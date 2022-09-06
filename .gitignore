@@ -1,0 +1,7 @@
+.vs
+.vscode
+bin
+obj
+Web/web-app/node_modules
+Web/web-app/dist
+wwwroot/js/bundles
