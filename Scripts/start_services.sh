@@ -2,6 +2,7 @@
 
 systemctl daemon-reload
 
+chmod +x /opt/www/personal/Scripts/start_server.sh
 if [ "$DEPLOYMENT_GROUP_NAME" == "Test" ]
 then
 	systemctl enable PersonalSite@test

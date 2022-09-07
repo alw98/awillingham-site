@@ -1,10 +1,9 @@
 [Unit]
-Description=A service to run the Rex web application
+Description=A service to run the my web server
 
 [Service]
 Type=simple
-WorkingDirectory=/opt/www/rex
-ExecStartPre=/bin/chmod +x /opt/www/personal/Scripts/start_server.sh
+WorkingDirectory=/opt/www/personal
 ExecStart=/opt/www/personal/Scripts/start_server.sh %I
 Restart=always
 # Restart service after 10 seconds if the dotnet service crashes:
