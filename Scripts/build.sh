@@ -30,7 +30,3 @@ then
 fi
 
 echo "Built ASP.NET app and frontend bundle"
-
-openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/pki/tls/private/nginx-selfsigned.key -out /etc/pki/tls/certs/nginx-selfsigned.crt -subj "/C=US/ST=Texas/L=Austin/O=Recs/OU=IT/CN=awillingham.dev"
-
-echo "Created HTTPS Certs"
