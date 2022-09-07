@@ -9,6 +9,8 @@
 	],
 	"scripts": {
 		"bundle": "npm run lint && webpack --config=./webpack/webpack.dev.js",
+		"bundle:test": "npm run lint && webpack --config=./webpack/webpack.dev.js",
+		"bundle:prod": "npm run lint && webpack --config=./webpack/webpack.prod.js",
 		"bundle:watch": "webpack --config=./webpack/webpack.dev.js --watch",
 		"test": "jest",
 		"test:watch": "jest --watch",

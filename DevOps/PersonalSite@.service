@@ -1,0 +1,17 @@
+[Unit]
+Description=A service to run the Rex web application
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/www/rex
+ExecStartPre=/bin/chmod +x /opt/www/rex/Scripts/start_server.sh
+ExecStart=/opt/www/rex/Scripts/start_server.sh %I
+Restart=always
+# Restart service after 10 seconds if the dotnet service crashes:
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=rex-webserver
+User=root
+
+[Install]
+WantedBy=multi-user.target
