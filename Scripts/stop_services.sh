@@ -13,6 +13,5 @@ fi
 
 rm /etc/nginx/conf.d/personalSite.conf -f
 rm /etc/systemd/system/PersonalSite@.service -f
-rm /opt/www/rex/aws-logger-errors.txt
 
 echo "Stopped services and removed their files"
