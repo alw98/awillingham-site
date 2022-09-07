@@ -1,6 +1,16 @@
 import React from 'react';
+import { createUseStyles } from 'react-jss';
 import Gearbox from 'wwwroot/images/gearbox.gif';
 
 export const App: React.FC = () => {
-	return <img src={Gearbox} />;
+	const styles = useStyles();
+
+	return <img src={Gearbox} className={styles.gearboxImage} />;
 };
+
+const useStyles = createUseStyles(() => ({
+	gearboxImage: {
+		maxWidth: '100%',
+		maxHeight: '100%',
+	}
+}));
