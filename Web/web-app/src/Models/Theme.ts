@@ -2,6 +2,8 @@ export interface Theme {
 	backgroundColor: {
 		primary: string;
 		secondary: string;
+		tertiary: string;
+		quaternary: string;
 	},
 	
     textColor: {
@@ -9,7 +11,7 @@ export interface Theme {
         secondary: string;
     };
 
-    borderColor: {
+    accentColor: {
         primary: string;
         secondary: string;
     };

@@ -1,6 +1,8 @@
 {
 	"compilerOptions": {
 		"outDir": "dist",
+		"target": "es5",
+        "lib": ["es6", "dom"],
 		"sourceMap": true,
 		"noImplicitAny": true,
 		"baseUrl": "src",
@@ -8,7 +10,9 @@
 		"esModuleInterop": true,
         "moduleResolution": "node",
 		"declaration": true,
-		"declarationDir": "dist/types"
+		"declarationDir": "dist/types",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
 	},
 	"watchOptions": {
 		"excludeDirectories": [

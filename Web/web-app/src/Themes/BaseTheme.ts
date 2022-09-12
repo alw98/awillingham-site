@@ -1,9 +1,9 @@
 import { Theme } from 'Models/Theme';
 
 export abstract class BaseTheme implements Theme {
-	abstract backgroundColor: { primary: string; secondary: string; };
+	abstract backgroundColor: { primary: string; secondary: string; tertiary: string; quaternary: string; };
 	abstract textColor: { primary: string; secondary: string; };
-	abstract borderColor: { primary: string; secondary: string; };
+	abstract accentColor: { primary: string; secondary: string; };
 	abstract button: { 
 		backgroundColor: { primary: string; secondary: string; }; 
 		textColor: { primary: string; secondary: string; }; 

@@ -3,3 +3,7 @@
 	margin: 0;
 	font-family: 'rubik';
 }
+
+* {
+	transition: background-color .5s;
+}

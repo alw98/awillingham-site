@@ -1,23 +1,17 @@
-import { Header } from 'Components/Header';
+import { ObserverThemeProvider } from 'Components/HigherOrderComponents/ObserverThemeProvider';
+import { Header } from 'Components/Nav/Header';
+import { cid, useInject } from 'inversify-hooks';
 import React from 'react';
-import { createUseStyles, ThemeProvider } from 'react-jss';
 import { Outlet } from 'react-router-dom';
-import { LightTheme } from 'Themes/LightTheme';
+import { ThemeStore } from 'Stores/ThemeStore';
 
 export const App: React.FC = () => {
-	const styles = useStyles();
+	const [themeStore] = useInject<ThemeStore>(cid.ThemeStore);
 
 	return (
-		<ThemeProvider theme={new LightTheme()}>
+		<ObserverThemeProvider themeStore={themeStore}>
 			<Header />
 			<Outlet />
-		</ThemeProvider>
+		</ObserverThemeProvider>
 	);
 };
-
-const useStyles = createUseStyles({
-	gearboxImage: {
-		maxWidth: '100%',
-		maxHeight: '100%',
-	}
-});

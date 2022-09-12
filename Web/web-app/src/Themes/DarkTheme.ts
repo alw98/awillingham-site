@@ -1,10 +1,10 @@
 import { BaseTheme } from './BaseTheme';
 import { ColorPalletes } from './ColorPalletes';
 
-export class LightTheme extends BaseTheme {
+export class DarkTheme extends BaseTheme {
 	backgroundColor = { 
-		primary: ColorPalletes.gray[9],
-		secondary: ColorPalletes.gray[1],
+		primary: ColorPalletes.gray[1],
+		secondary: ColorPalletes.gray[9],
 		tertiary: ColorPalletes.gray[1],
 		quaternary: ColorPalletes.gray[1]
 	};

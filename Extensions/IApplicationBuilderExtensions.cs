@@ -35,5 +35,21 @@ namespace awillingham_site.Extensions
 
             return app;
         }
+
+		public static IApplicationBuilder UseCustomEndpoints(
+			this IApplicationBuilder app)
+		{
+			app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
+                    "Default",
+                    "{*url}",
+                    new { controller = "Home", action = "Index" });
+
+
+            });
+
+			return app;
+		}
     }
 }

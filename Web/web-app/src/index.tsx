@@ -1,11 +1,16 @@
+import 'reflect-metadata';
+
 import { App } from 'App';
-import { ColorsPage } from 'Components/Pages/Colors';
+import { ColorsPage } from 'Components/Pages/Colors/ColorsPage';
 import { HomePage } from 'Components/Pages/Home';
 import React, { StrictMode } from 'react';
 import {createRoot} from 'react-dom/client';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { setupStores } from 'Utils/Stores';
 
 export const InitApp = (): void => {
+	setupStores();
+
 	const rootElement = document.getElementById('root');
 	const root = createRoot(rootElement);
 	root.render(

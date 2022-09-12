@@ -48,15 +48,7 @@ namespace awillingham_site
             app.UseStaticFiles();
             app.UseResponseCaching();
             app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    "Default",
-                    "{*url}",
-                    new { controller = "Home", action = "Index" });
-
-
-            });
+            app.UseCustomEndpoints();
         }
     }
 }
