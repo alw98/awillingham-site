@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlnsXlink="http://www.w3.org/1999/xlink"
+   width="30.701172"
+   height="22.601562"
+   version="1.1"
+   id="svg7908"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs7912">
+    <linearGradient
+       id="linearGradient13483">
+      <stop
+         style="stop-color:#91e7f7;stop-opacity:1;"
+         offset="0.09"
+         id="stop13479" />
+      <stop
+         style="stop-color:#edfdf3;stop-opacity:1;"
+         offset="1"
+         id="stop13481" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient9806">
+      <stop
+         style="stop-color:#97e8f8;stop-opacity:1;"
+         offset="0.09324758"
+         id="stop9802" />
+      <stop
+         style="stop-color:#edfdf3;stop-opacity:1;"
+         offset="1"
+         id="stop9804" />
+    </linearGradient>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath9710">
+      <path
+         id="lpe_path-effect9714"
+         style="fill:#aeaeae;fill-opacity:1;stroke-width:1.00157;paint-order:markers fill stroke"
+         class="powerclip"
+         d="M 0.2,4.2 H 40.9 V 36.8 H 0.2 Z m 9.7,18.9 h 6 L 13.031998,12.094686 9.9,23.1" />
+    </clipPath>
+    <linearGradient
+       xlink:href="#linearGradient9806"
+       id="linearGradient9808"
+       x1="19.527344"
+       y1="20.5"
+       x2="35.900391"
+       y2="20.5"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       xlink:href="#linearGradient13483"
+       id="linearGradient13485"
+       x1="5.1992188"
+       y1="20.501953"
+       x2="20.699219"
+       y2="20.501953"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <style
+     type="text/css"
+     id="style7887">
+				{`.st0{stroke:#000000;stroke-miterlimit:10;}
+                    .st1{fill:#FFFFFF;}
+                    .st2{fill:url(#XMLID_107_);}
+                    .st3{fill:url(#XMLID_108_);}`}
+			</style>
+  <path
+     id="path8976"
+     clip-path="url(#clipPath9710)"
+     style="display:inline;fill:url(#linearGradient13485);fill-opacity:1;stroke-width:1.00157;paint-order:markers fill stroke"
+     d="M 20.699219,31.800781 19.527344,27.830078 13.980469,9.203125 h -2.09961 L 5.1992188,31.800781 H 7.5 L 9.1992188,25.5 h 7.4003902 l 1.800782,6.300781 z"
+     transform="translate(-5.1992188,-9.1992188)" />
+  <path
+     id="path9776"
+     clip-path="url(#clipPath9710)"
+     style="display:inline;fill:url(#linearGradient9808);fill-opacity:1;stroke-width:1.00157;paint-order:markers fill stroke"
+     d="m 23.800781,9.1992188 -4.273437,18.6308592 1.171875,3.970703 4,-18.90039 3.912109,18.892578 2.365234,0.0039 4.923829,-22.5976562 h -2.201172 l -3.898438,19.5000002 -4,-19.5000002 z"
+     transform="translate(-5.1992188,-9.1992188)" />
+</svg>

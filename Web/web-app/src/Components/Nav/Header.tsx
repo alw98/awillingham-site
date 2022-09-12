@@ -6,12 +6,18 @@ import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
 import { ThemeStore } from 'Stores/ThemeStore';
 
+import { AWLogo } from './AWLogo';
+
 export const Header: React.FC = () => {
 	const styles = useStyles();
 	const [themeStore] = useInject<ThemeStore>('ThemeStore');
+	
 	return (
 		<nav className={styles.header} >
-			<Link className={styles.navLink} to={'/'} >Home</Link>
+			<Link className={styles.navLink} to={'/'} >
+				<AWLogo />
+				Home
+			</Link>
 			<Link className={styles.navLink} to={'/colors'} >Colors</Link>
 			<ToggleThemeButton themeStore={themeStore} />
 		</nav>
@@ -21,17 +27,20 @@ export const Header: React.FC = () => {
 const useStyles = createUseStyles((theme: Theme) => ({
 	header: {
 		width: '100%',
+		height: '3rem',
 		display: 'flex',
 		backgroundColor: theme.backgroundColor.primary
 	},
 	navLink: {
+		display: 'flex',
+		alignItems: 'center',
 		color: theme.button.textColor.primary,
 		backgroundColor: theme.button.backgroundColor.primary,
 		padding: theme.buttonPadding.two,
 		fontSize: theme.font.size.four,
 		textDecoration: 'none',
 		'&:visited': {
-			color: `${theme.button.textColor.primary} !important`
+			color: `${theme.button.textColor.primary}`
 		}
 	}
 }));
