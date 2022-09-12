@@ -1,16 +1,17 @@
 import { ToggleThemeButton } from 'Components/Buttons/ToggleThemeButton';
-import { cid, useInject } from 'inversify-hooks';
+import { useInject } from 'inversify-hooks';
 import { Theme } from 'Models/Theme';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { Link } from 'react-router-dom';
+import { Stores } from 'Stores/Stores';
 import { ThemeStore } from 'Stores/ThemeStore';
 
 import { AWLogo } from './AWLogo';
 
 export const Header: React.FC = () => {
 	const styles = useStyles();
-	const [themeStore] = useInject<ThemeStore>(cid.ThemeStore);
+	const [themeStore] = useInject<ThemeStore>(Stores.ThemeStore);
 
 	return (
 		<nav className={styles.header} >
