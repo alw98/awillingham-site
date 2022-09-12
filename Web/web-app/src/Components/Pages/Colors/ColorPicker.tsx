@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ColorPalletes } from 'Themes/ColorPalletes';
 
-
-export const ColorPalleteElement: React.FC = () => {
+export const ColorPicker: React.FC = () => {
 	const styles = useStyles();
 	const colorPalleteElements = useMemo(() => {
 		const palleteContainers = Object.values(ColorPalletes).map((pallete, i) => {

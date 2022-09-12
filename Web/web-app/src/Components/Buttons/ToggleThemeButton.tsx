@@ -15,7 +15,7 @@ export const ToggleThemeButton: React.FC<PropsWithThemeStore> = observer(({theme
 
 	return (
 		<UnstyledButton className={styles.toggleThemeButton} onClick={onClick} type='button' title='Toggle Theme'>
-			<img src={ToggleThemeIcon} alt='Toggle Theme' />
+			<img className={styles.toggleThemeIcon} src={ToggleThemeIcon} alt='Toggle Theme' />
 		</UnstyledButton>
 	);
 });
@@ -26,5 +26,9 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		padding: '.5rem',
 		paddingRight: '1rem',
+	},
+	toggleThemeIcon: {
+		width: 'auto',
+		height: '100%'
 	}
 });

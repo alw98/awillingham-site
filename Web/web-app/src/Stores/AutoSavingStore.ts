@@ -6,7 +6,7 @@ export abstract class AutoSavingStore {
 		autorun(this.saveToLocalStorage.bind(this));
 	}
 
-	loadFromLocalStorage() {
+	private loadFromLocalStorage() {
 		type KeyType = keyof this;
 		const saved: {[prop: string]: never} = JSON.parse(localStorage.getItem(this.STORE_KEY));
 		if(saved) {
@@ -16,7 +16,7 @@ export abstract class AutoSavingStore {
 		}
 	}
 
-	saveToLocalStorage() {
+	private saveToLocalStorage() {
 		type KeyType = keyof this;
 		const toSave: {[prop: string]: unknown} = {};
 		for(const key of Object.keys(this)) {

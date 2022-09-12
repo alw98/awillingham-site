@@ -1,19 +1,13 @@
+import { cid,useInject } from 'inversify-hooks';
 import React from 'react';
-import { createUseStyles } from 'react-jss';
+import { ThemeStore } from 'Stores/ThemeStore';
 
-import { ColorPalleteElement } from './ColorPallete';
+import { ColorPicker } from './ColorPicker';
 
 export const ColorsPage: React.FC = () => {
-	const styles = useStyles();
+	const [themeStore] = useInject<ThemeStore>(cid.ThemeStore);
+
 	return (
-		<div className={styles.pageContainer}>
-			<ColorPalleteElement />
-		</div>
+		<ColorPicker />
 	);
 };
-
-const useStyles = createUseStyles({
-	pageContainer: {
-		display: 'flex'
-	}
-});
