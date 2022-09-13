@@ -1,6 +1,6 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import Gearbox from 'wwwroot/images/gearbox.gif';
+import Gearbox from 'wwwroot/images/GearAnimation.gif';
 
 export const HomePage: React.FC = () => {
 	const styles = useStyles();
