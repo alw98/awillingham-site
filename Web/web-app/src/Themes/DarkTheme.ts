@@ -16,7 +16,7 @@ export class DarkTheme implements Theme {
 	};
 
 	accentColor = { 
-		primary: ColorPalletes.gray[9],
+		primary: ColorPalletes.trueRed[6],
 		secondary: ColorPalletes.gray[1]
 	};
 

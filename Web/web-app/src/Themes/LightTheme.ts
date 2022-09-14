@@ -16,7 +16,7 @@ export class LightTheme implements Theme {
 	};
 
 	accentColor = { 
-		primary: ColorPalletes.gray[9],
+		primary: ColorPalletes.paleBlue[6],
 		secondary: ColorPalletes.gray[1]
 	};
 

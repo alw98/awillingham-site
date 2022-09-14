@@ -1,8 +1,10 @@
-import { AWLogo } from 'Components/Nav/AWLogo';
+import { hexToCSSFilter } from 'hex-to-css-filter';
 import { observer } from 'mobx-react';
+import { Theme } from 'Models/Theme';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { PropsWithThemeStore } from 'Stores/ThemeStore';
+import ToggleThemeIcon from 'wwwroot/images/ToggleThemeIcon.svg';
 
 import { UnstyledButton } from './UnstyledButton';
 
@@ -12,21 +14,21 @@ export const ToggleThemeButton: React.FC<PropsWithThemeStore> = observer(({theme
 	const onClick = () => {
 		themeStore.switchDefaultTheme();
 	};
-
+	
 	return (
 		<UnstyledButton className={styles.toggleThemeButton} onClick={onClick} type='button' title='Toggle Theme'>
-			<AWLogo />
+			<img className={styles.toggleThemeIcon} src={ToggleThemeIcon} alt='Toggle Theme' />
 		</UnstyledButton>
 	);
 });
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
 	toggleThemeButton: {
-		display: 'flex',
 		padding: '.5rem',
 		marginLeft: 'auto'
 	},
 	toggleThemeIcon: {
-		width: '100%',
+		height: '100%',
+		filter: hexToCSSFilter(theme.accentColor.primary).filter
 	}
-});
+}));
