@@ -15,7 +15,7 @@ export interface Theme {
         primary: string;
         secondary: string;
     };
-
+	
 	button: {
 		backgroundColor: {
 			primary: string;
