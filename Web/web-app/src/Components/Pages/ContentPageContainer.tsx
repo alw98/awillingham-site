@@ -3,10 +3,17 @@ import React, { PropsWithChildren } from 'react';
 import { createUseStyles } from 'react-jss';
 
 
-export const PageContainer: React.FC<PropsWithChildren> = ({children}) => {
+export const ContentPageContainer: React.FC<PropsWithChildren> = ({children}) => {
 	const styles = useStyles();
 
-	return <div className={styles.pageContainer}>{children}</div>;
+	return (
+		<div className={styles.pageContainer}>
+			<div className={styles.contentContainer}>
+				
+				{children}
+			</div>
+		</div>
+	);
 };
 
 const useStyles = createUseStyles((theme: Theme) => ({
@@ -14,7 +21,9 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		display: 'flex',
 		flexDirection: 'column',
 		backgroundColor: theme.backgroundColor.primary,
-		color: theme.textColor.primary,
-		flexGrow: 1
+		alignItems: 'center',
+	},
+	contentContainer: {
+		width: 'min(100vw, 70rem)'
 	}
 }));

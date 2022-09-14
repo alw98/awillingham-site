@@ -37,8 +37,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		alignItems: 'center',
 		color: theme.button.textColor.primary,
 		backgroundColor: theme.button.backgroundColor.primary,
-		padding: theme.buttonPadding.two,
-		fontSize: theme.font.size.four,
+		padding: '.5rem',
+		fontSize: '1rem',
 		textDecoration: 'none',
 		'&:visited': {
 			color: `${theme.button.textColor.primary}`

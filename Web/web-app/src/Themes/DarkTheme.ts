@@ -1,7 +1,8 @@
-import { BaseTheme } from './BaseTheme';
+import { Theme } from 'Models/Theme';
+
 import { ColorPalletes } from './ColorPalletes';
 
-export class DarkTheme extends BaseTheme {
+export class DarkTheme implements Theme {
 	backgroundColor = { 
 		primary: ColorPalletes.gray[1],
 		secondary: ColorPalletes.gray[9],

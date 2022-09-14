@@ -46,28 +46,4 @@ export interface Theme {
 			secondary: string;
 		};
 	};
-
-	buttonPadding: {
-		one: string;
-		two: string;
-		three: string;
-		four: string;
-		five: string;
-	};
-
-	font: {
-		size: {
-			one: string;
-			two: string;
-			three: string;
-			four: string;
-			five: string;
-			six: string;
-			seven: string;
-			eight: string;
-		};
-		family: {
-			rubik: string;
-		}
-	}
 }

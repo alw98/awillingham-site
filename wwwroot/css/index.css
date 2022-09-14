@@ -13,5 +13,5 @@
 }
 
 * {
-	transition: background-color .5s;
+	transition: background-color .5s, color .2s;
 }

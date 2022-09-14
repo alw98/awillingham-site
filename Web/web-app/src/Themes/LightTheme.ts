@@ -1,7 +1,8 @@
-import { BaseTheme } from './BaseTheme';
+import { Theme } from 'Models/Theme';
+
 import { ColorPalletes } from './ColorPalletes';
 
-export class LightTheme extends BaseTheme {
+export class LightTheme implements Theme {
 	backgroundColor = { 
 		primary: ColorPalletes.gray[9],
 		secondary: ColorPalletes.gray[1],
@@ -10,8 +11,8 @@ export class LightTheme extends BaseTheme {
 	};
 
 	textColor = { 
-		primary: ColorPalletes.gray[9],
-		secondary: ColorPalletes.gray[1]
+		primary: ColorPalletes.gray[1],
+		secondary: ColorPalletes.gray[9]
 	};
 
 	accentColor = { 
