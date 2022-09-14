@@ -22,14 +22,14 @@ export const ToggleThemeButton: React.FC<PropsWithThemeStore> = observer(({theme
 
 const useStyles = createUseStyles({
 	toggleThemeButton: {
-		marginLeft: 'auto',
 		display: 'flex',
-		flexDirection: 'row-reverse',
+		alignItems: 'center',
 		padding: '.5rem',
-		paddingRight: '1rem',
+		fontSize: '1rem',
+		textDecoration: 'none',
+		marginLeft: 'auto'
 	},
 	toggleThemeIcon: {
-		width: 'auto',
-		height: '100%'
+		height: '100%',
 	}
 });
