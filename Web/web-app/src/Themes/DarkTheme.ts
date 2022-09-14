@@ -4,10 +4,10 @@ import { ColorPalletes } from './ColorPalletes';
 
 export class DarkTheme implements Theme {
 	backgroundColor = { 
-		primary: ColorPalletes.gray[1],
-		secondary: ColorPalletes.gray[9],
-		tertiary: ColorPalletes.gray[1],
-		quaternary: ColorPalletes.gray[1]
+		primary: ColorPalletes.gray[0],
+		secondary: ColorPalletes.gray[1],
+		tertiary: ColorPalletes.gray[0],
+		quaternary: ColorPalletes.gray[0]
 	};
 
 	textColor = { 
@@ -17,7 +17,7 @@ export class DarkTheme implements Theme {
 
 	accentColor = { 
 		primary: ColorPalletes.trueRed[6],
-		secondary: ColorPalletes.gray[1]
+		secondary: ColorPalletes.trueRed[4]
 	};
 
 	button = {

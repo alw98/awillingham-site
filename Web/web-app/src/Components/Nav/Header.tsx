@@ -30,18 +30,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		width: '100%',
 		height: '3rem',
 		display: 'flex',
-		backgroundColor: theme.backgroundColor.primary
+		backgroundColor: theme.backgroundColor.secondary
 	},
 	navLink: {
 		display: 'flex',
 		alignItems: 'center',
-		color: theme.button.textColor.primary,
-		backgroundColor: theme.button.backgroundColor.primary,
+		color: theme.accentColor.primary,
+		backgroundColor: theme.backgroundColor.secondary,
 		padding: '.5rem',
 		fontSize: '1rem',
 		textDecoration: 'none',
 		'&:visited': {
-			color: `${theme.button.textColor.primary}`
+			color: theme.accentColor.primary,
 		}
 	}
 }));

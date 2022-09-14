@@ -5,7 +5,7 @@ import { ColorPalletes } from './ColorPalletes';
 export class LightTheme implements Theme {
 	backgroundColor = { 
 		primary: ColorPalletes.gray[9],
-		secondary: ColorPalletes.gray[1],
+		secondary: ColorPalletes.gray[8],
 		tertiary: ColorPalletes.gray[1],
 		quaternary: ColorPalletes.gray[1]
 	};
@@ -16,8 +16,8 @@ export class LightTheme implements Theme {
 	};
 
 	accentColor = { 
-		primary: ColorPalletes.paleBlue[6],
-		secondary: ColorPalletes.gray[1]
+		primary: ColorPalletes.paleBlue[4],
+		secondary: ColorPalletes.paleBlue[2],
 	};
 
 	button = {
