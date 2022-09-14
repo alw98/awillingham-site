@@ -24,6 +24,7 @@ const useStyles = createUseStyles({
 	toggleThemeButton: {
 		marginLeft: 'auto',
 		display: 'flex',
+		flexDirection: 'row-reverse',
 		padding: '.5rem',
 		paddingRight: '1rem',
 	},

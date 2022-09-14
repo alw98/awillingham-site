@@ -1,12 +1,11 @@
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import Gearbox from 'wwwroot/images/GearAnimation.gif';
 
 export const HomePage: React.FC = () => {
 	const styles = useStyles();
 
 	return (
-		<img src={Gearbox} className={styles.gearboxImage} alt={'WIP'}/>
+		<div></div>
 	);
 };
 
