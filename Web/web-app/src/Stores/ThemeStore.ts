@@ -6,7 +6,7 @@ import { LightTheme } from 'Themes/LightTheme';
 import { AutoSavingStore } from './AutoSavingStore';
 
 export class ThemeStore extends AutoSavingStore {
-	theme: Theme = new LightTheme();
+	theme: Theme = new DarkTheme();
 	usingLightTheme = true;
 	usingDefaultTheme = true;
 	STORE_KEY = 'ThemeStore';
