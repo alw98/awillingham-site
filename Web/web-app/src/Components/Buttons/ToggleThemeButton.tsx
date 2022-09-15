@@ -28,7 +28,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		marginLeft: 'auto'
 	},
 	toggleThemeIcon: {
-		height: '100%',
+		width: '2rem',
 		filter: hexToCSSFilter(theme.accentColor.primary).filter
 	}
 }));
