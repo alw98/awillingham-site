@@ -10,7 +10,7 @@ export const HomePage: React.FC = () => {
 	return (
 		<ContentPageContainer>
 			<div className={styles.body}>
-				This is a gallery made by Armond Willingham, with love and care. It's still a work in progress.
+				This is an interactive gallery made by Armond Willingham, with love and care. It's still a work in progress.
 				<a href='https://github.com/alw98/awillingham-site'>Source</a>
 			</div>
 			<img src={Gearbox} className={styles.gearboxImage} alt={'WIP'}/>

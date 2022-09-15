@@ -36,7 +36,9 @@ export const BaseSketch: React.FC<BaseSketchProps> = observer(({themeStore}) => 
 	}, [p5ContainerRef.current, sketch]);
 	
 	return (
-		<>
+		<>	
+			<input placeholder='Enter a radius' onChange={(evt) => localStore.radius = Number.parseInt(evt.target.value)} />
+			<span>{localStore.radius}</span>
 			<div className={styles.sketch} ref={p5ContainerRef} />
 		</>
 	);
