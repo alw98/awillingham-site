@@ -1,7 +1,6 @@
-import { toJS } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react';
-import { Theme } from 'Models/Theme';
-import React, { useEffect } from 'react';
+import { observable, toJS } from 'mobx';
+import { observer } from 'mobx-react';
+import React, { useMemo, useState } from 'react';
 import { createUseStyles, ThemeProvider } from 'react-jss';
 import { PropsWithThemeStore } from 'Stores/ThemeStore';
 
@@ -9,23 +8,20 @@ import { ContentPageContainer } from '../ContentPageContainer';
 import { PrimaryColors } from './PrimaryColors';
 
 
-export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore: globalThemeStore}) => {
+export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore}) => {
 	const styles = useStyles();
-	const localTheme = useLocalObservable(() => toJS(globalThemeStore.theme));
+	const [renders, setRenders] = useState(0);
 
-	useEffect(() => {
-		const newTheme = toJS(globalThemeStore.theme);
-		for (const key in newTheme) {
-			type KeyOf = keyof Theme;
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(localTheme as any)[key as KeyOf] = newTheme[key as KeyOf];
-		}
-	}, [globalThemeStore.theme]);
+	const localTheme = useMemo(() => (observable(toJS(themeStore.theme))), [themeStore.theme]);
+	
+	const forceUpdate = () => {
+		setRenders(renders + 1);
+	};
 
 	return (
 		<ContentPageContainer>
-			<ThemeProvider theme={toJS(localTheme)}>
-				<div className={styles.content}>
+			<ThemeProvider theme={{...toJS(localTheme)}}>
+				<div className={styles.content} onClick={forceUpdate}>
 					<PrimaryColors theme={localTheme} />
 				</div>
 			</ThemeProvider>
