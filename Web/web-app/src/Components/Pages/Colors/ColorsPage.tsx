@@ -1,3 +1,4 @@
+import { BaseSketch } from 'Components/Sketches/BaseSketch';
 import { observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import React, { useMemo, useState } from 'react';
@@ -20,6 +21,7 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore})
 
 	return (
 		<ContentPageContainer>
+			<BaseSketch themeStore={themeStore}/>
 			<ThemeProvider theme={{...toJS(localTheme)}}>
 				<div className={styles.content} onClick={forceUpdate}>
 					<PrimaryColors theme={localTheme} />
