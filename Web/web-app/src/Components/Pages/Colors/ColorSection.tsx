@@ -24,7 +24,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
 	sectionContainer: {
 		display: 'flex',
 		flexDirection: 'column',
-		backgroundColor: theme.backgroundColor.primary,
 		alignItems: 'center',
 	},
 	contentContainer: {
@@ -32,6 +31,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		padding: '.5rem',
 	},
 	title: {
+		fontSize: '2rem',
 		padding: '1rem',
+		WebkitTextStroke: `1px ${theme.accentColor.primary}`
 	}
 }));

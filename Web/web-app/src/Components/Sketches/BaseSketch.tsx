@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ThemeStore } from 'Stores/ThemeStore';
 
-interface BaseSketchProps {
+export interface BaseSketchProps {
 	themeStore: ThemeStore
 }
 
