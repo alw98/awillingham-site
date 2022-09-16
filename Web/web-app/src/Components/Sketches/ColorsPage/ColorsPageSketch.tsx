@@ -33,7 +33,6 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 
 	useEffect(() => {
 		const newColors = getColorsByChance(themeStore.theme, ColorChances);
-		console.log(newColors);
 		for(let i = 0; i < localStore.colorsByChance.length; ++i) {
 			localStore.colorsByChance[i] = newColors[i];
 		}

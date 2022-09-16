@@ -15,11 +15,13 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore})
 	const localTheme = useLocalStore(() => toJS(themeStore.theme));
 	
 	useEffect(() => {
+		console.log('theme change');
+		console.log(themeStore.theme.backgroundColor.primary);
 		localTheme.backgroundColor.primary = themeStore.theme.backgroundColor.primary;
 	}, [themeStore]);
 
 	const forceUpdate = () => {
-		// setRenders(renders + 1);
+		setRenders(renders + 1);
 	};
 	
 	return (
