@@ -48,7 +48,7 @@ export const ColorChances: ColorChancesType<Theme> = {
 		}
 	},
 	textColor: {
-		primary: 100,
+		primary: 20,
 		secondary: 5
 	}
 };
