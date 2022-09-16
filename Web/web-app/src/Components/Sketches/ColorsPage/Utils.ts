@@ -13,7 +13,7 @@ export const getColorsByChance = <T>(colors: T, chances: ColorChancesType<T>) =>
 				}
 			}
 		} else if(typeof val === 'object' && typeof prob === 'object'){
-			colorProbs.push(...getColorsByChance(val, prob));
+			colorProbs.push(...getColorsByChance(val, prob as ColorChancesType<typeof val>));
 		}
 	}
 
