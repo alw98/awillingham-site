@@ -33,6 +33,7 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 
 	useEffect(() => {
 		const newColors = getColorsByChance(themeStore.theme, ColorChances);
+		console.log(newColors);
 		for(let i = 0; i < localStore.colorsByChance.length; ++i) {
 			localStore.colorsByChance[i] = newColors[i];
 		}
@@ -78,7 +79,6 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 
 		const tryAddCircle = () => {
 			if(Math.random() < localStore.spawnChance) {
-				console.log('spawn');
 				addCircle();
 			}
 		};
@@ -91,7 +91,7 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 		
 		s.draw = () => {
 			if(s.frameCount % 30 === 0)
-				console.log(`Frame rate: ${s.frameRate()}`);
+				console.log(`Frame rate: ${Math.round(s.frameRate())}`);
 			s.background(themeStore.theme.backgroundColor.primary);
 			if(localStore.mustResize) {
 				s.resizeCanvas(localStore.width, localStore.height);
