@@ -1,5 +1,5 @@
 import { useWindowSize } from 'Hooks/useWindowSize';
-import { observer, useLocalObservable } from 'mobx-react';
+import { useLocalObservable } from 'mobx-react';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
@@ -12,7 +12,7 @@ interface ColorsPageSketchProps {
 	theme: Theme
 }
 
-export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({theme}) => {
+export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
 	const styles = useStyles();
 	const p5ContainerRef = useRef();
 	const [windowWidth, windowHeight] = useWindowSize(250);
@@ -28,20 +28,18 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({them
 		chanceToShrink: .001,
 		growthRate: .1
 	}));
-
+	
 	useEffect(() => {
 		localStore.width = windowWidth - 1;
 		localStore.height = windowHeight - 10;
 		localStore.mustResize = true;
 	}, [windowWidth, windowHeight]);
 
-	useEffect(() => {
-		const newColors = getColorsByChance(theme, ColorChances);
-		for(let i = 0; i < localStore.colorsByChance.length; ++i) {
-			localStore.colorsByChance[i] = newColors[i];
-		}
-		localStore.backgroundColor = theme.backgroundColor.primary;
-	}, [theme]);
+	const newColors = getColorsByChance(theme, ColorChances);
+	for(let i = 0; i < localStore.colorsByChance.length; ++i) {
+		localStore.colorsByChance[i] = newColors[i];
+	}
+	localStore.backgroundColor = theme.backgroundColor.primary;
 
 	const sketch = useCallback((s: p5) => {
 		const addCircle = (radius?: number) => {
@@ -52,7 +50,7 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({them
 				y: Math.random() * localStore.height,
 				vx: Math.random() - .5,
 				vy: Math.random() - .5,
-				growthModifier: Math.random() * 5
+				growthModifier: Math.random() * 5 * Math.min(1, (Math.min(localStore.width, localStore.height) / 600)),
 			});
 		};
 
@@ -114,7 +112,7 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({them
 			<div className={styles.sketch} ref={p5ContainerRef} />
 		</>
 	);
-});
+};
 
 const useStyles = createUseStyles({
 	sketch: {
