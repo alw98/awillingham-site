@@ -19,8 +19,8 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
 	const localStore = useLocalObservable(() => ({
 		backgroundColor: theme.backgroundColor.primary,
 		radius: 200,
-		width: windowWidth - 1,
-		height: windowHeight - 10,
+		width: windowWidth,
+		height: windowHeight,
 		mustResize: false,
 		colorsByChance: getColorsByChance(theme, ColorChances),
 		circles: [] as {colorInd: number, r: number, x: number, y: number, vx: number, vy: number, growthModifier: number}[],
@@ -30,8 +30,8 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
 	}));
 	
 	useEffect(() => {
-		localStore.width = windowWidth - 1;
-		localStore.height = windowHeight - 10;
+		localStore.width = windowWidth;
+		localStore.height = windowHeight - 4;
 		localStore.mustResize = true;
 	}, [windowWidth, windowHeight]);
 

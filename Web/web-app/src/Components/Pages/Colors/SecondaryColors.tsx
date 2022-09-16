@@ -13,16 +13,16 @@ interface PrimaryColorsProps {
 	renders: number;
 }
 
-export const PrimaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore}) => {
+export const SecondaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore}) => {
 	const styles = useStyles();
 	
 	return (
-		<ColorSection title='Primary Colors'>
+		<ColorSection title='Secondary Colors'>
 			<div className={styles.display}>Lorem Ipsum</div>
 			<ColorDisplaysContainer>
-				<ColorDisplay displayText='Primary Background Color' onSelect={(color) => themeStore.theme.backgroundColor.primary = color} />
-				<ColorDisplay displayText='Primary Text Color' onSelect={(color) => themeStore.theme.textColor.primary = color} />
-				<ColorDisplay displayText='Primary Accent Color' onSelect={(color) => themeStore.theme.accentColor.primary = color} />
+				<ColorDisplay displayText='Secondary Background Color' onSelect={(color) => themeStore.theme.backgroundColor.secondary = color} />
+				<ColorDisplay displayText='Secondary Text Color' onSelect={(color) => themeStore.theme.textColor.secondary = color} />
+				<ColorDisplay displayText='Secondary Accent Color' onSelect={(color) => themeStore.theme.accentColor.secondary = color} />
 			</ColorDisplaysContainer>
 		</ColorSection>
 	);
@@ -30,9 +30,9 @@ export const PrimaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	display: {
-		backgroundColor: theme.backgroundColor.primary,
-		border: `2px solid ${theme.accentColor.primary}`,
-		color: theme.textColor.primary,
+		backgroundColor: theme.backgroundColor.secondary,
+		border: `2px solid ${theme.accentColor.secondary}`,
+		color: theme.textColor.secondary,
 		padding: '.5rem',
 		WebkitTextStroke: '0px'
 	},

@@ -5,10 +5,11 @@ import { ThemeProvider } from 'react-jss';
 import { ThemeStore } from 'Stores/ThemeStore';
 
 interface ObserverThemeProviderProps extends PropsWithChildren {
-	themeStore: Pick<ThemeStore, 'theme'>
+	themeStore: ThemeStore
 }
 
 export const ObserverThemeProvider: React.FC<ObserverThemeProviderProps > = observer(({themeStore, children}) => {
+	console.log('observer');
 	return (
 		<ThemeProvider theme={toJS(themeStore.theme)}>
 			{children}

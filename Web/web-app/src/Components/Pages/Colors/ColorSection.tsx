@@ -1,5 +1,4 @@
 
-import { Theme } from 'Models/Theme';
 import React, { PropsWithChildren } from 'react';
 import { createUseStyles } from 'react-jss';
 
@@ -20,7 +19,7 @@ export const ColorSection: React.FC<ColorSectionProps & PropsWithChildren> = ({t
 	);
 };
 
-const useStyles = createUseStyles((theme: Theme) => ({
+const useStyles = createUseStyles({
 	sectionContainer: {
 		display: 'flex',
 		flexDirection: 'column',
@@ -32,7 +31,6 @@ const useStyles = createUseStyles((theme: Theme) => ({
 	},
 	title: {
 		fontSize: '2rem',
-		padding: '1rem',
-		WebkitTextStroke: `1px ${theme.accentColor.primary}`
+		padding: '1rem'
 	}
-}));
+});

@@ -1,4 +1,3 @@
-import { Theme } from 'Models/Theme';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
 
@@ -17,8 +16,7 @@ export const ColorDisplay: React.FC<ColorDisplayProps> = (props) => {
 	);
 };
 
-const useStyles = createUseStyles((theme: Theme) => ({
+const useStyles = createUseStyles({
 	container: {
-		WebkitTextStroke: `.5px ${theme.accentColor.primary}`
 	}
-}));
+});
