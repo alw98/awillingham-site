@@ -9,7 +9,7 @@ import { ThemeStore } from 'Stores/ThemeStore';
 
 export const App: React.FC = () => {
 	const [themeStore] = useInject<ThemeStore>(Stores.ThemeStore);
-
+	
 	return (
 		<ObserverThemeProvider themeStore={themeStore}>
 			<Header />

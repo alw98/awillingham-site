@@ -1,4 +1,4 @@
-import { ToggleThemeButton } from 'Components/Buttons/ToggleThemeButton';
+import { ToggleThemeButton } from 'Components/Nav/ToggleThemeButton';
 import { useInject } from 'inversify-hooks';
 import { Theme } from 'Models/Theme';
 import React from 'react';

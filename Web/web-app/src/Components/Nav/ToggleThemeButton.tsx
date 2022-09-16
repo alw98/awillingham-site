@@ -6,7 +6,7 @@ import { createUseStyles } from 'react-jss';
 import { PropsWithThemeStore } from 'Stores/ThemeStore';
 import ToggleThemeIcon from 'wwwroot/images/ToggleThemeIcon.svg';
 
-import { UnstyledButton } from './UnstyledButton';
+import { UnstyledButton } from '../Buttons/UnstyledButton';
 
 export const ToggleThemeButton: React.FC<PropsWithThemeStore> = observer(({themeStore})=> {
 	const styles = useStyles();

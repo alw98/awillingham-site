@@ -15,5 +15,6 @@ const useStyles = createUseStyles({
 	container: {
 		display: 'flex',
 		flexDirection: 'column',
+		paddingLeft: '2rem',
 	}
 });

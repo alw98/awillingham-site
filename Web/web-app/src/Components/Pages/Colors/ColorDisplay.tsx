@@ -19,6 +19,6 @@ export const ColorDisplay: React.FC<ColorDisplayProps> = (props) => {
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	container: {
-		backgroundColor: theme.backgroundColor.primary
+		WebkitTextStroke: `.5px ${theme.accentColor.primary}`
 	}
 }));

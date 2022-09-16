@@ -1,30 +1,34 @@
 import { useWindowSize } from 'Hooks/useWindowSize';
 import { observer, useLocalObservable } from 'mobx-react';
+import { Theme } from 'Models/Theme';
 import p5 from 'p5';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 
-import { BaseSketchProps } from '../BaseSketch';
 import { ColorChances } from './ColorChances';
 import { getColorsByChance } from './Utils';
 
+interface ColorsPageSketchProps {
+	theme: Theme
+}
 
-export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore}) => {
+export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({theme}) => {
 	const styles = useStyles();
 	const p5ContainerRef = useRef();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const localStore = useLocalObservable(() => ({
+		backgroundColor: theme.backgroundColor.primary,
 		radius: 200,
 		width: windowWidth - 1,
 		height: windowHeight - 10,
 		mustResize: false,
-		colorsByChance: getColorsByChance(themeStore.theme, ColorChances),
+		colorsByChance: getColorsByChance(theme, ColorChances),
 		circles: [] as {colorInd: number, r: number, x: number, y: number, vx: number, vy: number, growthModifier: number}[],
 		spawnChance: .5,
 		chanceToShrink: .001,
 		growthRate: .1
 	}));
-	
+
 	useEffect(() => {
 		localStore.width = windowWidth - 1;
 		localStore.height = windowHeight - 10;
@@ -32,11 +36,12 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 	}, [windowWidth, windowHeight]);
 
 	useEffect(() => {
-		const newColors = getColorsByChance(themeStore.theme, ColorChances);
+		const newColors = getColorsByChance(theme, ColorChances);
 		for(let i = 0; i < localStore.colorsByChance.length; ++i) {
 			localStore.colorsByChance[i] = newColors[i];
 		}
-	}, [themeStore.theme]);
+		localStore.backgroundColor = theme.backgroundColor.primary;
+	}, [theme]);
 
 	const sketch = useCallback((s: p5) => {
 		const addCircle = (radius?: number) => {
@@ -49,12 +54,6 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 				vy: Math.random() - .5,
 				growthModifier: Math.random() * 5
 			});
-		};
-
-		const init = () => {
-			for(let i = 0; i < 25; ++i) {
-				//addCircle(Math.random() * 300);
-			}
 		};
 
 		const getRandomColorIndByChance = () => {
@@ -85,13 +84,10 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 
 		s.setup = () => {
 			s.createCanvas(localStore.width, localStore.height);
-			init();
 		};
 		
-		s.draw = () => {
-			if(s.frameCount % 30 === 0)
-				console.log(`Frame rate: ${Math.round(s.frameRate())}`);
-			s.background(themeStore.theme.backgroundColor.primary);
+		s.draw = () => {				
+			s.background(localStore.backgroundColor);
 			if(localStore.mustResize) {
 				s.resizeCanvas(localStore.width, localStore.height);
 				localStore.mustResize = false;
@@ -102,14 +98,15 @@ export const ColorsPageSketch: React.FC<BaseSketchProps> = observer(({themeStore
 		};
 	}, []);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if(p5ContainerRef.current){
 			const p5Instance = new p5(sketch, p5ContainerRef.current);
 			return () => {
 				p5Instance.remove();
+				setTimeout(() => p5Instance.remove(), 100);
 			};
 		}
-	}, [p5ContainerRef.current, sketch]);
+	}, []);
 	
 
 	return (

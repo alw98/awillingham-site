@@ -1,37 +1,32 @@
 import { ColorsPageSketch } from 'Components/Sketches/ColorsPage/ColorsPageSketch';
 import { toJS } from 'mobx';
-import { observer, useLocalStore } from 'mobx-react';
-import React, { useEffect, useState } from 'react';
+import { observer, useLocalObservable } from 'mobx-react';
+import React, { useEffect } from 'react';
 import { createUseStyles, ThemeProvider } from 'react-jss';
 import { PropsWithThemeStore } from 'Stores/ThemeStore';
+import { recursiveCopyStrings } from 'Utils/RecursiveCopyStrings';
 
 import { ContentPageContainer } from '../ContentPageContainer';
 import { PrimaryColors } from './PrimaryColors';
 
 
-export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore}) => {
+export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore: globalThemeStore}) => {
 	const styles = useStyles();
-	const [renders, setRenders] = useState(0);
-	const localTheme = useLocalStore(() => toJS(themeStore.theme));
-	
-	useEffect(() => {
-		console.log('theme change');
-		console.log(themeStore.theme.backgroundColor.primary);
-		localTheme.backgroundColor.primary = themeStore.theme.backgroundColor.primary;
-	}, [themeStore]);
+	const localThemeStore = useLocalObservable(() => ({theme: toJS(globalThemeStore.theme)}));
+	const localThemeJS = toJS(localThemeStore.theme);
 
-	const forceUpdate = () => {
-		setRenders(renders + 1);
-	};
-	
+	useEffect(() => {
+		recursiveCopyStrings(localThemeStore.theme, toJS(globalThemeStore.theme));
+	}, [globalThemeStore.theme]);
+
 	return (
 		<ContentPageContainer>
-			<ThemeProvider theme={{...toJS(localTheme)}}>
-				<div className={styles.content} onClick={forceUpdate}>
-					<PrimaryColors theme={localTheme} />
-					<button onClick={() => themeStore.theme = localTheme}>Save</button>
+			<ThemeProvider theme={localThemeJS}>
+				<div className={styles.content}>
+					<PrimaryColors themeStore={localThemeStore} />
+					<button onClick={() => globalThemeStore.theme = localThemeStore.theme}>Save</button>
 				</div>
-				<ColorsPageSketch themeStore={themeStore}/>
+				<ColorsPageSketch theme={localThemeJS} />
 			</ThemeProvider>
 		</ContentPageContainer>
 	);

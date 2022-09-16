@@ -5,7 +5,7 @@ import { createUseStyles } from 'react-jss';
 
 export const PageContainer: React.FC<PropsWithChildren> = ({children}) => {
 	const styles = useStyles();
-
+	
 	return <div className={styles.pageContainer}>{children}</div>;
 };
 
