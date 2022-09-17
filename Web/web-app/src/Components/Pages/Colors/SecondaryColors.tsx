@@ -30,6 +30,9 @@ export const SecondaryColors: React.FC<PrimaryColorsProps> = observer(({themeSto
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	display: {
+		display: 'flex',
+		alignItems: 'center',
+		textAlign: 'center',
 		backgroundColor: theme.backgroundColor.secondary,
 		border: `2px solid ${theme.accentColor.secondary}`,
 		color: theme.textColor.secondary,

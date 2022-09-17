@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createUseStyles } from 'react-jss';
+
+import { ColorPicker } from './ColorPicker';
 
 interface ColorDisplayProps {
 	displayText: string;
@@ -8,15 +10,23 @@ interface ColorDisplayProps {
 
 export const ColorDisplay: React.FC<ColorDisplayProps> = (props) => {
 	const styles = useStyles();
+	const [display, setDisplay] = useState(false);
+
+	const onSelect = (color: string) => {
+		setDisplay(false);
+		props.onSelect(color);
+	};
 	
 	return (
-		<div className={styles.container} onClick={() => props.onSelect('#fe0000')}>
-			{props.displayText}
+		<div className={styles.container} onClick={() => setDisplay(!display)}>
+			{props.displayText}				
+			{display && <ColorPicker onSelect={onSelect} />}
 		</div>
 	);
 };
 
 const useStyles = createUseStyles({
 	container: {
+		padding: '.5rem'
 	}
 });

@@ -30,6 +30,9 @@ export const PrimaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	display: {
+		display: 'flex',
+		alignItems: 'center',
+		textAlign: 'center',
 		backgroundColor: theme.backgroundColor.primary,
 		border: `2px solid ${theme.accentColor.primary}`,
 		color: theme.textColor.primary,
