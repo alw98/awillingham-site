@@ -11,7 +11,6 @@ import { ColorSection } from './ColorSection';
 
 interface PrimaryColorsProps {
 	themeStore: Pick<ThemeStore, 'theme'>;
-	renders: number;
 }
 
 export const PrimaryButtonColors: React.FC<PrimaryColorsProps> = observer(({themeStore}) => {

@@ -10,7 +10,6 @@ import { ColorSection } from './ColorSection';
 
 interface PrimaryColorsProps {
 	themeStore: Pick<ThemeStore, 'theme'>;
-	renders: number;
 }
 
 export const SecondaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore}) => {

@@ -1,5 +1,5 @@
 import { useWindowSize } from 'Hooks/useWindowSize';
-import { useLocalObservable } from 'mobx-react';
+import { observer, useLocalObservable } from 'mobx-react';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
 import React, { useCallback, useEffect, useLayoutEffect, useRef } from 'react';
@@ -12,7 +12,7 @@ interface ColorsPageSketchProps {
 	theme: Theme
 }
 
-export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
+export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({theme}) => {
 	const styles = useStyles();
 	const p5ContainerRef = useRef();
 	const [windowWidth, windowHeight] = useWindowSize(250);
@@ -112,7 +112,7 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
 			<div className={styles.sketch} ref={p5ContainerRef} />
 		</>
 	);
-};
+});
 
 const useStyles = createUseStyles({
 	sketch: {

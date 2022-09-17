@@ -1,12 +1,11 @@
 import { PrimaryButton } from 'Components/Buttons/PrimaryButton';
 import { ColorsPageSketch } from 'Components/Sketches/ColorsPage/ColorsPageSketch';
-import { observable, toJS } from 'mobx';
+import { toJS } from 'mobx';
 import { observer } from 'mobx-react';
 import { Theme } from 'Models/Theme';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { createUseStyles, ThemeProvider } from 'react-jss';
 import { PropsWithThemeStore } from 'Stores/ThemeStore';
-import { recursiveCopyStrings } from 'Utils/RecursiveCopyStrings';
 
 import { ContentPageContainer } from '../ContentPageContainer';
 import { PrimaryButtonColors } from './PrimaryButtonColors';
@@ -14,30 +13,26 @@ import { PrimaryColors } from './PrimaryColors';
 import { SecondaryColors } from './SecondaryColors';
 
 
-export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore: globalThemeStore}) => {
+export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore}) => {
 	const styles = useStyles();
-	const [testStore] = useState(observable({theme: toJS(globalThemeStore.theme), renders: 0}));
-	const localThemeJS = toJS(testStore.theme);
 
-	useEffect(() => {
-		console.log('change');
-		recursiveCopyStrings(testStore, {theme: {...toJS(globalThemeStore.theme)}, renders: Math.random()});
-	}, [globalThemeStore.theme]);
-	
+	const localThemeJS = toJS({...themeStore.colorPageThemeStore.theme});
+
 	const onSave = () => {
-		globalThemeStore.theme = localThemeJS;
+		themeStore.theme = {...localThemeJS};
 	};
 
+	console.log(themeStore.colorPageThemeStore.theme);
 	return (
 		<ContentPageContainer>
 			<ThemeProvider theme={{...localThemeJS}}>
-				<div className={styles.content} onClick={() => testStore.renders += 1}>
-					<PrimaryColors themeStore={testStore} renders={testStore.renders} />
-					<SecondaryColors themeStore={testStore} renders={testStore.renders} />
-					<PrimaryButtonColors themeStore={testStore} renders={testStore.renders} />
+				<div className={styles.content} >
+					<PrimaryColors themeStore={themeStore.colorPageThemeStore} />
+					<SecondaryColors themeStore={themeStore.colorPageThemeStore} />
+					<PrimaryButtonColors themeStore={themeStore.colorPageThemeStore} />
 				</div>
 			</ThemeProvider>
-			<ColorsPageSketch theme={localThemeJS} />
+			<ColorsPageSketch theme={toJS(themeStore.colorPageThemeStore.theme)} />
 			<PrimaryButton onClick={onSave} className={styles.saveButton}>Save</PrimaryButton>
 		</ContentPageContainer>
 	);

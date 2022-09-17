@@ -10,12 +10,12 @@ import { ColorSection } from './ColorSection';
 
 interface PrimaryColorsProps {
 	themeStore: Pick<ThemeStore, 'theme'>;
-	renders: number;
 }
 
 export const PrimaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore}) => {
 	const styles = useStyles();
 	
+	console.log(themeStore.theme.backgroundColor.primary);
 	return (
 		<ColorSection title='Primary Colors'>
 			<div className={styles.display}>Lorem Ipsum</div>
