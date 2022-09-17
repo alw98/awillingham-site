@@ -21,12 +21,14 @@ export const ColorSection: React.FC<ColorSectionProps & PropsWithChildren> = ({t
 
 const useStyles = createUseStyles({
 	sectionContainer: {
+		width: '100%',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
 	},
 	contentContainer: {
 		display: 'flex',
+		width: '100%',
 		padding: '.5rem',
 	},
 	title: {

@@ -37,11 +37,19 @@ export interface Theme {
 			primary: string;
 			secondary: string;
 		};
+		hoverOutlineColor: {
+			primary: string;
+			secondary: string;
+		};
 		pressBackgroundColor: {
 			primary: string;
 			secondary: string;
 		};
 		pressTextColor: {
+			primary: string;
+			secondary: string;
+		};
+		pressOutlineColor: {
 			primary: string;
 			secondary: string;
 		};

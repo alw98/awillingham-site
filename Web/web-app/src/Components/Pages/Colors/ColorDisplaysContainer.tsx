@@ -14,6 +14,7 @@ export const ColorDisplaysContainer: React.FC<PropsWithChildren> = ({children}) 
 const useStyles = createUseStyles({
 	container: {
 		display: 'flex',
+		flexGrow: '1',
 		flexDirection: 'column',
 		paddingLeft: '2rem',
 	}

@@ -20,9 +20,9 @@ export const PrimaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore
 		<ColorSection title='Primary Colors'>
 			<div className={styles.display}>Lorem Ipsum</div>
 			<ColorDisplaysContainer>
-				<ColorDisplay displayText='Primary Background Color' onSelect={(color) => themeStore.theme.backgroundColor.primary = color} />
-				<ColorDisplay displayText='Primary Text Color' onSelect={(color) => themeStore.theme.textColor.primary = color} />
-				<ColorDisplay displayText='Primary Accent Color' onSelect={(color) => themeStore.theme.accentColor.primary = color} />
+				<ColorDisplay displayText='Background' onSelect={(color) => themeStore.theme.backgroundColor.primary = color} />
+				<ColorDisplay displayText='Text' onSelect={(color) => themeStore.theme.textColor.primary = color} />
+				<ColorDisplay displayText='Accent' onSelect={(color) => themeStore.theme.accentColor.primary = color} />
 			</ColorDisplaysContainer>
 		</ColorSection>
 	);

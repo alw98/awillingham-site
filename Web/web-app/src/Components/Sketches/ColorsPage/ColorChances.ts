@@ -45,6 +45,14 @@ export const ColorChances: ColorChancesType<Theme> = {
 		outlineColor: {
 			primary: 5,
 			secondary: 5
+		},
+		hoverOutlineColor: {
+			primary: 2,
+			secondary: 2
+		},
+		pressOutlineColor: {
+			primary: 2,
+			secondary: 2
 		}
 	},
 	textColor: {

@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { bounce } from 'react-animations';
 import { createUseStyles } from 'react-jss';
 import { ColorPalletes } from 'Themes/ColorPalletes';
 
@@ -17,7 +18,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({onSelect}) => {
 			};
 			return <div key={i} className={styles.mainColor} style={{backgroundColor: val[5]}} onClick={mainColorOnClick} />;
 		});
-
+		setSelectedPallete(ColorPalletes.prettyBlue);
 		return <div className={styles.mainColorsContainer}>{elements}</div>;
 	}, [ColorPalletes, setSelectedPallete]);
 
@@ -33,12 +34,8 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({onSelect}) => {
 		return <div className={styles.subColorsContainer}>{elements}</div>;
 	}, [selectedPallete]);
 
-	const containerOnClick = (evt: React.MouseEvent<HTMLDivElement>) => {
-		evt.stopPropagation();
-	};
-
 	return (
-		<div className={styles.container} onClick={containerOnClick}>
+		<div className={styles.container}>
 			{mainColorsElements}
 			{subColorsElements}
 		</div>
@@ -46,6 +43,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({onSelect}) => {
 };
 
 const useStyles = createUseStyles({
+	'@keyframes bounce': bounce,
 	palleteCard: {
 		width: '2rem',
 		height: '2rem',
@@ -58,17 +56,19 @@ const useStyles = createUseStyles({
 		animationDuration: '1s',
 		display: 'flex',
 		flexDirection: 'column',
+		height: '4rem',
 	},
 	mainColorsContainer: {
 		display: 'flex',
 		flexDirection: 'row',
+		flexGrow: 1
 	},
 	subColorsContainer: {
 		display: 'flex',
 		flexDirection: 'row',
+		flexGrow: 1
 	},
 	mainColor: {
-		width: '1rem',
-		height: '1rem',
+		flexGrow: 1,
 	}
 });

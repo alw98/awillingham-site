@@ -31,7 +31,7 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
 	
 	useEffect(() => {
 		localStore.width = windowWidth;
-		localStore.height = windowHeight - 4;
+		localStore.height = windowHeight;
 		localStore.mustResize = true;
 	}, [windowWidth, windowHeight]);
 
@@ -116,7 +116,7 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = ({theme}) => {
 
 const useStyles = createUseStyles({
 	sketch: {
-		position: 'absolute',
+		position: 'fixed',
 		left: '0',
 		top: '0'
 	}

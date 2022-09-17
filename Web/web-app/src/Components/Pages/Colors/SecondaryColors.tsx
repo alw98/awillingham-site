@@ -20,9 +20,9 @@ export const SecondaryColors: React.FC<PrimaryColorsProps> = observer(({themeSto
 		<ColorSection title='Secondary Colors'>
 			<div className={styles.display}>Lorem Ipsum</div>
 			<ColorDisplaysContainer>
-				<ColorDisplay displayText='Secondary Background Color' onSelect={(color) => themeStore.theme.backgroundColor.secondary = color} />
-				<ColorDisplay displayText='Secondary Text Color' onSelect={(color) => themeStore.theme.textColor.secondary = color} />
-				<ColorDisplay displayText='Secondary Accent Color' onSelect={(color) => themeStore.theme.accentColor.secondary = color} />
+				<ColorDisplay displayText='Background' onSelect={(color) => themeStore.theme.backgroundColor.secondary = color} />
+				<ColorDisplay displayText='Text' onSelect={(color) => themeStore.theme.textColor.secondary = color} />
+				<ColorDisplay displayText='Accent' onSelect={(color) => themeStore.theme.accentColor.secondary = color} />
 			</ColorDisplaysContainer>
 		</ColorSection>
 	);

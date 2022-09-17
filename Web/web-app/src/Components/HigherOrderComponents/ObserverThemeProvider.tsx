@@ -9,7 +9,6 @@ interface ObserverThemeProviderProps extends PropsWithChildren {
 }
 
 export const ObserverThemeProvider: React.FC<ObserverThemeProviderProps > = observer(({themeStore, children}) => {
-	console.log('observer');
 	return (
 		<ThemeProvider theme={toJS(themeStore.theme)}>
 			{children}

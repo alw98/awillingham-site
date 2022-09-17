@@ -1,3 +1,4 @@
+import { PrimaryButton } from 'Components/Buttons/PrimaryButton';
 import { ColorsPageSketch } from 'Components/Sketches/ColorsPage/ColorsPageSketch';
 import { observable, toJS } from 'mobx';
 import { observer } from 'mobx-react';
@@ -8,6 +9,7 @@ import { PropsWithThemeStore } from 'Stores/ThemeStore';
 import { recursiveCopyStrings } from 'Utils/RecursiveCopyStrings';
 
 import { ContentPageContainer } from '../ContentPageContainer';
+import { PrimaryButtonColors } from './PrimaryButtonColors';
 import { PrimaryColors } from './PrimaryColors';
 import { SecondaryColors } from './SecondaryColors';
 
@@ -18,7 +20,8 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore: 
 	const localThemeJS = toJS(testStore.theme);
 
 	useEffect(() => {
-		recursiveCopyStrings(testStore, {theme: {...toJS(globalThemeStore.theme)}, renders: 0});
+		console.log('change');
+		recursiveCopyStrings(testStore, {theme: {...toJS(globalThemeStore.theme)}, renders: Math.random()});
 	}, [globalThemeStore.theme]);
 	
 	const onSave = () => {
@@ -31,21 +34,26 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore: 
 				<div className={styles.content} onClick={() => testStore.renders += 1}>
 					<PrimaryColors themeStore={testStore} renders={testStore.renders} />
 					<SecondaryColors themeStore={testStore} renders={testStore.renders} />
-					<button onClick={onSave}>Save</button>
+					<PrimaryButtonColors themeStore={testStore} renders={testStore.renders} />
 				</div>
-				<ColorsPageSketch theme={localThemeJS} />
 			</ThemeProvider>
+			<ColorsPageSketch theme={localThemeJS} />
+			<PrimaryButton onClick={onSave} className={styles.saveButton}>Save</PrimaryButton>
 		</ContentPageContainer>
 	);
 });
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	content: {
+		padding: '1rem',
 		position: 'relative',
 		display: 'flex',
 		flexDirection: 'column',
 		alignItems: 'center',
 		zIndex: 1,
 		WebkitTextStroke: `1px ${theme.accentColor.primary}`
+	},
+	saveButton: {
+		zIndex: 1
 	}
 }));

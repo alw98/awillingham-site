@@ -12,7 +12,7 @@ export class DarkTheme implements Theme {
 
 	textColor = { 
 		primary: ColorPalletes.gray[9],
-		secondary: ColorPalletes.gray[1]
+		secondary: ColorPalletes.gray[8]
 	};
 
 	accentColor = { 
@@ -41,6 +41,10 @@ export class DarkTheme implements Theme {
 			primary: ColorPalletes.gray[1],
 			secondary: ColorPalletes.gray[9]
 		},
+		hoverOutlineColor: {
+			primary: ColorPalletes.gray[1],
+			secondary: ColorPalletes.gray[9]
+		},
 		pressBackgroundColor: {
 			primary: ColorPalletes.gray[9],
 			secondary: ColorPalletes.gray[1]
@@ -49,6 +53,10 @@ export class DarkTheme implements Theme {
 			primary: ColorPalletes.gray[1],
 			secondary: ColorPalletes.gray[9]
 		},
+		pressOutlineColor: {
+			primary: ColorPalletes.gray[1],
+			secondary: ColorPalletes.gray[9]
+		},
 	};
-	
 }
+

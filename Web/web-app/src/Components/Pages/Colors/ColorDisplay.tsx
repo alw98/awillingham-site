@@ -18,8 +18,8 @@ export const ColorDisplay: React.FC<ColorDisplayProps> = (props) => {
 	};
 	
 	return (
-		<div className={styles.container} onClick={() => setDisplay(!display)}>
-			{props.displayText}				
+		<div className={styles.container} >
+			<span onClick={() => setDisplay(!display)}>{props.displayText}</span>		
 			{display && <ColorPicker onSelect={onSelect} />}
 		</div>
 	);
@@ -27,6 +27,7 @@ export const ColorDisplay: React.FC<ColorDisplayProps> = (props) => {
 
 const useStyles = createUseStyles({
 	container: {
+		fontSize: '1.5rem',
 		padding: '.5rem'
 	}
 });

@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, toJS } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { Theme } from 'Models/Theme';
 import { DarkTheme } from 'Themes/DarkTheme';
 import { LightTheme } from 'Themes/LightTheme';
@@ -25,12 +25,10 @@ export class ThemeStore extends AutoSavingStore {
 	}
 
 	setTheme(theme: Theme) {
-		console.log(theme);
 		this.theme = theme;
 	}
 
 	switchDefaultTheme() {
-		console.log(toJS(this.theme));
 		if(!this.usingDefaultTheme)
 			return;
 		if(this.usingLightTheme) {

@@ -8,10 +8,7 @@ export const ContentPageContainer: React.FC<PropsWithChildren> = ({children}) =>
 
 	return (
 		<div className={styles.pageContainer}>
-			<div className={styles.contentContainer}>
-				
-				{children}
-			</div>
+			{children}
 		</div>
 	);
 };
@@ -22,8 +19,5 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		flexDirection: 'column',
 		backgroundColor: theme.backgroundColor.primary,
 		alignItems: 'center',
-	},
-	contentContainer: {
-		width: 'min(100vw, 70rem)'
 	}
 }));
