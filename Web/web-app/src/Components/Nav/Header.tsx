@@ -19,6 +19,7 @@ export const Header: React.FC = () => {
 				<AWLogo />
 				Home
 			</Link>
+			<Link className={styles.navLink} to={'/gallery'} >Gallery</Link>
 			<Link className={styles.navLink} to={'/colors'} >Colors</Link>
 			<ToggleThemeButton themeStore={themeStore} />
 		</nav>

@@ -19,13 +19,12 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore})
 	const localThemeJS = toJS({...themeStore.colorPageThemeStore.theme});
 
 	const onSave = () => {
-		themeStore.theme = {...localThemeJS};
+		themeStore.theme = localThemeJS;
 	};
 
-	console.log(themeStore.colorPageThemeStore.theme);
 	return (
 		<ContentPageContainer>
-			<ThemeProvider theme={{...localThemeJS}}>
+			<ThemeProvider theme={localThemeJS}>
 				<div className={styles.content} >
 					<PrimaryColors themeStore={themeStore.colorPageThemeStore} />
 					<SecondaryColors themeStore={themeStore.colorPageThemeStore} />

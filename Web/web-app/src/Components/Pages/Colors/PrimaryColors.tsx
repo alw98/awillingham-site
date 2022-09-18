@@ -15,7 +15,6 @@ interface PrimaryColorsProps {
 export const PrimaryColors: React.FC<PrimaryColorsProps> = observer(({themeStore}) => {
 	const styles = useStyles();
 	
-	console.log(themeStore.theme.backgroundColor.primary);
 	return (
 		<ColorSection title='Primary Colors'>
 			<div className={styles.display}>Lorem Ipsum</div>

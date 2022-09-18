@@ -11,6 +11,7 @@ export const PageContainer: React.FC<PropsWithChildren> = ({children}) => {
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	pageContainer: {
+		overflow: 'auto',
 		display: 'flex',
 		flexDirection: 'column',
 		backgroundColor: theme.backgroundColor.primary,
