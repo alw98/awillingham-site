@@ -63,6 +63,7 @@
 	},
 	"dependencies": {
 		"hex-to-css-filter": "^5.4.0",
+		"hsluv": "^0.1.0",
 		"jss": "^10.9.2",
 		"krakatoa": "^1.0.0",
 		"mobx": "^6.6.2",

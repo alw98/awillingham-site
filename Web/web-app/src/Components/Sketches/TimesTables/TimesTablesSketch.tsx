@@ -1,3 +1,4 @@
+import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
 import { observable } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
@@ -6,6 +7,8 @@ import p5 from 'p5';
 import React, { useCallback, useLayoutEffect, useRef } from 'react';
 import { createUseStyles } from 'react-jss';
 import { ThemeStore } from 'Stores/ThemeStore';
+import GearboxDark from 'wwwroot/images/GearAnimationDark.gif';
+import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
 import { drawTables } from './Utils';
 
@@ -28,6 +31,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	const styles = useStyles();
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
+	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore);
 	const localStore: TimesTablesPropsStore = propsStore ?? useLocalObservable(() => ({
 		...TimesTablesDefaultPropsStore,
 		isGallery: false
@@ -45,7 +49,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 				localStore.mustResize = false;
 			}
 
-			drawTables(s, localStore);
+			drawTables(s, localStore, themeStore);
 		};
 	}, []);
 
@@ -69,15 +73,25 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 
 	
 	return (
-		<>
-			<div className={styles.sketch} ref={p5ContainerRef} />
-		</>
+		<div className={styles.sketch} ref={p5ContainerRef} >
+			{!localStore.isGallery && <img src={gearbox} className={styles.settings} alt={'Settings'}/>}
+		</div>
 	);
 });
 
 const useStyles = createUseStyles({
 	sketch: {
+		position: 'relative',
 		overflow: 'hidden',
 		height: '100%'
+	},
+	settings: {
+		position: 'absolute',
+		top: 0,
+		right: 0,
+		width: '2rem',
+		height: '2rem',
+		padding: '1rem',
+		cursor: 'pointer'
 	}
 });

@@ -23,7 +23,8 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore})
 	};
 
 	return (
-		<ContentPageContainer>
+		<ContentPageContainer>					
+			<PrimaryButton onClick={onSave} className={styles.saveButton}>Save</PrimaryButton>
 			<ThemeProvider theme={localThemeJS}>
 				<div className={styles.content} >
 					<PrimaryColors themeStore={themeStore.colorPageThemeStore} />
@@ -32,7 +33,6 @@ export const ColorsPage: React.FC<PropsWithThemeStore> = observer(({themeStore})
 				</div>
 			</ThemeProvider>
 			<ColorsPageSketch theme={toJS(themeStore.colorPageThemeStore.theme)} />
-			<PrimaryButton onClick={onSave} className={styles.saveButton}>Save</PrimaryButton>
 		</ContentPageContainer>
 	);
 });
@@ -48,6 +48,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		WebkitTextStroke: `1px ${theme.accentColor.primary}`
 	},
 	saveButton: {
-		zIndex: 1
+		zIndex: 1,
+		marginTop: '1rem',
 	}
 }));

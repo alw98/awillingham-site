@@ -1,11 +1,18 @@
+import { useValueForTheme } from 'Hooks/useValueForTheme';
+import { useInject } from 'inversify-hooks';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import Gearbox from 'wwwroot/images/GearAnimation.gif';
+import { Stores } from 'Stores/Stores';
+import { ThemeStore } from 'Stores/ThemeStore';
+import GearboxDark from 'wwwroot/images/GearAnimationDark.gif';
+import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
 import { ContentPageContainer } from './ContentPageContainer';
 
 export const HomePage: React.FC = () => {
 	const styles = useStyles();
+	const [themeStore] = useInject<ThemeStore>(Stores.ThemeStore);
+	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore);
 
 	return (
 		<ContentPageContainer>
@@ -13,7 +20,7 @@ export const HomePage: React.FC = () => {
 				This is an interactive gallery made by Armond Willingham, with love and care. It's still a work in progress.
 				<a href='https://github.com/alw98/awillingham-site'>Source</a>
 			</div>
-			<img src={Gearbox} className={styles.gearboxImage} alt={'WIP'}/>
+			<img src={gearbox} className={styles.gearboxImage} alt={'WIP'}/>
 		</ContentPageContainer>
 	);
 };
