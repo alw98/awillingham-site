@@ -117,7 +117,8 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({them
 const useStyles = createUseStyles({
 	sketch: {
 		position: 'fixed',
-		left: '0',
-		top: '0'
+		left: 0,
+		top: 0,
+		zIndex: -1
 	}
 });
