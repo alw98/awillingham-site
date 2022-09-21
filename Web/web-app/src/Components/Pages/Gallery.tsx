@@ -35,7 +35,8 @@ const useStyles = createUseStyles((theme: Theme) => ({
 	contentContainer: {
 		display: 'flex',
 		flexWrap: 'wrap',
-		justifyContent: 'space-evenly'
+		justifyContent: 'space-evenly',
+		padding: '1rem'
 	},
 	sketchContainer: {
 		padding: '1rem',
