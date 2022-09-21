@@ -26,7 +26,7 @@ export const TimesTablesDefaultPropsStore: TimesTablesPropsStore = observable({
 	width: 320,
 	height: 320,
 	mustResize: false,
-	tables: [{x: 0, y: 0, radius: 160, resolution: 100, multiplier: 2, multiplierChangeRate: .01}],
+	tables: [{x: 0, y: 0, radius: 160, resolution: 100, initialMultiplier: 2, curMultiplier: 2, multiplierChangeRate: .01}],
 	isGallery: true
 });
 
@@ -126,11 +126,11 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		transformOrigin: 'top'
 	},
 	optionsEnterActive: {
-		maxHeight: '5rem',
+		maxHeight: '15rem',
 		transition: 'all 500ms'
 	},
 	optionsExit: {
-		maxHeight: '5rem',
+		maxHeight: '15rem',
 		transformOrigin: 'top'
 	},
 	optionsExitActive: {

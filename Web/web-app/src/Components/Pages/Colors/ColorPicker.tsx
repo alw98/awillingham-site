@@ -53,6 +53,7 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		flexDirection: 'column',
 		height: '4rem',
+		width: '100%',
 	},
 	mainColorsContainer: {
 		display: 'flex',

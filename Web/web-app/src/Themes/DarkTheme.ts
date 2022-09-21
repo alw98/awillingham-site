@@ -22,7 +22,7 @@ export class DarkTheme implements Theme {
 
 	button = {
 		backgroundColor: {
-			primary: ColorPalletes.paleBlue[1],
+			primary: ColorPalletes.paleBlue[2],
 			secondary: ColorPalletes.gray[1]
 		},
 		textColor: {

@@ -3,7 +3,8 @@ export interface TimesTable {
 	y: number;
 	radius: number;
 	resolution: number;
-	multiplier: number;
+	initialMultiplier: number;
+	curMultiplier: number;
 	multiplierChangeRate: number;
 	color?: string;
 }

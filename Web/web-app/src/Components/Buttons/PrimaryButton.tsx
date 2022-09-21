@@ -19,6 +19,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		color: theme.button.textColor.primary,
 		padding: '.5rem',
 		borderRadius: '10rem',
+		height: 'max-content',
 		'&:hover': {
 			backgroundColor: theme.button.hoverBackgroundColor.primary,
 			border: `1px solid ${theme.button.hoverOutlineColor.primary}`,
