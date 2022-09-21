@@ -4,41 +4,41 @@ import { ColorPalletes } from './ColorPalletes';
 
 export class DarkTheme implements Theme {
 	backgroundColor = { 
-		primary: ColorPalletes.gray[0],
-		secondary: ColorPalletes.gray[1],
+		primary: ColorPalletes.paleBlue[0],
+		secondary: ColorPalletes.paleBlue[1],
 		tertiary: ColorPalletes.gray[0],
 		quaternary: ColorPalletes.gray[0]
 	};
 
 	textColor = { 
-		primary: ColorPalletes.gray[9],
-		secondary: ColorPalletes.gray[8]
+		primary: ColorPalletes.trueBlue[9],
+		secondary: ColorPalletes.trueBlue[8]
 	};
 
 	accentColor = { 
-		primary: ColorPalletes.trueRed[6],
-		secondary: ColorPalletes.trueRed[4]
+		primary: ColorPalletes.prettyBlue[7],
+		secondary: ColorPalletes.trueBlue[8]
 	};
 
 	button = {
 		backgroundColor: {
-			primary: ColorPalletes.gray[9],
+			primary: ColorPalletes.paleBlue[1],
 			secondary: ColorPalletes.gray[1]
 		},
 		textColor: {
-			primary: ColorPalletes.gray[1],
+			primary: ColorPalletes.prettyBlue[9],
 			secondary: ColorPalletes.gray[9]
 		},
 		outlineColor: {
-			primary: 'none',
+			primary: ColorPalletes.paleBlue[7],
 			secondary: 'none'
 		},
 		hoverBackgroundColor: {
-			primary: ColorPalletes.gray[9],
+			primary: ColorPalletes.prettyBlue[3],
 			secondary: ColorPalletes.gray[1]
 		},
 		hoverTextColor: {
-			primary: ColorPalletes.gray[1],
+			primary: ColorPalletes.gray[2],
 			secondary: ColorPalletes.gray[9]
 		},
 		hoverOutlineColor: {

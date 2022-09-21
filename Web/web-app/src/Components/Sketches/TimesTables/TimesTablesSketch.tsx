@@ -92,7 +92,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 					alt={'Settings'} 
 					onClick={onSettingsClick}/> }
 			
-			<CSSTransition unmountOnExit nodeRef={nodeRef} in={settingsOpen} timeout={200} classNames={{
+			<CSSTransition unmountOnExit nodeRef={nodeRef} in={settingsOpen} timeout={500} classNames={{
 				enter: styles.optionsEnter,
 				enterActive: styles.optionsEnterActive,
 				exit: styles.optionsExit,
@@ -126,16 +126,16 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		transformOrigin: 'top'
 	},
 	optionsEnterActive: {
-		maxHeight: 500,
-		transition: 'all 200ms'
+		maxHeight: '5rem',
+		transition: 'all 500ms'
 	},
 	optionsExit: {
-		maxHeight: 500,
+		maxHeight: '5rem',
 		transformOrigin: 'top'
 	},
 	optionsExitActive: {
 		maxHeight: 0,
-		transition: 'all 200ms'
+		transition: 'all 500ms'
 	},
 	animationContainer: {
 		position: 'absolute',
