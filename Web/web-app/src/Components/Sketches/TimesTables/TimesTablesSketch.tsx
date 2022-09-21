@@ -122,19 +122,18 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		cursor: 'pointer'
 	},
 	optionsEnter: {
-		maxHeight: 0,
-		transformOrigin: 'top'
+		marginTop: '-100%',
 	},
 	optionsEnterActive: {
-		maxHeight: '15rem',
+		marginTop: 0,
 		transition: 'all 500ms'
 	},
 	optionsExit: {
-		maxHeight: '15rem',
+		marginTop: 0,
 		transformOrigin: 'top'
 	},
 	optionsExitActive: {
-		maxHeight: 0,
+		marginTop: '-100%',
 		transition: 'all 500ms'
 	},
 	animationContainer: {
