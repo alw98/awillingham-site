@@ -11,7 +11,8 @@ export const AWLogo: React.FC = () => {
 
 const useStyles = createUseStyles({
 	logo: {
-		height: '100%',
+		height: '2rem',
+		width: 'auto',
 		paddingRight: '1rem',
 	}
 });
