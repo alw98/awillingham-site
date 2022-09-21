@@ -10,7 +10,6 @@ import { ContentPageContainer } from './ContentPageContainer';
 
 export const HomePage: React.FC<PropsWithThemeStore> = observer(({themeStore}) => {
 	const styles = useStyles();
-	console.log(themeStore.theme);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
 
 	return (
