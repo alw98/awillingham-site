@@ -28,7 +28,8 @@ export const Header: React.FC = () => {
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	header: {
-		zIndex: '100',
+		zIndex: 100,
+		transform: 'translate3d(0, 0, 1px)',
 		width: '100%',
 		height: '3rem',
 		display: 'flex',
