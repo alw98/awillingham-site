@@ -42,6 +42,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		padding: '.5rem',
 		fontSize: '1rem',
 		textDecoration: 'none',
+		zIndex: 100,
 		'&:visited': {
 			color: theme.accentColor.primary,
 		}

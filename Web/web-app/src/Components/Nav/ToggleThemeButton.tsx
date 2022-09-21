@@ -25,7 +25,8 @@ export const ToggleThemeButton: React.FC<PropsWithThemeStore> = observer(({theme
 const useStyles = createUseStyles((theme: Theme) => ({
 	toggleThemeButton: {
 		padding: '.5rem',
-		marginLeft: 'auto'
+		marginLeft: 'auto',
+		zIndex: 100
 	},
 	toggleThemeIcon: {
 		width: '2rem',
