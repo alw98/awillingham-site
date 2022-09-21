@@ -62,6 +62,7 @@ export const ColorsPageSketch: React.FC<ColorsPageSketchProps> = observer(({them
 			for(let i = localStore.circles.length - 1; i >= 0; i--) {
 				const c = localStore.circles[i];
 				s.fill(localStore.colorsByChance[c.colorInd]);
+				console.log(localStore.colorsByChance[c.colorInd]);
 				s.circle(c.x, c.y, c.r * 2);
 				c.r += localStore.growthRate * c.growthModifier;
 				c.growthModifier-= .01;
@@ -119,6 +120,6 @@ const useStyles = createUseStyles({
 		position: 'fixed',
 		left: 0,
 		top: 0,
-		zIndex: -1
+		zIndex: 0
 	}
 });
