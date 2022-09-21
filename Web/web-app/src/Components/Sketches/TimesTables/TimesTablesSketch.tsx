@@ -36,7 +36,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	const nodeRef = useRef(null);
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
-	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore);
+	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
 	const localStore: TimesTablesPropsStore = propsStore ?? useLocalObservable(() => ({
 		...TimesTablesDefaultPropsStore,
 		isGallery: false

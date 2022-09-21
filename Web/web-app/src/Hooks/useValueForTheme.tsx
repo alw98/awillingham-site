@@ -1,6 +1,7 @@
 import { hexToHsluv } from 'hsluv';
-import { ThemeStore } from 'Stores/ThemeStore';
+import { Theme } from 'Models/Theme';
 
-export const useValueForTheme = <T,>(lightValue: T, darkValue: T, themeStore: ThemeStore): T => {
-	return hexToHsluv(themeStore.theme.backgroundColor.primary)[2] > 50 ? lightValue : darkValue;
+export const useValueForTheme = <T,>(lightValue: T, darkValue: T, theme: Theme): T => {
+	console.log(theme);
+	return hexToHsluv(theme.backgroundColor.primary)[2] > 50 ? lightValue : darkValue;
 };

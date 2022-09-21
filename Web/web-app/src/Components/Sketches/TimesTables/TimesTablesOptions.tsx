@@ -15,13 +15,13 @@ export const TimesTablesOptions: React.FC<TimesTablesOptionsProps> = observer(({
 		<input 
 			type='number' 
 			placeholder={`Multiplier: ${Math.round(propsStore.tables[0].multiplier * 100) / 100}`} 
-			onChange={(evt) => propsStore.tables[0].multiplier = Number.parseInt(evt.target.value)} />
+			onChange={(evt) => propsStore.tables[0].multiplier = Number.parseFloat(evt.target.value)} />
 
 		
 		<input 
 			type='number' 
 			placeholder={`Multiplier Change Rate: ${Math.round(propsStore.tables[0].multiplierChangeRate * 100) / 100}`} 
-			onChange={(evt) => propsStore.tables[0].multiplierChangeRate = Number.parseInt(evt.target.value)} />
+			onChange={(evt) => propsStore.tables[0].multiplierChangeRate = Number.parseFloat(evt.target.value)} />
 		<PrimaryButton onClick={onClose} className={styles.closeButton}>Close</PrimaryButton>
 	</div>;
 });

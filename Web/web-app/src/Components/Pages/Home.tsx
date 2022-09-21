@@ -1,18 +1,17 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
-import { useInject } from 'inversify-hooks';
+import { observer } from 'mobx-react';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
-import { Stores } from 'Stores/Stores';
-import { ThemeStore } from 'Stores/ThemeStore';
+import { PropsWithThemeStore } from 'Stores/ThemeStore';
 import GearboxDark from 'wwwroot/images/GearAnimationDark.gif';
 import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
 import { ContentPageContainer } from './ContentPageContainer';
 
-export const HomePage: React.FC = () => {
+export const HomePage: React.FC<PropsWithThemeStore> = observer(({themeStore}) => {
 	const styles = useStyles();
-	const [themeStore] = useInject<ThemeStore>(Stores.ThemeStore);
-	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore);
+	console.log(themeStore.theme);
+	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
 
 	return (
 		<ContentPageContainer>
@@ -23,7 +22,7 @@ export const HomePage: React.FC = () => {
 			<img src={gearbox} className={styles.gearboxImage} alt={'WIP'}/>
 		</ContentPageContainer>
 	);
-};
+});
 
 const useStyles = createUseStyles({
 	body: {

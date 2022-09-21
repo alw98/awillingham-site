@@ -27,7 +27,7 @@ export const InitApp = (): void => {
 		<BrowserRouter>
 			<Routes>
 				<Route path="/" element={<App/>}>
-					<Route path="/" element={<HomePage />} />
+					<Route path="/" element={<HomePage themeStore={themeStore} />} />
 					<Route path="colors" element={<ColorsPage themeStore={themeStore} />} />
 					<Route path="gallery" element={<Gallery />} />
 					{galleryElementRoutes}
