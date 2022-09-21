@@ -3,13 +3,16 @@ import { useWindowSize } from 'Hooks/useWindowSize';
 import { observable } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
 import { TimesTablesPropsStore } from 'Models/Sketches/TimesTables/TimesTablesPropsStore';
+import { Theme } from 'Models/Theme';
 import p5 from 'p5';
-import React, { useCallback, useLayoutEffect, useRef } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
+import { CSSTransition } from 'react-transition-group';
 import { ThemeStore } from 'Stores/ThemeStore';
 import GearboxDark from 'wwwroot/images/GearAnimationDark.gif';
 import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
+import { TimesTablesOptions } from './TimesTablesOptions';
 import { drawTables } from './Utils';
 
 export interface TimesTablesSketchProps {
@@ -23,12 +26,14 @@ export const TimesTablesDefaultPropsStore: TimesTablesPropsStore = observable({
 	width: 320,
 	height: 320,
 	mustResize: false,
-	tables: [{x: 0, y: 0, radius: 160, resolution: 100, multiplier: 2}],
+	tables: [{x: 0, y: 0, radius: 160, resolution: 100, multiplier: 2, multiplierChangeRate: .01}],
 	isGallery: true
 });
 
 export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({themeStore, propsStore}) => {
 	const styles = useStyles();
+	const [settingsOpen, setSettingsOpen] = useState(false);
+	const nodeRef = useRef(null);
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore);
@@ -71,15 +76,37 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 		}
 	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
 
-	
+	const onSettingsClick = () => {
+		setSettingsOpen(true);
+	};
+
+	const onSettingsClose = () => {
+		setSettingsOpen(false);
+	};
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
-			{!localStore.isGallery && <img src={gearbox} className={styles.settings} alt={'Settings'}/>}
+			{ !localStore.isGallery 
+				&& <img 
+					src={gearbox} 
+					className={styles.settings} 
+					alt={'Settings'} 
+					onClick={onSettingsClick}/> }
+			
+			<CSSTransition unmountOnExit nodeRef={nodeRef} in={settingsOpen} timeout={200} classNames={{
+				enter: styles.optionsEnter,
+				enterActive: styles.optionsEnterActive,
+				exit: styles.optionsExit,
+				exitActive: styles.optionsExitActive
+			}} >
+				<div ref={nodeRef} className={styles.animationContainer}>
+					<TimesTablesOptions propsStore={localStore} onClose={onSettingsClose} />
+				</div>
+			</CSSTransition>
 		</div>
 	);
 });
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles((theme: Theme) => ({
 	sketch: {
 		position: 'relative',
 		overflow: 'hidden',
@@ -89,9 +116,32 @@ const useStyles = createUseStyles({
 		position: 'absolute',
 		top: 0,
 		right: 0,
-		width: '2rem',
-		height: '2rem',
+		width: '4rem',
+		height: '4rem',
 		padding: '1rem',
 		cursor: 'pointer'
+	},
+	optionsEnter: {
+		maxHeight: 0,
+		transformOrigin: 'top'
+	},
+	optionsEnterActive: {
+		maxHeight: 500,
+		transition: 'all 200ms'
+	},
+	optionsExit: {
+		maxHeight: 500,
+		transformOrigin: 'top'
+	},
+	optionsExitActive: {
+		maxHeight: 0,
+		transition: 'all 200ms'
+	},
+	animationContainer: {
+		position: 'absolute',
+		top: 0,
+		width: '100%',
+		backgroundColor: theme.backgroundColor.secondary,
+		overflow: 'hidden'
 	}
-});
+}));

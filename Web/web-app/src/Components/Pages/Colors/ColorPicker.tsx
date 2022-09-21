@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { bounce } from 'react-animations';
 import { createUseStyles } from 'react-jss';
 import { ColorPalletes } from 'Themes/ColorPalletes';
 
@@ -43,7 +42,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({onSelect}) => {
 };
 
 const useStyles = createUseStyles({
-	'@keyframes bounce': bounce,
 	palleteCard: {
 		width: '2rem',
 		height: '2rem',
@@ -52,8 +50,6 @@ const useStyles = createUseStyles({
 		display: 'flex'
 	},
 	container: {
-		animationName: 'bounce',
-		animationDuration: '1s',
 		display: 'flex',
 		flexDirection: 'column',
 		height: '4rem',

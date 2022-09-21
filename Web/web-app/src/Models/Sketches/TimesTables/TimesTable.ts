@@ -4,5 +4,6 @@ export interface TimesTable {
 	radius: number;
 	resolution: number;
 	multiplier: number;
+	multiplierChangeRate: number;
 	color?: string;
 }

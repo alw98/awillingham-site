@@ -25,5 +25,5 @@ export const drawLines = (s: p5, table: TimesTable, store: TimesTablesPropsStore
 		s.stroke(table.color ?? themeStore.theme.textColor.primary);
 		s.line(x, y, toX, toY);
 	}
-	table.multiplier += .01;
+	table.multiplier += table.multiplierChangeRate;
 };
