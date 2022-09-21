@@ -59,6 +59,8 @@ const useStyles = createUseStyles({
 		display: 'flex',
 		flexWrap: 'wrap',
 		padding: '1rem',
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	colorPicker: {
 		padding: '.5rem',
