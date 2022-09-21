@@ -29,7 +29,6 @@ export const Header: React.FC = () => {
 const useStyles = createUseStyles((theme: Theme) => ({
 	header: {
 		zIndex: '100',
-		position: 'relative',
 		width: '100%',
 		height: '3rem',
 		display: 'flex',
