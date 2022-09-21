@@ -13,6 +13,6 @@ const useStyles = createUseStyles({
 	logo: {
 		height: '2rem',
 		width: 'auto',
-		paddingRight: '1rem',
+		paddingRight: '.5rem',
 	}
 });
