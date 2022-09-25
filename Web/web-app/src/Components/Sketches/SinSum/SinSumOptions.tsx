@@ -58,8 +58,20 @@ export const SinSumOptions: React.FC<SinSumOptionsProps> = observer(({propsStore
 		});
 	}, [propsStore.functions]);
 
+	const setSketchSpeed = (val: number) => {
+		propsStore.speed = val;
+		propsStore.drawn = [];
+	};
+
 	return (
 		<BaseOptions onClose={onClose}>
+			<RangeSlider
+				title='Sketch speed'
+				onChange={setSketchSpeed}
+				min={0}
+				max={5}
+				initialValue={propsStore.speed}
+				step={.5} />
 			{functionOptions}
 		</BaseOptions>
 	);

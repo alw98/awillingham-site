@@ -21,7 +21,7 @@ export interface SinSumSketchProps {
 }
 
 export const SinSumSketchDefaultPropsStore = observable<SinSumSketchPropsStore>({
-	name: 'BaseSketch',
+	name: 'SinSums',
 	backgroundColor: '',
 	width: 320,
 	height: 320,

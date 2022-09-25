@@ -2,7 +2,7 @@
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 
 import { BaseSketchProps } from './BaseSketch';
-import { SinSumSketch, SinSumSketchDefaultPropsStore } from './SineSum/SinSumSketch';
+import { SinSumSketch, SinSumSketchDefaultPropsStore } from './SinSum/SinSumSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
 
 interface GallerySketch {

@@ -40,6 +40,7 @@ const useStyles = createUseStyles((theme: Theme) => ({
 	},
 	sketchContainer: {
 		padding: '1rem',
-		border: `1px solid ${theme.accentColor.primary}`
+		border: `1px solid ${theme.accentColor.primary}`,
+		marginBottom: '1rem',
 	}
 }));
