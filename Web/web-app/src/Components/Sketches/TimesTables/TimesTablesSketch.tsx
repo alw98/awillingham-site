@@ -20,7 +20,7 @@ export interface TimesTablesSketchProps {
 	propsStore?: TimesTablesPropsStore;
 }
 
-export const TimesTablesDefaultPropsStore: TimesTablesPropsStore = observable({
+export const TimesTablesDefaultPropsStore = observable<TimesTablesPropsStore>({
 	name: 'TimesTables',
 	backgroundColor: '',
 	width: 320,
@@ -37,7 +37,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
-	const localStore: TimesTablesPropsStore = propsStore ?? useLocalObservable(() => ({
+	const localStore = propsStore ?? useLocalObservable<TimesTablesPropsStore>(() => ({
 		...TimesTablesDefaultPropsStore,
 		isGallery: false
 	}));
@@ -85,12 +85,16 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	};
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
-			{ !localStore.isGallery 
-				&& <img 
-					src={gearbox} 
-					className={styles.settings} 
-					alt={'Settings'} 
-					onClick={onSettingsClick}/> }
+			{ !localStore.isGallery && 
+				<div className={styles.settingsContainer}>
+					<img 
+						src={gearbox} 
+						className={styles.settings} 
+						alt={'Settings'} 
+						onClick={onSettingsClick}/>
+						settings
+				</div> 
+			}
 			
 			<CSSTransition unmountOnExit nodeRef={nodeRef} in={settingsOpen} timeout={500} classNames={{
 				enter: styles.optionsEnter,
@@ -112,14 +116,19 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		overflow: 'hidden',
 		height: '100%'
 	},
-	settings: {
+	settingsContainer: {
+		display: 'flex',
+		flexDirection: 'column',
 		position: 'absolute',
 		top: 0,
 		right: 0,
+		cursor: 'pointer',
+		padding: '1rem',
+		alignItems: 'center',
+	},
+	settings: {
 		width: '4rem',
 		height: '4rem',
-		padding: '1rem',
-		cursor: 'pointer'
 	},
 	optionsEnter: {
 		marginTop: '-100%',

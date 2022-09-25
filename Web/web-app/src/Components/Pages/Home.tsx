@@ -31,7 +31,7 @@ const useStyles = createUseStyles({
 		padding: '1rem 2rem 2rem 2rem',
 	},
 	gearboxImage: {
-		maxWidth: '100%',
+		maxWidth: 'min(100%, 40rem)',
 		maxHeight: '100%',
 	}
 });

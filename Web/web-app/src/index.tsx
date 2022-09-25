@@ -8,7 +8,7 @@ import { GallerySketches } from 'Components/Sketches/GallerySketches';
 import { container } from 'inversify-hooks';
 import React from 'react';
 import {createRoot} from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Stores } from 'Stores/Stores';
 import { ThemeStore } from 'Stores/ThemeStore';
 import { setupStores } from 'Utils/Stores';
@@ -31,6 +31,7 @@ export const InitApp = (): void => {
 					<Route path="colors" element={<ColorsPage themeStore={themeStore} />} />
 					<Route path="gallery" element={<Gallery />} />
 					{galleryElementRoutes}
+					<Route path="*" element={<Navigate to="/" />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>
