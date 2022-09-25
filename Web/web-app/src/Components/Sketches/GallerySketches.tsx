@@ -2,6 +2,7 @@
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 
 import { BaseSketchProps } from './BaseSketch';
+import { SinSumSketch, SinSumSketchDefaultPropsStore } from './SineSum/SinSumSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
 
 interface GallerySketch {
@@ -14,4 +15,8 @@ export const GallerySketches: GallerySketch[] = [
 		sketch: TimesTablesSketch,
 		defaultPropsStore: TimesTablesDefaultPropsStore
 	},
+	{
+		sketch: SinSumSketch,
+		defaultPropsStore: SinSumSketchDefaultPropsStore
+	}
 ];
