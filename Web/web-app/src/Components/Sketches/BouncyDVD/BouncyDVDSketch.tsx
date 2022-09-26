@@ -33,8 +33,8 @@ export const BouncyDVDSketch: React.FC<BaseSketchProps> = observer(({themeStore,
 	const sketch = useCallback((s: p5) => {
 		const dvdLogo = s.loadImage(DVDLogo);
 		const aspectRatio = .5;
-		let vx = Math.random() * 5 + 3;
-		let vy = Math.random() * 5 + 3;
+		let vx = (Math.random() * 5 + 3) * localStore.width / 500;
+		let vy = (Math.random() * 5 + 3) * localStore.height / 500;
 		const imageWidth = localStore.width / 6;
 		const imageHeight = localStore.width / 6 * aspectRatio;
 		let x = Math.random() * localStore.width - imageWidth;
