@@ -28,6 +28,10 @@ export const SinSumOptions: React.FC<SinSumOptionsProps> = observer(({propsStore
 			fn.amplitude = val;
 			propsStore.drawn = [];
 		};
+		const onDelete = () => {
+			propsStore.functions.splice(i, 1);
+			propsStore.drawn = [];
+		};
 		return(
 			<div key={i} className={styles.functionContainer}>
 					Function {i}
@@ -54,6 +58,7 @@ export const SinSumOptions: React.FC<SinSumOptionsProps> = observer(({propsStore
 					max={Math.PI * 2}
 					initialValue={fn.phase}
 					step={.1} />
+				<PrimaryButton onClick={onDelete} >Delete</PrimaryButton>
 			</div>
 
 		); 
