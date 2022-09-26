@@ -14,7 +14,6 @@ import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
 import { SinSumOptions } from './SinSumOptions';
 
-
 export interface SinSumSketchProps {
 	themeStore: ThemeStore;
 	propsStore?: SinSumSketchPropsStore;
@@ -76,6 +75,9 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 				offY += Math.sin(localTheta) * size / 2;
 			}
 			s.ellipse(offX, offY, 10, 10);
+			if(localStore.drawn.length > 1000) {
+				localStore.drawn.splice(0, 1);
+			}
 			localStore.drawn.push({x: offX, y: offY});
 		};
 

@@ -1,5 +1,4 @@
 import { createPalleteFromHex } from 'krakatoa';
-
 export const ColorPalletes = {
 	trueRed: createPalleteFromHex('#dd0b0b', 10),
 	prettyRed: createPalleteFromHex('#8d2727', 10),
@@ -12,4 +11,11 @@ export const ColorPalletes = {
 	purple: createPalleteFromHex('#c531dd', 10),
 	tan: createPalleteFromHex('#f4dbae', 10),
 	gray: createPalleteFromHex('#ffffff', 10),
+};
+
+export const getRandomColor = () => {
+	const keys = Object.keys(ColorPalletes);
+	const color = ColorPalletes[keys[Math.floor(Math.random() * keys.length)] as keyof typeof ColorPalletes];
+	const shade = color[Math.floor(Math.random() * color.length)];
+	return shade;
 };
