@@ -31,7 +31,6 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({title, onChange, initia
 	const resize = useCallback((val: number) => {
 		if(extendable) {
 			if(val === min) {
-				console.log('min');
 				const newMin = min / 2;
 				const newStep = (val - newMin) / 10;
 				setMin(round(min / 2, 5));
@@ -40,7 +39,6 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({title, onChange, initia
 				setDisabled(true);
 				setTimeout(() => setDisabled(false), 50);
 			} else if(val === max) {
-				console.log('max');
 				const newMax = max * 2;
 				const newStep = (newMax - val) / 10;
 				setMax(round(max * 2, 5));

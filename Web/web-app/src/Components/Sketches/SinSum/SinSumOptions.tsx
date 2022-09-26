@@ -67,7 +67,6 @@ export const SinSumOptions: React.FC<SinSumOptionsProps> = observer(({propsStore
 	const addNewFunction = () => {
 		propsStore.functions.push({...propsStore.functions[propsStore.functions.length - 1]});
 		propsStore.drawn = [];
-		console.log(propsStore.functions);
 	};
 
 	return (
