@@ -12,6 +12,7 @@ import { ThemeStore } from 'Stores/ThemeStore';
 import GearboxDark from 'wwwroot/images/GearAnimationDark.gif';
 import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
+import { TimesTablesAbout } from './TimesTableAbout';
 import { TimesTablesOptions } from './TimesTablesOptions';
 import { drawTables } from './Utils';
 
@@ -33,7 +34,9 @@ export const TimesTablesDefaultPropsStore = observable<TimesTablesPropsStore>({
 export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({themeStore, propsStore}) => {
 	const styles = useStyles();
 	const [settingsOpen, setSettingsOpen] = useState(false);
-	const nodeRef = useRef(null);
+	const [aboutOpen, setAboutOpen] = useState(false);
+	const settingsNodeRef = useRef(null);
+	const aboutNodeRef = useRef(null);
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
@@ -86,24 +89,37 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
 			{ !localStore.isGallery && 
-				<div className={styles.settingsContainer}>
-					<img 
-						src={gearbox} 
-						className={styles.settings} 
-						alt={'Settings'} 
-						onClick={onSettingsClick}/>
+				<>
+					<div className={styles.aboutContainer} onClick={() => setAboutOpen(true)}>About</div>
+					<div className={styles.settingsContainer}>
+						<img 
+							src={gearbox} 
+							className={styles.settings} 
+							alt={'Settings'} 
+							onClick={onSettingsClick}/>
 						settings
-				</div> 
+					</div> 
+				</>
 			}
 			
-			<CSSTransition unmountOnExit nodeRef={nodeRef} in={settingsOpen} timeout={500} classNames={{
+			<CSSTransition unmountOnExit nodeRef={settingsNodeRef} in={settingsOpen} timeout={500} classNames={{
 				enter: styles.optionsEnter,
 				enterActive: styles.optionsEnterActive,
 				exit: styles.optionsExit,
 				exitActive: styles.optionsExitActive
 			}} >
-				<div ref={nodeRef} className={styles.animationContainer}>
+				<div ref={settingsNodeRef} className={styles.animationContainer}>
 					<TimesTablesOptions propsStore={localStore} onClose={onSettingsClose} />
+				</div>
+			</CSSTransition>
+			<CSSTransition unmountOnExit nodeRef={aboutNodeRef} in={aboutOpen} timeout={500} classNames={{
+				enter: styles.optionsEnter,
+				enterActive: styles.optionsEnterActive,
+				exit: styles.optionsExit,
+				exitActive: styles.optionsExitActive
+			}} >
+				<div ref={aboutNodeRef} className={styles.animationContainer}>
+					<TimesTablesAbout onClose={() => setAboutOpen(false)} />
 				</div>
 			</CSSTransition>
 		</div>
@@ -122,6 +138,17 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		position: 'absolute',
 		top: 0,
 		right: 0,
+		cursor: 'pointer',
+		padding: '1rem',
+		alignItems: 'center',
+	},
+	aboutContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		position: 'absolute',
+		top: 0,
+		right: '50%',
+		left: '50%',
 		cursor: 'pointer',
 		padding: '1rem',
 		alignItems: 'center',
