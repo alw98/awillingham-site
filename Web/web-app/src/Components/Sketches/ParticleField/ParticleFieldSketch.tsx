@@ -7,7 +7,7 @@ import { Particle } from 'Models/Sketches/ParticleField/Particle';
 import { ParticleFieldSketchPropsStore } from 'Models/Sketches/ParticleField/ParticleFieldSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { CSSTransition } from 'react-transition-group';
 import { ThemeStore } from 'Stores/ThemeStore';
@@ -42,6 +42,12 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 				localStore.particles.push(new Particle(s, s.mouseX, s.mouseY));
 		};
 
+		const createStartingParticles = () => {
+			for(let i = 0; i < localStore.initialParticles; ++i) {
+				localStore.particles.push(new Particle(s, Math.random() * localStore.width, Math.random() * localStore.height));
+			}
+		};
+
 		s.setup = () => {
 			const c = s.createCanvas(localStore.width, localStore.height);
 			localStore.field = new Field(localStore.gridWidth, 
@@ -51,19 +57,17 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 				localStore.fieldStrengthScale,
 				localStore.uniformStrength,
 				s);
-			
-			for(let i = 0; i < localStore.initialParticles; ++i) {
-				localStore.particles.push(new Particle(s, Math.random() * localStore.width, Math.random() * localStore.height));
-			}
+				
+			createStartingParticles();
 			c.mouseMoved(mouseMoved);
 		};
 		
-
 		s.draw = () => {	
 			s.background(themeStore.theme.backgroundColor.primary);
 			if(localStore.mustResize) {
 				if(s.width !== localStore.width || s.height != localStore.height) {
 					localStore.particles = [];
+					createStartingParticles();
 					s.resizeCanvas(localStore.width, localStore.height);
 				}
 				localStore.mustResize = false;
@@ -80,7 +84,7 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 			if(localStore.drawFieldLines)
 				localStore.field.drawFieldLines(localStore.width, localStore.height);
 			localStore.particles.forEach((val) => val.draw(localStore.particleSize, localStore.particleTrailShrinks));
-			localStore.field.update(localStore.step, localStore.fieldDirectionChangeSpeed, localStore.fieldStrengthChangeSpeed);
+			localStore.field.update(localStore.step, localStore.fieldDirectionChangeSpeed, localStore.fieldStrengthChangeSpeed, localStore.fieldStrengthScale);
 			localStore.field.updateParticles(localStore.particles, localStore.particleSpeed, localStore.particleTrailLength);
 			localStore.step++;
 		};
@@ -96,13 +100,13 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 		}
 	}, []);
 	
-	useLayoutEffect(() => {
+	useEffect(() => {
+		localStore.height = p5ContainerRef.current.clientHeight;
+		localStore.width = p5ContainerRef.current.clientWidth;
+		localStore.mustResize = true;
 		if(!localStore.isGallery) {
-			localStore.height = p5ContainerRef.current.clientHeight;
-			localStore.width = p5ContainerRef.current.clientWidth;
 			localStore.gridWidth = Math.floor(localStore.width / 50);
 			localStore.gridHeight = Math.floor(localStore.height / 50);
-			localStore.mustResize = true;
 		}
 	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
 
@@ -162,21 +166,21 @@ export const ParticleFieldSketchDefaultPropsStore = observable<ParticleFieldSket
 	height: 320,
 	mustResize: false,
 	isGallery: true,
-	particleSpeed: 6,
+	particleSpeed: 2,
 	particleTrailLength: 100,
 	particleSize: 4,
 	fieldDirectionChangeSpeed: .001,
 	fieldStrengthChangeSpeed: .01,
-	fieldStrengthScale: 1,
-	fieldDirectionNoiseScale: .1,
-	fieldStrengthNoiseScale: .1,
+	fieldStrengthScale: .25,
+	fieldDirectionNoiseScale: .03,
+	fieldStrengthNoiseScale: .03,
 	gridWidth: 32,
 	gridHeight: 32,
 	step: 0,
 	initialParticles: 10,
 	particleTrailShrinks: false,
 	drawFieldLines: true,
-	drawGrid: true,
+	drawGrid: false,
 	uniformStrength: false,
 	field: {} as Field,
 	particles: [],

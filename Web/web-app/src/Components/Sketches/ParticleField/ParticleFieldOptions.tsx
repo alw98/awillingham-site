@@ -53,7 +53,8 @@ export const ParticleFieldOptions: React.FC<ParticleFieldOptionsProps> = observe
 					onChange={(val) => { propsStore.fieldDirectionNoiseScale = val; propsStore.mustResize = true; }}
 					min={.01}
 					max={.2}
-					initialValue={propsStore.fieldDirectionNoiseScale} step={.01} />
+					initialValue={propsStore.fieldDirectionNoiseScale} step={.01}
+					extendable />
 				<RangeSlider
 					title='Field Strength'
 					onChange={(val) => { propsStore.fieldStrengthNoiseScale = val; propsStore.mustResize = true; }}
@@ -69,9 +70,9 @@ export const ParticleFieldOptions: React.FC<ParticleFieldOptionsProps> = observe
 					title='Field Direction'
 					onChange={(val) => { propsStore.fieldDirectionChangeSpeed = val; propsStore.mustResize = true; }}
 					min={0}
-					max={.03}
+					max={.005}
 					initialValue={propsStore.fieldDirectionChangeSpeed} 
-					step={.001} />
+					step={.0001} />
 				<RangeSlider
 					title='Field Strength'
 					onChange={(val) => { propsStore.fieldStrengthChangeSpeed = val; propsStore.mustResize = true; }}
@@ -107,9 +108,10 @@ export const ParticleFieldOptions: React.FC<ParticleFieldOptionsProps> = observe
 				title='Field Strength Scale'
 				onChange={(val) => { propsStore.fieldStrengthScale = val; }}
 				min={0}
-				max={5}
+				max={2}
 				initialValue={propsStore.fieldStrengthScale}
-				step={.1} />
+				step={.01} />
+
 		</BaseOptions>
 	);
 });

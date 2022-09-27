@@ -1,6 +1,7 @@
 import p5 from 'p5';
 
 import { Particle } from './Particle';
+import { convertPlaneCoordsToTorus } from './Utils';
 
 const STRENGTH_NOISE_OFFSET = 42069;
 
@@ -11,7 +12,6 @@ export class Field {
 	h: number;
 	fieldDirectionNoiseScale: number;
 	fieldStrengthNoiseScale: number;
-	fieldStrengthScale: number;
 	fieldUniformStrength: boolean;
 
 	constructor(
@@ -25,7 +25,6 @@ export class Field {
 		this.field = new Array(h);
 		this.fieldDirectionNoiseScale = fieldDirectionNoiseScale;
 		this.fieldStrengthNoiseScale = fieldStrengthNoiseScale;
-		this.fieldStrengthScale = fieldStrengthScale;
 		this.fieldUniformStrength = fieldUniformStrength;
 		this.w = w;
 		this.h = h;
@@ -33,23 +32,24 @@ export class Field {
 		for(let y = 0; y < h; ++y) {
 			this.field[y] = new Array(w);
 		}
-		this.update(0, 0, 0);
+		this.update(0, 0, 0, fieldStrengthScale);
 	}
 
-	update(step: number, directionChangeSpeed: number, strengthChangeSpeed: number) {
+	update(step: number, directionChangeSpeed: number, strengthChangeSpeed: number, fieldStrengthScale: number) {
 		for(let y = 0; y < this.h; ++y) {
 			for(let x = 0; x < this.w; ++x) {
-				let direction = this.s.noise(x * this.fieldDirectionNoiseScale, 
-					y * this.fieldDirectionNoiseScale, 
-					step * directionChangeSpeed);
+				const fieldToroidPos = convertPlaneCoordsToTorus(this.s, x, y, this.w, this.h);
+				let direction = this.s.noise(fieldToroidPos.x * this.fieldDirectionNoiseScale + step * directionChangeSpeed, 
+					fieldToroidPos.y * this.fieldDirectionNoiseScale + step * directionChangeSpeed, 
+					fieldToroidPos.z + step * directionChangeSpeed);
 
 				let strength = this.fieldUniformStrength ? 1 : 
-					this.s.noise(x * this.fieldStrengthNoiseScale + STRENGTH_NOISE_OFFSET, 
-						y * this.fieldStrengthNoiseScale + STRENGTH_NOISE_OFFSET,
-						step * strengthChangeSpeed);
+					this.s.noise(fieldToroidPos.x * this.fieldStrengthNoiseScale + STRENGTH_NOISE_OFFSET + step * strengthChangeSpeed, 
+						fieldToroidPos.y * this.fieldStrengthNoiseScale + STRENGTH_NOISE_OFFSET + step * strengthChangeSpeed,
+						fieldToroidPos.z + step * strengthChangeSpeed);
 
 				direction *= Math.PI * 6;
-				strength *= this.fieldStrengthScale;
+				strength *= fieldStrengthScale;
 				this.field[y][x] = new p5.Vector(Math.cos(direction) * strength, Math.sin(direction) * strength);
 			}
 		}
