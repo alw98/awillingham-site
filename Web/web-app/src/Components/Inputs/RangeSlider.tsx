@@ -56,6 +56,7 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({title, onChange, initia
 		const val = newValues[0];
 		setValues(newValues);
 		onChange(val);
+
 		if(extendable && (val === min || val === max)){
 			debouncedResize(val);
 		}

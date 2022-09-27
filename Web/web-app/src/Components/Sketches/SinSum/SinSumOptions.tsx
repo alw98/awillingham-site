@@ -1,5 +1,5 @@
 import { PrimaryButton } from 'Components/Buttons/PrimaryButton';
-import { RangeSlider } from 'Components/Inputs/RangeSlider/RangeSlider';
+import { RangeSlider } from 'Components/Inputs/RangeSlider';
 import { observer } from 'mobx-react';
 import { SinSumSketchPropsStore } from 'Models/Sketches/SineSum/SinSumSketchPropsStore';
 import { Theme } from 'Models/Theme';

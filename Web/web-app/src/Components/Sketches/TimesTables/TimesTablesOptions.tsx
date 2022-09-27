@@ -1,4 +1,4 @@
-import { RangeSlider } from 'Components/Inputs/RangeSlider/RangeSlider';
+import { RangeSlider } from 'Components/Inputs/RangeSlider';
 import { ColorPicker } from 'Components/Pages/Colors/ColorPicker';
 import { observer } from 'mobx-react';
 import { TimesTablesPropsStore } from 'Models/Sketches/TimesTables/TimesTablesPropsStore';
