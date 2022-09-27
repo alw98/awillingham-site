@@ -65,7 +65,9 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 		s.draw = () => {	
 			s.background(themeStore.theme.backgroundColor.primary);
 			if(localStore.mustResize) {
-				if(s.width !== localStore.width || s.height != localStore.height) {
+				if(s.width !== localStore.width 
+					|| s.height != localStore.height 
+					|| localStore.particles.length !== localStore.initialParticles) {
 					localStore.particles = [];
 					createStartingParticles();
 					s.resizeCanvas(localStore.width, localStore.height);
@@ -105,8 +107,8 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 		localStore.width = p5ContainerRef.current.clientWidth;
 		localStore.mustResize = true;
 		if(!localStore.isGallery) {
-			localStore.gridWidth = Math.floor(localStore.width / 50);
-			localStore.gridHeight = Math.floor(localStore.height / 50);
+			localStore.gridWidth = Math.floor(localStore.width / 10);
+			localStore.gridHeight = Math.floor(localStore.height / 10);
 		}
 	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
 
@@ -166,20 +168,20 @@ export const ParticleFieldSketchDefaultPropsStore = observable<ParticleFieldSket
 	height: 320,
 	mustResize: false,
 	isGallery: true,
-	particleSpeed: 2,
-	particleTrailLength: 100,
+	particleSpeed: 6,
+	particleTrailLength: 50,
 	particleSize: 4,
-	fieldDirectionChangeSpeed: .001,
+	fieldDirectionChangeSpeed: .02,
 	fieldStrengthChangeSpeed: .01,
-	fieldStrengthScale: .25,
-	fieldDirectionNoiseScale: .03,
+	fieldStrengthScale: 1.5,
+	fieldDirectionNoiseScale: .1,
 	fieldStrengthNoiseScale: .03,
 	gridWidth: 32,
 	gridHeight: 32,
 	step: 0,
-	initialParticles: 10,
-	particleTrailShrinks: false,
-	drawFieldLines: true,
+	initialParticles: 20,
+	particleTrailShrinks: true,
+	drawFieldLines: false,
 	drawGrid: false,
 	uniformStrength: false,
 	field: {} as Field,

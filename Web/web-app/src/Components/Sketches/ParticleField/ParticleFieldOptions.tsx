@@ -21,6 +21,13 @@ export const ParticleFieldOptions: React.FC<ParticleFieldOptionsProps> = observe
 			<div className={styles.groupContainer}>
 				Particles
 				<RangeSlider
+					title='Initial particle count'
+					onChange={(val) => { propsStore.initialParticles = val; propsStore.mustResize = true; }}
+					min={0}
+					max={100}
+					initialValue={propsStore.initialParticles}
+					step={1} />
+				<RangeSlider
 					title='Size'
 					onChange={(val) => { propsStore.particleSize = val; }}
 					min={1}
@@ -70,7 +77,7 @@ export const ParticleFieldOptions: React.FC<ParticleFieldOptionsProps> = observe
 					title='Field Direction'
 					onChange={(val) => { propsStore.fieldDirectionChangeSpeed = val; propsStore.mustResize = true; }}
 					min={0}
-					max={.005}
+					max={.05}
 					initialValue={propsStore.fieldDirectionChangeSpeed} 
 					step={.0001} />
 				<RangeSlider
