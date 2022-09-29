@@ -15,11 +15,13 @@ export interface ParticleFieldSketchPropsStore extends BaseSketchPropsStore {
 	gridHeight: number;
 	step: number;
 	initialParticles: number;
+	particleAlpha: number;
 
 	particleTrailShrinks: boolean;
 	drawFieldLines: boolean;
 	drawGrid: boolean;
 	uniformStrength: boolean;
+	resetBackground: boolean;
 
 	field: Field;
 	particles: Particle[];

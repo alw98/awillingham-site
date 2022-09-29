@@ -1,6 +1,6 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
 import { TimesTablesPropsStore } from 'Models/Sketches/TimesTables/TimesTablesPropsStore';
 import { Theme } from 'Models/Theme';
@@ -20,16 +20,6 @@ export interface TimesTablesSketchProps {
 	themeStore: ThemeStore;
 	propsStore?: TimesTablesPropsStore;
 }
-
-export const TimesTablesDefaultPropsStore = observable<TimesTablesPropsStore>({
-	name: 'TimesTables',
-	backgroundColor: '',
-	width: 320,
-	height: 320,
-	mustResize: false,
-	tables: [{x: 0, y: 0, radius: 160, resolution: 100, initialMultiplier: 2, curMultiplier: 2, multiplierChangeRate: .01}],
-	isGallery: true
-});
 
 export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({themeStore, propsStore}) => {
 	const styles = useStyles();
@@ -124,6 +114,23 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 			</CSSTransition>
 		</div>
 	);
+});
+
+
+export const TimesTablesDefaultPropsStore = observable<TimesTablesPropsStore>({
+	name: 'TimesTables',
+	backgroundColor: '',
+	width: 320,
+	height: 320,
+	mustResize: false,
+	tables: [{x: 0, y: 0, radius: 160, resolution: 100, initialMultiplier: 2, curMultiplier: 2, multiplierChangeRate: .01}],
+	isGallery: true
+});
+
+
+export const TimesTablesDefaultPropsStoreTwo = observable<TimesTablesPropsStore>({
+	...toJS(TimesTablesDefaultPropsStore),
+	tables: [{x: 0, y: 0, radius: 160, resolution: 10, initialMultiplier: 2, curMultiplier: 2, multiplierChangeRate: 0}]
 });
 
 const useStyles = createUseStyles((theme: Theme) => ({

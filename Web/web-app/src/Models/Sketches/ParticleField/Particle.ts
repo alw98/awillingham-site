@@ -46,9 +46,13 @@ export class Particle {
 		}
 	}
 
-	draw(size: number, tailShrinks: boolean) {
-		this.s.fill(this.color);
-		this.s.stroke(this.color);
+	draw(size: number, tailShrinks: boolean, alpha: number) {
+		let alphaHex = alpha.toString(16);
+		if(alphaHex.length === 1) 
+			alphaHex = '0' + alphaHex;
+
+		this.s.fill(this.color + alphaHex);
+		this.s.stroke(this.color + alphaHex);
 		this.s.strokeWeight(1);
 		this.s.ellipse(this.pos.x, this.pos.y, size, size);
 		for(let i = 1; i < this.trail.length; ++i) {

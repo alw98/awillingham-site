@@ -75,7 +75,7 @@ export class Field {
 		}
 	}
 
-	drawFieldLines(w: number, h: number) {
+	drawFieldLines(w: number, h: number, fieldStrengthScale: number) {
 		const dy = h / this.field.length;
 		const dx = w / this.field[0].length;
 		this.s.strokeWeight(1);
@@ -86,9 +86,9 @@ export class Field {
 				const fieldCell = this.field[y][x];
 				const fromX = x * dx + dx / 2;
 				const fromY = y * dy + dy / 2;
-				const theta = Math.atan(fieldCell.y / fieldCell.x);
-				const r = this.s.lerp(0, 255, theta);
-				const g = this.s.lerp(255, 0, theta);
+				const str = fieldCell.mag() / fieldStrengthScale;
+				const r = this.s.lerp(0, 255, str);
+				const g = this.s.lerp(255, 0, str);
 				
 				const scaled = fieldCell.copy().setMag(mag);
 				this.s.stroke(r, g, 0);

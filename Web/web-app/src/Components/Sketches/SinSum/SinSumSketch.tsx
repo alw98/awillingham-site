@@ -1,6 +1,6 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
 import { SinSumSketchPropsStore } from 'Models/Sketches/SineSum/SinSumSketchPropsStore';
 import { Theme } from 'Models/Theme';
@@ -32,6 +32,12 @@ export const SinSumSketchDefaultPropsStore = observable<SinSumSketchPropsStore>(
 	speed: 1,
 	step: 0
 });
+export const SinSumSketchDefaultPropsStoreTwo = observable<SinSumSketchPropsStore>({
+	...toJS(SinSumSketchDefaultPropsStore),
+	name: 'SinSums2',
+	functions: [{freq: 1, amplitude: .3, phase: 0}, {freq: .1, amplitude: .3, phase: 0}, {freq: 10, amplitude: .05, phase: 0}]
+});
+
 
 export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, propsStore}) => {
 	const styles = useStyles();

@@ -1,6 +1,6 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
-import { observable } from 'mobx';
+import { observable, toJS } from 'mobx';
 import { observer, useLocalObservable } from 'mobx-react';
 import { Field } from 'Models/Sketches/ParticleField/Field';
 import { Particle } from 'Models/Sketches/ParticleField/Particle';
@@ -63,7 +63,9 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 		};
 		
 		s.draw = () => {	
-			s.background(themeStore.theme.backgroundColor.primary);
+			if(localStore.resetBackground) {
+				s.background(themeStore.theme.backgroundColor.primary);
+			}
 			if(localStore.mustResize) {
 				if(s.width !== localStore.width 
 					|| s.height != localStore.height 
@@ -84,8 +86,8 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 			if(localStore.drawGrid)
 				localStore.field.drawGrid(localStore.width, localStore.height);
 			if(localStore.drawFieldLines)
-				localStore.field.drawFieldLines(localStore.width, localStore.height);
-			localStore.particles.forEach((val) => val.draw(localStore.particleSize, localStore.particleTrailShrinks));
+				localStore.field.drawFieldLines(localStore.width, localStore.height, localStore.fieldStrengthScale);
+			localStore.particles.forEach((val) => val.draw(localStore.particleSize, localStore.particleTrailShrinks, localStore.particleAlpha));
 			localStore.field.update(localStore.step, localStore.fieldDirectionChangeSpeed, localStore.fieldStrengthChangeSpeed, localStore.fieldStrengthScale);
 			localStore.field.updateParticles(localStore.particles, localStore.particleSpeed, localStore.particleTrailLength);
 			localStore.step++;
@@ -180,13 +182,37 @@ export const ParticleFieldSketchDefaultPropsStore = observable<ParticleFieldSket
 	gridHeight: 32,
 	step: 0,
 	initialParticles: 20,
+	particleAlpha: 255,
 	particleTrailShrinks: true,
 	drawFieldLines: false,
 	drawGrid: false,
 	uniformStrength: false,
+	resetBackground: true,
 	field: {} as Field,
 	particles: [],
 });
+
+export const ParticleFieldSketchDefaultPropsStoreTwo = observable<ParticleFieldSketchPropsStore>({
+	...toJS(ParticleFieldSketchDefaultPropsStore),
+	name: 'FlowField',
+	initialParticles: 0,
+	drawFieldLines: true,
+	fieldDirectionChangeSpeed: .001
+});
+
+export const ParticleFieldSketchDefaultPropsStoreThree = observable<ParticleFieldSketchPropsStore>({
+	...toJS(ParticleFieldSketchDefaultPropsStore),
+	name: 'DrawnField',
+	resetBackground: false,
+	particleTrailLength: 2,
+	particleAlpha: 20,
+	initialParticles: 3,
+	particleSize: 1,
+	particleTrailShrinks: false,
+	particleSpeed: 3,
+	fieldStrengthScale: .5
+});
+
 
 const useStyles = createUseStyles((theme: Theme) => ({
 	sketch: {
