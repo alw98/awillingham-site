@@ -1,5 +1,7 @@
 import { GallerySketches } from 'Components/Sketches/GallerySketches';
 import { useInject } from 'inversify-hooks';
+import { observable, toJS } from 'mobx';
+import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import React from 'react';
 import { createUseStyles } from 'react-jss';
@@ -13,13 +15,20 @@ export const Gallery: React.FC = () => {
 	const [themeStore] = useInject<ThemeStore>(Stores.ThemeStore);
 
 	const galleryElements = GallerySketches.map((val, i) => {
+		const propsStore = observable<BaseSketchPropsStore>({
+			...toJS(val.propsStore),
+			isGallery: true,
+			width: 320,
+			height: 320
+		});
+
 		return (
 			<Link 
 				key={i} 
-				title={val.defaultPropsStore.name} 
+				title={val.propsStore.name} 
 				className={styles.sketchContainer} 
-				to={val.defaultPropsStore.name}>
-				<val.sketch key={i} propsStore={val.defaultPropsStore} themeStore={themeStore} />
+				to={val.propsStore.name}>
+				<val.sketch key={i} propsStore={propsStore} themeStore={themeStore} />
 			</Link>
 		);
 	});

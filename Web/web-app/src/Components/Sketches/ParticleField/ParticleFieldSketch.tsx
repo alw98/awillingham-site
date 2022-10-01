@@ -1,13 +1,13 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
 import { observable, toJS } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { Field } from 'Models/Sketches/ParticleField/Field';
 import { Particle } from 'Models/Sketches/ParticleField/Particle';
 import { ParticleFieldSketchPropsStore } from 'Models/Sketches/ParticleField/ParticleFieldSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
-import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { CSSTransition } from 'react-transition-group';
 import { ThemeStore } from 'Stores/ThemeStore';
@@ -19,7 +19,7 @@ import { ParticleFieldOptions } from './ParticleFieldOptions';
 
 export interface ParticleFieldSketchProps {
 	themeStore: ThemeStore;
-	propsStore?: ParticleFieldSketchPropsStore;
+	propsStore: ParticleFieldSketchPropsStore;
 }
 
 export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(({themeStore, propsStore}) => {
@@ -31,31 +31,27 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
-	const localStore = propsStore ?? useLocalObservable<ParticleFieldSketchPropsStore>(() => ({
-		...ParticleFieldSketchDefaultPropsStore,
-		isGallery: false
-	}));
 
 	const sketch = useCallback((s: p5) => {
 		const mouseMoved = () => {
 			if(s.mouseIsPressed)
-				localStore.particles.push(new Particle(s, s.mouseX, s.mouseY));
+				propsStore.particles.push(new Particle(s, s.mouseX, s.mouseY));
 		};
 
 		const createStartingParticles = () => {
-			for(let i = 0; i < localStore.initialParticles; ++i) {
-				localStore.particles.push(new Particle(s, Math.random() * localStore.width, Math.random() * localStore.height));
+			for(let i = 0; i < propsStore.initialParticles; ++i) {
+				propsStore.particles.push(new Particle(s, Math.random() * propsStore.width, Math.random() * propsStore.height));
 			}
 		};
 
 		s.setup = () => {
-			const c = s.createCanvas(localStore.width, localStore.height);
-			localStore.field = new Field(localStore.gridWidth, 
-				localStore.gridHeight, 
-				localStore.fieldDirectionNoiseScale, 
-				localStore.fieldStrengthNoiseScale, 
-				localStore.fieldStrengthScale,
-				localStore.uniformStrength,
+			const c = s.createCanvas(propsStore.width, propsStore.height);
+			propsStore.field = new Field(propsStore.gridWidth, 
+				propsStore.gridHeight, 
+				propsStore.fieldDirectionNoiseScale, 
+				propsStore.fieldStrengthNoiseScale, 
+				propsStore.fieldStrengthScale,
+				propsStore.uniformStrength,
 				s);
 				
 			createStartingParticles();
@@ -63,34 +59,34 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 		};
 		
 		s.draw = () => {	
-			if(localStore.resetBackground) {
+			if(propsStore.resetBackground) {
 				s.background(themeStore.theme.backgroundColor.primary);
 			}
-			if(localStore.mustResize) {
-				if(s.width !== localStore.width 
-					|| s.height != localStore.height 
-					|| localStore.particles.length !== localStore.initialParticles) {
-					localStore.particles = [];
+			if(propsStore.mustResize) {
+				if(s.width !== propsStore.width 
+					|| s.height != propsStore.height 
+					|| propsStore.particles.length !== propsStore.initialParticles) {
+					propsStore.particles = [];
 					createStartingParticles();
-					s.resizeCanvas(localStore.width, localStore.height);
+					s.resizeCanvas(propsStore.width, propsStore.height);
 				}
-				localStore.mustResize = false;
-				localStore.field = new Field(localStore.gridWidth, 
-					localStore.gridHeight, 
-					localStore.fieldDirectionNoiseScale, 
-					localStore.fieldStrengthNoiseScale, 
-					localStore.fieldStrengthScale,
-					localStore.uniformStrength,
+				propsStore.mustResize = false;
+				propsStore.field = new Field(propsStore.gridWidth, 
+					propsStore.gridHeight, 
+					propsStore.fieldDirectionNoiseScale, 
+					propsStore.fieldStrengthNoiseScale, 
+					propsStore.fieldStrengthScale,
+					propsStore.uniformStrength,
 					s);
 			}
-			if(localStore.drawGrid)
-				localStore.field.drawGrid(localStore.width, localStore.height);
-			if(localStore.drawFieldLines)
-				localStore.field.drawFieldLines(localStore.width, localStore.height, localStore.fieldStrengthScale);
-			localStore.particles.forEach((val) => val.draw(localStore.particleSize, localStore.particleTrailShrinks, localStore.particleAlpha));
-			localStore.field.update(localStore.step, localStore.fieldDirectionChangeSpeed, localStore.fieldStrengthChangeSpeed, localStore.fieldStrengthScale);
-			localStore.field.updateParticles(localStore.particles, localStore.particleSpeed, localStore.particleTrailLength);
-			localStore.step++;
+			if(propsStore.drawGrid)
+				propsStore.field.drawGrid(propsStore.width, propsStore.height);
+			if(propsStore.drawFieldLines)
+				propsStore.field.drawFieldLines(propsStore.width, propsStore.height, propsStore.fieldStrengthScale);
+			propsStore.particles.forEach((val) => val.draw(propsStore.particleSize, propsStore.particleTrailShrinks, propsStore.particleAlpha));
+			propsStore.field.update(propsStore.step, propsStore.fieldDirectionChangeSpeed, propsStore.fieldStrengthChangeSpeed, propsStore.fieldStrengthScale);
+			propsStore.field.updateParticles(propsStore.particles, propsStore.particleSpeed, propsStore.particleTrailLength);
+			propsStore.step++;
 		};
 	}, []);
 
@@ -104,15 +100,15 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 		}
 	}, []);
 	
-	useEffect(() => {
-		localStore.height = p5ContainerRef.current.clientHeight;
-		localStore.width = p5ContainerRef.current.clientWidth;
-		localStore.mustResize = true;
-		if(!localStore.isGallery) {
-			localStore.gridWidth = Math.floor(localStore.width / 10);
-			localStore.gridHeight = Math.floor(localStore.height / 10);
+	useLayoutEffect(() => {
+		if(!propsStore.isGallery) {
+			propsStore.height = p5ContainerRef.current.clientHeight;
+			propsStore.width = p5ContainerRef.current.clientWidth;
 		}
-	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
+		propsStore.gridWidth = Math.floor(propsStore.width / 10);
+		propsStore.gridHeight = Math.floor(propsStore.height / 10);
+		propsStore.mustResize = true;
+	}, [windowWidth, windowHeight, propsStore.isGallery, p5ContainerRef]);
 
 	const onSettingsClick = () => {
 		setSettingsOpen(true);
@@ -125,7 +121,7 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
 			{ 
-				!localStore.isGallery && 
+				!propsStore.isGallery && 
 				<>
 					<div className={styles.aboutContainer} onClick={() => setAboutOpen(true)}>About</div>
 					<div className={styles.settingsContainer}>
@@ -146,7 +142,7 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 				exitActive: styles.optionsExitActive
 			}} >
 				<div ref={settingsNodeRef} className={styles.animationContainer}>
-					<ParticleFieldOptions propsStore={localStore} onClose={onSettingsClose} />
+					<ParticleFieldOptions propsStore={propsStore} onClose={onSettingsClose} />
 				</div>
 			</CSSTransition>
 			<CSSTransition unmountOnExit nodeRef={aboutNodeRef} in={aboutOpen} timeout={500} classNames={{
@@ -169,7 +165,7 @@ export const ParticleFieldSketchDefaultPropsStore = observable<ParticleFieldSket
 	width: 320,
 	height: 320,
 	mustResize: false,
-	isGallery: true,
+	isGallery: false,
 	particleSpeed: 6,
 	particleTrailLength: 50,
 	particleSize: 4,

@@ -1,7 +1,7 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
 import { observable, toJS } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { SinSumSketchPropsStore } from 'Models/Sketches/SineSum/SinSumSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
@@ -17,27 +17,8 @@ import { SinSumOptions } from './SinSumOptions';
 
 export interface SinSumSketchProps {
 	themeStore: ThemeStore;
-	propsStore?: SinSumSketchPropsStore;
+	propsStore: SinSumSketchPropsStore;
 }
-
-export const SinSumSketchDefaultPropsStore = observable<SinSumSketchPropsStore>({
-	name: 'SinSums',
-	backgroundColor: '',
-	width: 320,
-	height: 320,
-	mustResize: false,
-	isGallery: true,
-	functions: [{freq: 1, amplitude: .6, phase: 0}, {freq: 2, amplitude: .3, phase: 0}, {freq: 5, amplitude: .1, phase: 0}],
-	drawn: [],
-	speed: 1,
-	step: 0
-});
-export const SinSumSketchDefaultPropsStoreTwo = observable<SinSumSketchPropsStore>({
-	...toJS(SinSumSketchDefaultPropsStore),
-	name: 'SinSums2',
-	functions: [{freq: 1, amplitude: .3, phase: 0}, {freq: .1, amplitude: .3, phase: 0}, {freq: 10, amplitude: .05, phase: 0}]
-});
-
 
 export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, propsStore}) => {
 	const styles = useStyles();
@@ -48,19 +29,15 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
-	const localStore = propsStore ?? useLocalObservable<SinSumSketchPropsStore>(() => ({
-		...SinSumSketchDefaultPropsStore,
-		isGallery: false
-	}));
 
 	const sketch = useCallback((s: p5) => {
 		const drawGraph = () => {
 			s.noFill();
 			s.stroke(themeStore.theme.textColor.secondary);
 
-			for(let i = 1; i < localStore.drawn.length; ++i) {
-				const from = localStore.drawn[i - 1];
-				const to = localStore.drawn[i];
+			for(let i = 1; i < propsStore.drawn.length; ++i) {
+				const from = propsStore.drawn[i - 1];
+				const to = propsStore.drawn[i];
 				s.line(from.x, from.y, to.x, to.y);
 			}
 		};
@@ -69,13 +46,13 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 			s.noFill();
 			s.stroke(themeStore.theme.textColor.primary);
 
-			let offX = localStore.width / 2;
-			let offY = localStore.height / 2;
-			const sizeScaler = Math.min(localStore.width, localStore.height);
-			const globalThetaScale = localStore.speed / 200 * localStore.step;
+			let offX = propsStore.width / 2;
+			let offY = propsStore.height / 2;
+			const sizeScaler = Math.min(propsStore.width, propsStore.height);
+			const globalThetaScale = propsStore.speed / 200 * propsStore.step;
 			const globalTheta = globalThetaScale * Math.PI * 2;
-			for(let i = 0; i < localStore.functions.length; ++i) {
-				const fn = localStore.functions[i];
+			for(let i = 0; i < propsStore.functions.length; ++i) {
+				const fn = propsStore.functions[i];
 				const size = fn.amplitude * sizeScaler;
 				const localTheta = globalTheta * fn.freq + fn.phase;
 
@@ -84,25 +61,25 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 				offY += Math.sin(localTheta) * size / 2;
 			}
 			s.ellipse(offX, offY, 10, 10);
-			if(localStore.drawn.length > 1000) {
-				localStore.drawn.splice(0, 1);
+			if(propsStore.drawn.length > 1000) {
+				propsStore.drawn.splice(0, 1);
 			}
-			localStore.drawn.push({x: offX, y: offY});
+			propsStore.drawn.push({x: offX, y: offY});
 		};
 
 		s.setup = () => {
-			s.createCanvas(localStore.width, localStore.height);
+			s.createCanvas(propsStore.width, propsStore.height);
 		};
 		
 		s.draw = () => {				
 			s.background(themeStore.theme.backgroundColor.primary);
-			if(localStore.mustResize) {
-				s.resizeCanvas(localStore.width, localStore.height);
-				localStore.mustResize = false;
+			if(propsStore.mustResize) {
+				s.resizeCanvas(propsStore.width, propsStore.height);
+				propsStore.mustResize = false;
 			}
 			drawGraph();
 			drawCircles();
-			localStore.step++;
+			propsStore.step++;
 		};
 	}, []);
 
@@ -117,13 +94,13 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 	}, []);
 	
 	useLayoutEffect(() => {
-		if(!localStore.isGallery) {
-			localStore.height = p5ContainerRef.current.clientHeight;
-			localStore.width = p5ContainerRef.current.clientWidth;
-			localStore.mustResize = true;
-			localStore.drawn = [];
+		if(!propsStore.isGallery) {
+			propsStore.height = p5ContainerRef.current.clientHeight;
+			propsStore.width = p5ContainerRef.current.clientWidth;
+			propsStore.mustResize = true;
+			propsStore.drawn = [];
 		}
-	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
+	}, [windowWidth, windowHeight, propsStore.isGallery, p5ContainerRef]);
 
 	const onSettingsClick = () => {
 		setSettingsOpen(true);
@@ -136,7 +113,7 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
 			{ 
-				!localStore.isGallery && 
+				!propsStore.isGallery && 
 				<>
 					<div className={styles.aboutContainer} onClick={() => setAboutOpen(true)}>About</div>
 					<div className={styles.settingsContainer}>
@@ -157,7 +134,7 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 				exitActive: styles.optionsExitActive
 			}} >
 				<div ref={settingsNodeRef} className={styles.animationContainer}>
-					<SinSumOptions propsStore={localStore} onClose={onSettingsClose} />
+					<SinSumOptions propsStore={propsStore} onClose={onSettingsClose} />
 				</div>
 			</CSSTransition>
 			<CSSTransition unmountOnExit nodeRef={aboutNodeRef} in={aboutOpen} timeout={500} classNames={{
@@ -172,6 +149,25 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({themeStore, 
 			</CSSTransition>
 		</div>
 	);
+});
+
+export const SinSumSketchDefaultPropsStore = observable<SinSumSketchPropsStore>({
+	name: 'SinSums',
+	backgroundColor: '',
+	width: 320,
+	height: 320,
+	mustResize: false,
+	isGallery: false,
+	functions: [{freq: 1, amplitude: .6, phase: 0}, {freq: 2, amplitude: .3, phase: 0}, {freq: 5, amplitude: .1, phase: 0}],
+	drawn: [],
+	speed: 1,
+	step: 0
+});
+
+export const SinSumSketchDefaultPropsStoreTwo = observable<SinSumSketchPropsStore>({
+	...toJS(SinSumSketchDefaultPropsStore),
+	name: 'SinSums2',
+	functions: [{freq: 1, amplitude: .3, phase: 0}, {freq: .1, amplitude: .3, phase: 0}, {freq: 10, amplitude: .05, phase: 0}]
 });
 
 const useStyles = createUseStyles((theme: Theme) => ({

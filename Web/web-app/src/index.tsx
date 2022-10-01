@@ -18,7 +18,8 @@ export const InitApp = (): void => {
 	const themeStore = container.get<ThemeStore>(Stores.ThemeStore);
 
 	const galleryElementRoutes = GallerySketches.map((val, i) => {
-		return <Route key={i} path={'gallery/' + val.defaultPropsStore.name} element={<val.sketch themeStore={themeStore} />} />;
+		
+		return <Route key={i} path={'gallery/' + val.propsStore.name} element={<val.sketch themeStore={themeStore} propsStore={val.propsStore} />} />;
 	});	
 
 	const rootElement = document.getElementById('root');

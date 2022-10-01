@@ -9,40 +9,40 @@ import { TimesTablesDefaultPropsStore, TimesTablesDefaultPropsStoreTwo, TimesTab
 
 interface GallerySketch {
 	sketch: React.ComponentType<BaseSketchProps>;
-	defaultPropsStore: BaseSketchPropsStore;
+	propsStore: BaseSketchPropsStore;
 }
 
 export const GallerySketches: GallerySketch[] = [
 	{
 		sketch: TimesTablesSketch,
-		defaultPropsStore: TimesTablesDefaultPropsStore
+		propsStore: TimesTablesDefaultPropsStore
 	},
 	{
 		sketch: TimesTablesSketch,
-		defaultPropsStore: TimesTablesDefaultPropsStoreTwo
+		propsStore: TimesTablesDefaultPropsStoreTwo
 	},
 	{
 		sketch: ParticleFieldSketch,
-		defaultPropsStore: ParticleFieldSketchDefaultPropsStore
+		propsStore: ParticleFieldSketchDefaultPropsStore
 	},
 	{
 		sketch: ParticleFieldSketch,
-		defaultPropsStore: ParticleFieldSketchDefaultPropsStoreTwo
+		propsStore: ParticleFieldSketchDefaultPropsStoreTwo
 	},
 	{
 		sketch: ParticleFieldSketch,
-		defaultPropsStore: ParticleFieldSketchDefaultPropsStoreThree
+		propsStore: ParticleFieldSketchDefaultPropsStoreThree
 	},
 	{
 		sketch: SinSumSketch,
-		defaultPropsStore: SinSumSketchDefaultPropsStore
+		propsStore: SinSumSketchDefaultPropsStore
 	},
 	{
 		sketch: SinSumSketch,
-		defaultPropsStore: SinSumSketchDefaultPropsStoreTwo
+		propsStore: SinSumSketchDefaultPropsStoreTwo
 	},
 	{
 		sketch: BouncyDVDSketch,
-		defaultPropsStore: BouncyDVDSketchDefaultPropsStore
+		propsStore: BouncyDVDSketchDefaultPropsStore
 	}
 ];

@@ -1,7 +1,7 @@
 
 import { useWindowSize } from 'Hooks/useWindowSize';
 import { observable } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
@@ -18,44 +18,40 @@ export const BouncyDVDSketchDefaultPropsStore = observable<BaseSketchPropsStore>
 	width: 320,
 	height: 320,
 	mustResize: false,
-	isGallery: true
+	isGallery: false
 });
 
 export const BouncyDVDSketch: React.FC<BaseSketchProps> = observer(({themeStore, propsStore}) => {
 	const styles = useStyles();
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
-	const localStore = propsStore ?? useLocalObservable<BaseSketchPropsStore>(() => ({
-		...BouncyDVDSketchDefaultPropsStore,
-		isGallery: false
-	}));
-
+	
 	const sketch = useCallback((s: p5) => {
 		const dvdLogo = s.loadImage(DVDLogo);
 		const aspectRatio = .5;
-		let vx = (Math.random() * 5 + 3) * localStore.width / 500;
-		let vy = (Math.random() * 5 + 3) * localStore.height / 500;
-		const imageWidth = localStore.width / 6;
-		const imageHeight = localStore.width / 6 * aspectRatio;
-		let x = Math.random() * localStore.width - imageWidth;
-		let y = Math.random() * localStore.height - imageHeight;
+		let vx = (Math.random() * 5 + 3) * propsStore.width / 500;
+		let vy = (Math.random() * 5 + 3) * propsStore.height / 500;
+		const imageWidth = propsStore.width / 6;
+		const imageHeight = propsStore.width / 6 * aspectRatio;
+		let x = Math.random() * propsStore.width - imageWidth;
+		let y = Math.random() * propsStore.height - imageHeight;
 		let color = getRandomColor();
 
 		s.setup = () => {
-			s.createCanvas(localStore.width, localStore.height);
+			s.createCanvas(propsStore.width, propsStore.height);
 		};
 		
 		s.draw = () => {				
 			s.background(themeStore.theme.backgroundColor.primary);
-			if(localStore.mustResize) {
-				s.resizeCanvas(localStore.width, localStore.height);
-				localStore.mustResize = false;
+			if(propsStore.mustResize) {
+				s.resizeCanvas(propsStore.width, propsStore.height);
+				propsStore.mustResize = false;
 			}
-			const imageWidth = localStore.width / 6;
-			const imageHeight = localStore.width / 6 * aspectRatio;
+			const imageWidth = propsStore.width / 6;
+			const imageHeight = propsStore.width / 6 * aspectRatio;
 			s.stroke(themeStore.theme.accentColor.primary);
 			s.noFill();
-			s.rect(0, 0, localStore.width, localStore.height);
+			s.rect(0, 0, propsStore.width, propsStore.height);
 			s.tint(color);
 			s.image(dvdLogo, x, y, imageWidth, imageHeight);
 			x += vx;
@@ -64,7 +60,7 @@ export const BouncyDVDSketch: React.FC<BaseSketchProps> = observer(({themeStore,
 				x = -x;
 				vx = -vx;
 				color = getRandomColor();
-			} else if(x + imageWidth > localStore.width) {
+			} else if(x + imageWidth > propsStore.width) {
 				vx = -vx;
 				color = getRandomColor();
 			}
@@ -72,7 +68,7 @@ export const BouncyDVDSketch: React.FC<BaseSketchProps> = observer(({themeStore,
 				y = -y;
 				vy = -vy;
 				color = getRandomColor();
-			} else if(y + imageHeight > localStore.height) {
+			} else if(y + imageHeight > propsStore.height) {
 				vy = -vy;
 				color = getRandomColor();
 			}
@@ -90,12 +86,12 @@ export const BouncyDVDSketch: React.FC<BaseSketchProps> = observer(({themeStore,
 	}, []);
 	
 	useLayoutEffect(() => {
-		if(!localStore.isGallery) {
-			localStore.height = p5ContainerRef.current.clientHeight;
-			localStore.width = p5ContainerRef.current.clientWidth;
-			localStore.mustResize = true;
+		if(!propsStore.isGallery) {
+			propsStore.height = p5ContainerRef.current.clientHeight;
+			propsStore.width = p5ContainerRef.current.clientWidth;
+			propsStore.mustResize = true;
 		}
-	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
+	}, [windowWidth, windowHeight, propsStore.isGallery, p5ContainerRef]);
 
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} />

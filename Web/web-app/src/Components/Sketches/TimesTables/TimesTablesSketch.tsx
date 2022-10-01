@@ -1,7 +1,7 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
 import { observable, toJS } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { TimesTablesPropsStore } from 'Models/Sketches/TimesTables/TimesTablesPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
@@ -18,7 +18,7 @@ import { drawTables } from './Utils';
 
 export interface TimesTablesSketchProps {
 	themeStore: ThemeStore;
-	propsStore?: TimesTablesPropsStore;
+	propsStore: TimesTablesPropsStore;
 }
 
 export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({themeStore, propsStore}) => {
@@ -30,24 +30,20 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
-	const localStore = propsStore ?? useLocalObservable<TimesTablesPropsStore>(() => ({
-		...TimesTablesDefaultPropsStore,
-		isGallery: false
-	}));
 
 	const sketch = useCallback((s: p5) => {
 		s.setup = () => {
-			s.createCanvas(localStore.width, localStore.height);
+			s.createCanvas(propsStore.width, propsStore.height);
 		};
 		
 		s.draw = () => {				
 			s.background(themeStore.theme.backgroundColor.primary);
-			if(localStore.mustResize) {
-				s.resizeCanvas(localStore.width, localStore.height);
-				localStore.mustResize = false;
+			if(propsStore.mustResize) {
+				s.resizeCanvas(propsStore.width, propsStore.height);
+				propsStore.mustResize = false;
 			}
 
-			drawTables(s, localStore, themeStore);
+			drawTables(s, propsStore, themeStore);
 		};
 	}, []);
 
@@ -62,12 +58,12 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	}, []);
 	
 	useLayoutEffect(() => {
-		if(!localStore.isGallery) {
-			localStore.height = p5ContainerRef.current.clientHeight;
-			localStore.width = p5ContainerRef.current.clientWidth;
-			localStore.mustResize = true;
+		if(!propsStore.isGallery) {
+			propsStore.height = p5ContainerRef.current.clientHeight;
+			propsStore.width = p5ContainerRef.current.clientWidth;
+			propsStore.mustResize = true;
 		}
-	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
+	}, [windowWidth, windowHeight, propsStore.isGallery, p5ContainerRef]);
 
 	const onSettingsClick = () => {
 		setSettingsOpen(true);
@@ -78,7 +74,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 	};
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
-			{ !localStore.isGallery && 
+			{ !propsStore.isGallery && 
 				<>
 					<div className={styles.aboutContainer} onClick={() => setAboutOpen(true)}>About</div>
 					<div className={styles.settingsContainer}>
@@ -99,7 +95,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({th
 				exitActive: styles.optionsExitActive
 			}} >
 				<div ref={settingsNodeRef} className={styles.animationContainer}>
-					<TimesTablesOptions propsStore={localStore} onClose={onSettingsClose} />
+					<TimesTablesOptions propsStore={propsStore} onClose={onSettingsClose} />
 				</div>
 			</CSSTransition>
 			<CSSTransition unmountOnExit nodeRef={aboutNodeRef} in={aboutOpen} timeout={500} classNames={{
@@ -124,7 +120,7 @@ export const TimesTablesDefaultPropsStore = observable<TimesTablesPropsStore>({
 	height: 320,
 	mustResize: false,
 	tables: [{x: 0, y: 0, radius: 160, resolution: 100, initialMultiplier: 2, curMultiplier: 2, multiplierChangeRate: .01}],
-	isGallery: true
+	isGallery: false
 });
 
 

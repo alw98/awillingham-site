@@ -16,7 +16,7 @@ import { BaseOptions } from './BaseOptions';
 
 export interface BaseSketchProps {
 	themeStore: ThemeStore;
-	propsStore?: BaseSketchPropsStore;
+	propsStore: BaseSketchPropsStore;
 }
 
 export const BaseSketchDefaultPropsStore = observable<BaseSketchPropsStore>({
