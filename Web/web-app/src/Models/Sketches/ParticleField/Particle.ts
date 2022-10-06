@@ -1,5 +1,6 @@
 import p5 from 'p5';
 import { getRandomColor } from 'Themes/ColorPalletes';
+import { alphaToHex } from 'Utils/AlphaToHex';
 
 export class Particle {
 	pos: p5.Vector;
@@ -47,10 +48,7 @@ export class Particle {
 	}
 
 	draw(size: number, tailShrinks: boolean, alpha: number) {
-		let alphaHex = alpha.toString(16);
-		if(alphaHex.length === 1) 
-			alphaHex = '0' + alphaHex;
-
+		const alphaHex = alphaToHex(alpha);
 		this.s.fill(this.color + alphaHex);
 		this.s.stroke(this.color + alphaHex);
 		this.s.strokeWeight(1);

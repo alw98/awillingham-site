@@ -3,6 +3,7 @@ import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 
 import { BaseSketchProps } from './BaseSketch';
 import { BouncyDVDSketch, BouncyDVDSketchDefaultPropsStore } from './BouncyDVD/BouncyDVDSketch';
+import { FireworksSketch, FireworksSketchDefaultPropsStore } from './Fireworks/FireworksSketch';
 import { ParticleFieldSketch, ParticleFieldSketchDefaultPropsStore, ParticleFieldSketchDefaultPropsStoreThree, ParticleFieldSketchDefaultPropsStoreTwo } from './ParticleField/ParticleFieldSketch';
 import { SinSumSketch, SinSumSketchDefaultPropsStore, SinSumSketchDefaultPropsStoreTwo } from './SinSum/SinSumSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesDefaultPropsStoreTwo, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
@@ -14,16 +15,16 @@ interface GallerySketch {
 
 export const GallerySketches: GallerySketch[] = [
 	{
-		sketch: TimesTablesSketch,
-		propsStore: TimesTablesDefaultPropsStore
-	},
-	{
-		sketch: TimesTablesSketch,
-		propsStore: TimesTablesDefaultPropsStoreTwo
-	},
-	{
 		sketch: ParticleFieldSketch,
 		propsStore: ParticleFieldSketchDefaultPropsStore
+	},
+	{
+		sketch: FireworksSketch,
+		propsStore: FireworksSketchDefaultPropsStore
+	},
+	{
+		sketch: TimesTablesSketch,
+		propsStore: TimesTablesDefaultPropsStore
 	},
 	{
 		sketch: ParticleFieldSketch,
@@ -32,6 +33,10 @@ export const GallerySketches: GallerySketch[] = [
 	{
 		sketch: ParticleFieldSketch,
 		propsStore: ParticleFieldSketchDefaultPropsStoreThree
+	},
+	{
+		sketch: TimesTablesSketch,
+		propsStore: TimesTablesDefaultPropsStoreTwo
 	},
 	{
 		sketch: SinSumSketch,
