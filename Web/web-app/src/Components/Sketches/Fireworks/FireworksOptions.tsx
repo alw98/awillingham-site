@@ -47,12 +47,26 @@ export const FireworksOptions: React.FC<FireworksOptionsProps> = observer(({prop
 				initialValue={propsStore.particleTrailLength}
 				step={1} />
 			<RangeSlider
+				title='Particle trail length variance'
+				onChange={(val) => { propsStore.particleTrailLengthVariance = val; }}
+				min={0}
+				max={50}
+				initialValue={propsStore.particleTrailLengthVariance}
+				step={1} />
+			<RangeSlider
 				title='Explosion force'
 				onChange={(val) => { propsStore.explosionForce = val; }}
 				min={0}
 				max={20}
 				initialValue={propsStore.explosionForce}
 				step={1} />
+			<RangeSlider
+				title='Explosion arc'
+				onChange={(val) => { propsStore.explosionArc = val; }}
+				min={0}
+				max={Number.parseFloat((Math.PI * 2).toPrecision(3))}
+				initialValue={propsStore.explosionArc}
+				step={.1} />
 			<RangeSlider
 				title='Explosion particle count'
 				onChange={(val) => { propsStore.explosionParticleCount = val; }}
