@@ -2,6 +2,7 @@ import 'reflect-metadata';
 
 import { App } from 'App';
 import { ColorsPage } from 'Components/Pages/Colors/ColorsPage';
+import { EulerPage } from 'Components/Pages/Euler/EulerPage';
 import { Gallery } from 'Components/Pages/Gallery';
 import { HomePage } from 'Components/Pages/Home';
 import { GallerySketches } from 'Components/Sketches/GallerySketches';
@@ -30,6 +31,7 @@ export const InitApp = (): void => {
 				<Route path="/" element={<App/>}>
 					<Route path="/" element={<HomePage themeStore={themeStore} />} />
 					<Route path="colors" element={<ColorsPage themeStore={themeStore} />} />
+					<Route path="projecteuler" element={<EulerPage themeStore={themeStore} />} />
 					<Route path="gallery" element={<Gallery />} />
 					{galleryElementRoutes}
 					<Route path="*" element={<Navigate to="/" />} />

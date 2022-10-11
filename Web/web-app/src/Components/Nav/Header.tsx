@@ -21,6 +21,7 @@ export const Header: React.FC = () => {
 			</Link>
 			<Link className={styles.navLink} to={'/gallery'} >Gallery</Link>
 			<Link className={styles.navLink} to={'/colors'} >Colors</Link>
+			<Link className={styles.navLink} to={'/projecteuler'} >Euler</Link>
 			<ToggleThemeButton themeStore={themeStore} />
 		</nav>
 	);
