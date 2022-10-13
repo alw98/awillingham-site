@@ -1,6 +1,5 @@
 export const solveEulerProblem10 = (): number => {
 	const primes = getPrimeArrayUpToPrime(2000000);
-	console.log(primes.at(-1));
 	return primes.reduce((prev, cur) => prev + cur);
 };
 
