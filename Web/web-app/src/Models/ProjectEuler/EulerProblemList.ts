@@ -4,6 +4,10 @@ import { solveEulerProblem3 } from './1-10/EulerProblem3';
 import { solveEulerProblem4 } from './1-10/EulerProblem4';
 import { solveEulerProblem5 } from './1-10/EulerProblem5';
 import { solveEulerProblem6 } from './1-10/EulerProblem6';
+import { solveEulerProblem7 } from './1-10/EulerProblem7';
+import { solveEulerProblem8 } from './1-10/EulerProblem8';
+import { solveEulerProblem9 } from './1-10/EulerProblem9';
+import { solveEulerProblem10 } from './1-10/EulerProblem10';
 import { EulerProblem } from './EulerProblem';
 
 export const EulerProblemList: EulerProblem[] = [
@@ -51,5 +55,36 @@ The square of the sum of the first ten natural numbers is, (1 + 2 + 3... + 10)^2
 Hence the difference between the sum of the squares of the first ten natural numbers and the square of the sum is 3025 - 385 = 2640.
 Find the difference between the sum of the squares of the first one hundred natural numbers and the square of the sum.`,
 		getAnswer: solveEulerProblem6
+	},
+	{
+		id: 7,
+		title: '10001st Prime',
+		text: `By listing the first six prime numbers: 2, 3, 5, 7, 11, and 13, we can see that the 6th prime is 13.
+What is the 10 001st prime number?`,
+		getAnswer: solveEulerProblem7
+	},
+	{
+		id: 8,
+		title: 'Largest Product in a Series',
+		text: `The four adjacent digits in the 1000-digit number that have the greatest product are 9 × 9 × 8 × 9 = 5832.
+Find the thirteen adjacent digits in the 1000-digit number that have the greatest product. What is the value of this product? (1000 digit number removed for sanity)`,
+		getAnswer: solveEulerProblem8
+	},
+	{
+		id: 9,
+		title: 'Special Pythagorean Triplet',
+		text: `A Pythagorean triplet is a set of three natural numbers, a < b < c, for which,
+a^2 + b^2 = c^2
+For example, 32 + 42 = 9 + 16 = 25 = 52.
+There exists exactly one Pythagorean triplet for which a + b + c = 1000.
+Find the product abc.`,
+		getAnswer: solveEulerProblem9
+	},
+	{
+		id: 10,
+		title: 'Summation of primes',
+		text: `The sum of the primes below 10 is 2 + 3 + 5 + 7 = 17.
+Find the sum of all the primes below two million.`,
+		getAnswer: solveEulerProblem10
 	}
 ];
