@@ -41,6 +41,10 @@
 			"warn",
 			{ "vars": "all", "varsIgnorePattern": "^_", "args": "after-used", "argsIgnorePattern": "^_" }
 		],
+		"@typescript-eslint/no-empty-function": [
+			"error", 
+			{ "allow": ["arrowFunctions"] }
+		],
 		"simple-import-sort/imports": "error",
 		"simple-import-sort/exports": "error"
 	}
