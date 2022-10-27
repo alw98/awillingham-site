@@ -18,7 +18,7 @@ cd /opt/www/personal/
 dotnet build --configuration release
 
 cd /opt/www/personal/Web/web-app/
-npm install
+npm install --legacy-peer-deps
 
 if [ "$DEPLOYMENT_GROUP_NAME" == "Test" ]
 then
