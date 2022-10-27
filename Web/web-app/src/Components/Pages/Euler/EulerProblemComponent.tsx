@@ -10,7 +10,8 @@ interface EulerProblemComponentProps {
 export const EulerProblemComponent: React.FC<EulerProblemComponentProps> = ({problem}) => {
 	const [answer, setAnswer] = useState('Calculating...');
 	const [getAnswerWorker] = useWorker(problem.getAnswer);
-
+	const styles = useStyles();
+	
 	useEffect(() => {
 		const setAnswerFn = async () => {
 			setAnswer('' + await getAnswerWorker());
@@ -18,7 +19,6 @@ export const EulerProblemComponent: React.FC<EulerProblemComponentProps> = ({pro
 
 		setAnswerFn();
 	}, []);
-	const styles = useStyles();
 	return (
 		<div key={problem.title} className={styles.eulerProblemContainer}>
 			<span className={styles.title}>{problem.id}. {problem.title}</span>
