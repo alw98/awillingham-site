@@ -234,7 +234,7 @@ export const SkyscrapersSketchDefaultPropsStore = observable<SkyscrapersSketchPr
 	startCount: 10,
 	updateDelay: .3,
 	minSSHeight: 10,
-	maxSSHeight: 100,
+	maxSSHeight: 250,
 	minSSWidth: 10,
 	maxSSWidth: 100,
 	skyscrapers: [],
