@@ -87,4 +87,4 @@ Find the product abc.`,
 Find the sum of all the primes below two million.`,
 		getAnswer: solveEulerProblem10
 	}
-];
+].reverse();

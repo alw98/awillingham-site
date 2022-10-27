@@ -1,6 +1,6 @@
 export interface EulerProblem {
 	title: string;
 	text: string;
-	getAnswer: () => unknown;
+	getAnswer: () => string | number;
 	id: number;
 }

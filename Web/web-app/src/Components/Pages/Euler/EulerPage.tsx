@@ -11,7 +11,7 @@ export const EulerPage: React.FC<PropsWithThemeStore> = () => {
 	const styles = useStyles();
 
 	const questions = useMemo(() => {
-		return EulerProblemList.reverse().map((val) => {
+		return EulerProblemList.map((val) => {
 			return <EulerProblemComponent key={val.id} problem={val} />;
 		});
 	}, []);

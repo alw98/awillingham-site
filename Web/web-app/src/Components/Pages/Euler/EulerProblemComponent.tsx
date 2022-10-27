@@ -1,5 +1,6 @@
+import { useWorker } from '@koale/useworker';
 import { EulerProblem } from 'Models/ProjectEuler/EulerProblem';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 
 interface EulerProblemComponentProps {
@@ -7,12 +8,22 @@ interface EulerProblemComponentProps {
 }
 
 export const EulerProblemComponent: React.FC<EulerProblemComponentProps> = ({problem}) => {
+	const [answer, setAnswer] = useState('Calculating...');
+	const [getAnswerWorker] = useWorker(problem.getAnswer);
+
+	useEffect(() => {
+		const setAnswerFn = async () => {
+			setAnswer('' + await getAnswerWorker());
+		};
+
+		setAnswerFn();
+	}, []);
 	const styles = useStyles();
 	return (
 		<div key={problem.title} className={styles.eulerProblemContainer}>
 			<span className={styles.title}>{problem.id}. {problem.title}</span>
 			<span className={styles.question}>{problem.text}</span>
-			<span>Answer: {problem.getAnswer().toString()}</span>
+			<span>Answer: {answer}</span>
 		</div>
 	);
 };
