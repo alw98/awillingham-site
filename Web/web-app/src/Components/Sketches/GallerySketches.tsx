@@ -6,7 +6,7 @@ import { BouncyDVDSketch, BouncyDVDSketchDefaultPropsStore } from './BouncyDVD/B
 import { FireworksSketch, FireworksSketchDefaultPropsStore } from './Fireworks/FireworksSketch';
 import { ParticleFieldSketch, ParticleFieldSketchDefaultPropsStore, ParticleFieldSketchDefaultPropsStoreThree, ParticleFieldSketchDefaultPropsStoreTwo } from './ParticleField/ParticleFieldSketch';
 import { SinSumSketch, SinSumSketchDefaultPropsStore, SinSumSketchDefaultPropsStoreTwo } from './SinSum/SinSumSketch';
-import { SkyscrapersSketch, SkyscrapersSketchDefaultPropsStore } from './Skyscrapers/SkyscrapersSketch';
+import { SkyscrapersImprovedSketch, SkyscrapersImprovedSketchDefaultPropsStore } from './SkyscrapersImproved/SkyscrapersImprovedSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesDefaultPropsStoreTwo, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
 
 interface GallerySketch {
@@ -16,8 +16,8 @@ interface GallerySketch {
 
 export const GallerySketches: GallerySketch[] = [
 	{
-		sketch: SkyscrapersSketch,
-		propsStore: SkyscrapersSketchDefaultPropsStore
+		sketch: SkyscrapersImprovedSketch,
+		propsStore: SkyscrapersImprovedSketchDefaultPropsStore
 	},
 	{
 		sketch: ParticleFieldSketch,
