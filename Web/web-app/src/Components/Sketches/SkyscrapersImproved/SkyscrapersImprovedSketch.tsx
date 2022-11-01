@@ -48,6 +48,39 @@ export const SkyscrapersImprovedSketch: React.FC<SkyscrapersSketchProps> = obser
 		propsStore.points.push(...cur.getRightSidePoints());
 	};
 
+	const addNewSkyScraperThatIntersects = (toAdd: Skyscraper, tallest: Skyscraper) => {
+		//add to the heap, move up if needed
+		propsStore.ssHeap.push(toAdd);
+		if(toAdd.h > tallest.h) {
+			propsStore.points.push(new p5.Vector(toAdd.x, tallest.h));
+			propsStore.points.push(new p5.Vector(toAdd.x, toAdd.h));
+		}
+		propsStore.curSSInd++;
+	};
+
+	const addNewSkyScraperThatDoesntIntersect = () => {
+		const tallest = propsStore.ssHeap.pop();
+		const tallestRight = tallest.x + tallest.w;
+		//move down
+		let nextTallest = tallest;
+		let nextTallestRight = nextTallest.x + nextTallest.w;
+		while(!propsStore.ssHeap.isEmpty() && nextTallestRight <= tallestRight) {
+			nextTallest = propsStore.ssHeap.pop();			
+			nextTallestRight = nextTallest.x + nextTallest.w;
+		}
+
+		if(nextTallest === tallest || nextTallestRight <= tallestRight) {
+			//straight down to ground
+			propsStore.points.push(new p5.Vector(tallestRight, tallest.h));
+			propsStore.points.push(new p5.Vector(tallestRight, 0));
+		} else {
+			//down to next tallest		
+			propsStore.points.push(new p5.Vector(tallestRight, tallest.h));
+			propsStore.points.push(new p5.Vector(tallestRight, nextTallest.h));
+			propsStore.ssHeap.push(nextTallest);
+		}
+	};
+
 	const updatePoints = () => {	
 		propsStore.updateCallbackId = setTimeout(updatePoints, propsStore.updateDelay * 1000);
 		if(propsStore.curSSInd >= propsStore.skyscrapers.length) {
@@ -74,32 +107,9 @@ export const SkyscrapersImprovedSketch: React.FC<SkyscrapersSketchProps> = obser
 		const tallest = propsStore.ssHeap.peek();
 		const tallestRight = tallest.x + tallest.w;
 		if(tallestRight > toAdd.x) {
-			//add to the heap, move up if needed
-			propsStore.ssHeap.push(toAdd);
-			if(toAdd.h > tallest.h) {
-				propsStore.points.push(new p5.Vector(toAdd.x, tallest.h));
-				propsStore.points.push(new p5.Vector(toAdd.x, toAdd.h));
-			}
-			propsStore.curSSInd++;
+			addNewSkyScraperThatIntersects(toAdd, tallest);
 		} else {
-			//move down
-			let nextTallest = propsStore.ssHeap.pop();
-			let nextTallestRight = nextTallest.x + nextTallest.w;
-			while(!propsStore.ssHeap.isEmpty() && nextTallestRight <= tallestRight) {
-				nextTallest = propsStore.ssHeap.pop();			
-				nextTallestRight = nextTallest.x + nextTallest.w;
-			}
-
-			if(nextTallest === tallest || nextTallestRight <= tallestRight) {
-				//straight down to ground
-				propsStore.points.push(new p5.Vector(tallestRight, tallest.h));
-				propsStore.points.push(new p5.Vector(tallestRight, 0));
-			} else {
-				//down to next tallest		
-				propsStore.points.push(new p5.Vector(tallestRight, tallest.h));
-				propsStore.points.push(new p5.Vector(tallestRight, nextTallest.h));
-				propsStore.ssHeap.push(nextTallest);
-			}
+			addNewSkyScraperThatDoesntIntersect();
 		}
 
 	};
