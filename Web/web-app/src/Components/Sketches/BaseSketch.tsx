@@ -1,76 +1,63 @@
 import { useValueForTheme } from 'Hooks/useValueForTheme';
 import { useWindowSize } from 'Hooks/useWindowSize';
-import { observable } from 'mobx';
-import { observer, useLocalObservable } from 'mobx-react';
+import { observer } from 'mobx-react';
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
-import React, { useCallback, useLayoutEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { CSSTransition } from 'react-transition-group';
 import { ThemeStore } from 'Stores/ThemeStore';
 import GearboxDark from 'wwwroot/images/GearAnimationDark.gif';
 import GearboxLight from 'wwwroot/images/GearAnimationLight.gif';
 
-import { BaseOptions } from './BaseOptions';
 
-export interface BaseSketchProps {
-	themeStore: ThemeStore;
+export interface BaseOptionsProps {
+	onClose: () => void;
 	propsStore: BaseSketchPropsStore;
 }
 
-export const BaseSketchDefaultPropsStore = observable<BaseSketchPropsStore>({
-	name: 'BaseSketch',
-	backgroundColor: '',
-	width: 320,
-	height: 320,
-	mustResize: false,
-	isGallery: true
-});
+export interface BaseAboutProps {
+	onClose: () => void;
+}
 
-export const BaseSketch: React.FC<BaseSketchProps> = observer(({themeStore, propsStore}) => {
+export interface BaseSketchProps {
+	propsStore: BaseSketchPropsStore;
+	themeStore: ThemeStore;
+	options?: React.ComponentType<BaseOptionsProps>;
+	about?: React.ComponentType<BaseAboutProps>;
+	sketch: (s: p5) => void;
+}
+
+
+export const BaseSketch: React.FC<BaseSketchProps> = observer((props) => {
 	const styles = useStyles();
 	const [settingsOpen, setSettingsOpen] = useState(false);
-	const nodeRef = useRef(null);
+	const [aboutOpen, setAboutOpen] = useState(false);
+	const settingsNodeRef = useRef(null);
+	const aboutNodeRef = useRef(null);
 	const p5ContainerRef = useRef<HTMLDivElement>();
 	const [windowWidth, windowHeight] = useWindowSize(250);
-	const gearbox = useValueForTheme(GearboxDark, GearboxLight, themeStore.theme);
-	const localStore = propsStore ?? useLocalObservable<BaseSketchPropsStore>(() => ({
-		...BaseSketchDefaultPropsStore,
-		isGallery: false
-	}));
+	const gearbox = useValueForTheme(GearboxDark, GearboxLight, props.themeStore.theme);
 
-	const sketch = useCallback((s: p5) => {
-		s.setup = () => {
-			s.createCanvas(localStore.width, localStore.height);
-		};
-		
-		s.draw = () => {				
-			s.background(themeStore.theme.backgroundColor.primary);
-			if(localStore.mustResize) {
-				s.resizeCanvas(localStore.width, localStore.height);
-				localStore.mustResize = false;
-			}
-		};
-	}, []);
 
 	useLayoutEffect(() => {
-		if(p5ContainerRef.current){
-			const p5Instance = new p5(sketch, p5ContainerRef.current);
+		if (p5ContainerRef.current) {
+			const p5Instance = new p5(props.sketch, p5ContainerRef.current);
 			return () => {
 				p5Instance.remove();
 				setTimeout(() => p5Instance.remove(), 100);
 			};
 		}
 	}, []);
-	
+
 	useLayoutEffect(() => {
-		if(!localStore.isGallery) {
-			localStore.height = p5ContainerRef.current.clientHeight;
-			localStore.width = p5ContainerRef.current.clientWidth;
-			localStore.mustResize = true;
+		if (!props.propsStore.isGallery) {
+			props.propsStore.height = p5ContainerRef.current.clientHeight;
+			props.propsStore.width = p5ContainerRef.current.clientWidth;
 		}
-	}, [windowWidth, windowHeight, localStore.isGallery, p5ContainerRef]);
+		props.propsStore.mustResize = true;
+	}, [windowWidth, windowHeight, props.propsStore.isGallery, p5ContainerRef]);
 
 	const onSettingsClick = () => {
 		setSettingsOpen(true);
@@ -82,26 +69,41 @@ export const BaseSketch: React.FC<BaseSketchProps> = observer(({themeStore, prop
 
 	return (
 		<div className={styles.sketch} ref={p5ContainerRef} >
-			{ 
-				!localStore.isGallery && 
-				<div className={styles.settingsContainer}>
-					<img 
-						src={gearbox} 
-						className={styles.settings} 
-						alt={'Settings'} 
-						onClick={onSettingsClick}/>
-						settings
-				</div> 
+			{
+				!props.propsStore.isGallery &&
+				<>
+					{props.about && <div className={styles.aboutContainer} onClick={() => setAboutOpen(true)}>About</div>}
+					{
+						props.options && <div className={styles.settingsContainer}>
+							<img
+								src={gearbox}
+								className={styles.settings}
+								alt={'Settings'}
+								onClick={onSettingsClick} />
+							settings
+						</div>
+					}
+				</>
 			}
-			
-			<CSSTransition unmountOnExit nodeRef={nodeRef} in={settingsOpen} timeout={500} classNames={{
+
+			<CSSTransition unmountOnExit nodeRef={settingsNodeRef} in={settingsOpen} timeout={500} classNames={{
 				enter: styles.optionsEnter,
 				enterActive: styles.optionsEnterActive,
 				exit: styles.optionsExit,
 				exitActive: styles.optionsExitActive
 			}} >
-				<div ref={nodeRef} className={styles.animationContainer}>
-					<BaseOptions onClose={onSettingsClose} />
+				<div ref={settingsNodeRef} className={styles.animationContainer}>
+					{props.options && <props.options onClose={onSettingsClose} propsStore={props.propsStore} />}
+				</div>
+			</CSSTransition>
+			<CSSTransition unmountOnExit nodeRef={aboutNodeRef} in={aboutOpen} timeout={500} classNames={{
+				enter: styles.optionsEnter,
+				enterActive: styles.optionsEnterActive,
+				exit: styles.optionsExit,
+				exitActive: styles.optionsExitActive
+			}} >
+				<div ref={aboutNodeRef} className={styles.animationContainer}>
+					{props.about && <props.about onClose={() => setAboutOpen(false)} />}
 				</div>
 			</CSSTransition>
 		</div>
@@ -120,6 +122,17 @@ const useStyles = createUseStyles((theme: Theme) => ({
 		position: 'absolute',
 		top: 0,
 		right: 0,
+		cursor: 'pointer',
+		padding: '1rem',
+		alignItems: 'center',
+	},
+	aboutContainer: {
+		display: 'flex',
+		flexDirection: 'column',
+		position: 'absolute',
+		top: 0,
+		right: '50%',
+		left: '50%',
 		cursor: 'pointer',
 		padding: '1rem',
 		alignItems: 'center',
