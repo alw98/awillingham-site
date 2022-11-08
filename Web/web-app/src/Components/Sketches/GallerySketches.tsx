@@ -1,7 +1,7 @@
 
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
+import { ThemeStore } from 'Stores/ThemeStore';
 
-import { BaseSketchProps } from './BaseSketch';
 import { BouncyDVDSketch, BouncyDVDSketchDefaultPropsStore } from './BouncyDVD/BouncyDVDSketch';
 import { EdgeDetectionAgatePropsStore, EdgeDetectionDefaultPropsStore, EdgeDetectionSketch } from './EdgeDetection/EdgeDetectionSketch';
 import { FireworksSketch, FireworksSketchDefaultPropsStore } from './Fireworks/FireworksSketch';
@@ -11,8 +11,13 @@ import { SinSumSketch, SinSumSketchDefaultPropsStore, SinSumSketchDefaultPropsSt
 import { SkyscrapersImprovedSketch, SkyscrapersImprovedSketchDefaultPropsStore } from './SkyscrapersImproved/SkyscrapersImprovedSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesDefaultPropsStoreTwo, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
 
+interface MinimumSketchProps {
+	propsStore: BaseSketchPropsStore;
+	themeStore: ThemeStore;
+}
+
 interface GallerySketch {
-	sketch: React.ComponentType<BaseSketchProps>;
+	sketch: React.ComponentType<MinimumSketchProps>;
 	propsStore: BaseSketchPropsStore;
 }
 
