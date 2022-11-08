@@ -1,3 +1,5 @@
 import { BaseSketchPropsStore } from '../BaseSketchPropsStore';
 
-export type EdgeDetectionPropsStore = BaseSketchPropsStore;
+export interface EdgeDetectionPropsStore extends BaseSketchPropsStore {
+	image: string;
+}

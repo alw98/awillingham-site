@@ -3,7 +3,7 @@ import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 
 import { BaseSketchProps } from './BaseSketch';
 import { BouncyDVDSketch, BouncyDVDSketchDefaultPropsStore } from './BouncyDVD/BouncyDVDSketch';
-import { EdgeDetectionDefaultPropsStore, EdgeDetectionSketch } from './EdgeDetection/EdgeDetectionSketch';
+import { EdgeDetectionAgatePropsStore, EdgeDetectionDefaultPropsStore, EdgeDetectionSketch } from './EdgeDetection/EdgeDetectionSketch';
 import { FireworksSketch, FireworksSketchDefaultPropsStore } from './Fireworks/FireworksSketch';
 import { ParticleFieldSketch, ParticleFieldSketchDefaultPropsStore, ParticleFieldSketchDefaultPropsStoreThree, ParticleFieldSketchDefaultPropsStoreTwo } from './ParticleField/ParticleFieldSketch';
 import { PurgatorySketch, PurgatorySketchDefaultPropsStore as PurgatoryDefaultPropsStore } from './Purgatory/PurgatorySketch';
@@ -18,12 +18,12 @@ interface GallerySketch {
 
 export const GallerySketches: GallerySketch[] = [
 	{
-		sketch: EdgeDetectionSketch,
-		propsStore: EdgeDetectionDefaultPropsStore
-	},
-	{
 		sketch: PurgatorySketch,
 		propsStore: PurgatoryDefaultPropsStore
+	},
+	{
+		sketch: EdgeDetectionSketch,
+		propsStore: EdgeDetectionAgatePropsStore
 	},
 	{
 		sketch: SkyscrapersImprovedSketch,
@@ -40,6 +40,10 @@ export const GallerySketches: GallerySketch[] = [
 	{
 		sketch: TimesTablesSketch,
 		propsStore: TimesTablesDefaultPropsStore
+	},
+	{
+		sketch: EdgeDetectionSketch,
+		propsStore: EdgeDetectionDefaultPropsStore
 	},
 	{
 		sketch: ParticleFieldSketch,
