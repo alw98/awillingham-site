@@ -10,7 +10,7 @@ export const EdgeDetectionAbout: React.FC<EdgeDetectionAboutProps> = ({ onClose 
 	return (
 		<BaseOptions onClose={onClose}>
 			<div>
-				A simple edge detection algorithm
+				A simple edge detection algorithm, purely takes the difference between nearby pixels up and down.
 			</div>
 		</BaseOptions>
 	);
