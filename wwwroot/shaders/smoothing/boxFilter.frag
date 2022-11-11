@@ -1,4 +1,4 @@
-#define MAX_KERNEL_SIZE 25
+#define MAX_KERNEL_SIZE 10
 
 #ifdef GL_ES
 precision mediump float;

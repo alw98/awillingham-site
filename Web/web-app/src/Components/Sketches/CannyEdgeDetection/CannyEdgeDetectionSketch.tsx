@@ -4,11 +4,11 @@ import { CannyEdgeDetectionPropsStore } from 'Models/Sketches/CannyEdgeDetection
 import p5 from 'p5';
 import React, { useCallback } from 'react';
 import { ThemeStore } from 'Stores/ThemeStore';
-import { detectEdges } from 'Utils/CannyEdgeDetection';
 import CannyEdgeDetectionTest from 'wwwroot/images/EdgeDetectionTest.png';
 import CannyEdgeDetectionTest1 from 'wwwroot/images/EdgeDetectionTest1.png';
-import ApplyKernelFrag from 'wwwroot/shaders/applyKernel.frag';
-import ApplySobelKernelFrag from 'wwwroot/shaders/applySobelKernel.frag';
+import ApplySobelKernelFrag from 'wwwroot/shaders/edgedetection/applySobelKernel.frag';
+import BilateralFilterFrag from 'wwwroot/shaders/smoothing/bilateralFilter.frag';
+import BoxFilterFrag from 'wwwroot/shaders/smoothing/boxFilter.frag';
 import TexturedRectVert from 'wwwroot/shaders/texturedRect.vert';
 
 import { BaseSketch } from '../BaseSketch';
@@ -27,7 +27,6 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 		let smoothedBuffer: p5.Graphics;
 		let gradientsShader: p5.Shader;
 		let gradientsBuffer: p5.Graphics;
-		let edgeDetectedImage: p5.Image;
 
 		const getSmoothingKernel = () => {
 			const result = [];
@@ -55,20 +54,36 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 			gradientsBuffer.rect(0, 0, s.width, s.height);
 		};
 
+		const init = () => {
+			image = undefined;
+			smoothedBuffer = undefined;
+			gradientsBuffer = undefined;
+			image = s.loadImage(propsStore.image, () => {
+				reloadShaders();
+			});
+		};
+		
+		const reloadShaders = () => {
+			const smoothingShaderFrag = propsStore.useBilateralSmoothing ? BilateralFilterFrag : BoxFilterFrag;
+			s.loadShader(TexturedRectVert, smoothingShaderFrag, (args) => {
+				smoothingShader = args;
+				if(!smoothedBuffer) {				
+					smoothedBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
+				}
+			});
+
+			s.loadShader(TexturedRectVert, ApplySobelKernelFrag, (args) => {
+				gradientsShader = args;
+				if(!gradientsBuffer) {
+					gradientsBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
+				}
+			});
+		};
+
 		s.setup = () => {
 			s.createCanvas(propsStore.width, propsStore.height);
 			s.pixelDensity(1);
-			image = s.loadImage(propsStore.image, () => {
-				edgeDetectedImage = s.createImage(image.width, image.height);
-				detectEdges(image, edgeDetectedImage);
-				smoothingShader = s.loadShader(TexturedRectVert, ApplyKernelFrag, () => {
-					smoothedBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
-				});
-
-				gradientsShader = s.loadShader(TexturedRectVert, ApplySobelKernelFrag, () => {
-					gradientsBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
-				});
-			});
+			init();
 		};
 
 		s.draw = () => {
@@ -76,7 +91,9 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 			if (propsStore.mustResize) {
 				if (s.width !== propsStore.width || s.height != propsStore.height) {
 					s.resizeCanvas(propsStore.width, propsStore.height);
-				}
+				}					
+				reloadShaders();
+				propsStore.mustResize = false;
 			}
 			if(smoothedBuffer && gradientsBuffer) {
 				smoothImage(smoothedBuffer);
@@ -111,7 +128,8 @@ export const CannyEdgeDetectionDefaultPropsStore = observable<CannyEdgeDetection
 	mustResize: false,
 	isGallery: false,
 	image: CannyEdgeDetectionTest,
-	smoothingKernelSize: 3
+	smoothingKernelSize: 7,
+	useBilateralSmoothing: true
 });
 
 export const CannyEdgeDetectionAgatePropsStore = observable<CannyEdgeDetectionPropsStore>({

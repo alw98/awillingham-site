@@ -19,6 +19,6 @@ void main() {
 	vec4 dx = abs(cur - leftPx);
 	vec4 combined = dy + dx;
 
-	gl_FragColor = vec4(dx.r, combined.b, dy.b, 1.0);
+	gl_FragColor = vec4(combined.rgb, 1.0);
 }
 
