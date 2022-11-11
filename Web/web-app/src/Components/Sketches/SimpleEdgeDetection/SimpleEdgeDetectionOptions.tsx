@@ -1,15 +1,15 @@
 import { observer } from 'mobx-react';
-import { EdgeDetectionPropsStore } from 'Models/Sketches/EdgeDetection/EdgeDetectionPropsStore';
+import { SimpleEdgeDetectionPropsStore } from 'Models/Sketches/SimpleEdgeDetection/SimpleEdgeDetectionPropsStore';
 import React from 'react';
 
 import { BaseOptions } from '../BaseOptions';
 
-interface EdgeDetectionOptionsProps {
-	propsStore: EdgeDetectionPropsStore;
+interface SimpleEdgeDetectionOptionsProps {
+	propsStore: SimpleEdgeDetectionPropsStore;
 	onClose: () => void;
 }
 
-export const EdgeDetectionOptions: React.FC<EdgeDetectionOptionsProps> = observer(({ onClose }) => {
+export const SimpleEdgeDetectionOptions: React.FC<SimpleEdgeDetectionOptionsProps> = observer(({ onClose }) => {
 	//const styles = useStyles();
 
 	return (

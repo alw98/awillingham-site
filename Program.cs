@@ -45,7 +45,10 @@ namespace awillingham_site
             app.UseIpRateLimiting();
             app.UseHttpsRedirection();
             app.UseHsts();
-            app.UseStaticFiles();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                ServeUnknownFileTypes = true,
+            });
             app.UseResponseCaching();
             app.UseRouting();
             app.UseCustomEndpoints();

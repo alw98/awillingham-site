@@ -3,10 +3,11 @@ import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 import { ThemeStore } from 'Stores/ThemeStore';
 
 import { BouncyDVDSketch, BouncyDVDSketchDefaultPropsStore } from './BouncyDVD/BouncyDVDSketch';
-import { EdgeDetectionAgatePropsStore, EdgeDetectionDefaultPropsStore, EdgeDetectionSketch } from './EdgeDetection/EdgeDetectionSketch';
+import { CannyEdgeDetectionAgatePropsStore, CannyEdgeDetectionSketch } from './CannyEdgeDetection/CannyEdgeDetectionSketch';
 import { FireworksSketch, FireworksSketchDefaultPropsStore } from './Fireworks/FireworksSketch';
 import { ParticleFieldSketch, ParticleFieldSketchDefaultPropsStore, ParticleFieldSketchDefaultPropsStoreThree, ParticleFieldSketchDefaultPropsStoreTwo } from './ParticleField/ParticleFieldSketch';
 import { PurgatorySketch, PurgatorySketchDefaultPropsStore as PurgatoryDefaultPropsStore } from './Purgatory/PurgatorySketch';
+import { SimpleEdgeDetectionAgatePropsStore, SimpleEdgeDetectionDefaultPropsStore, SimpleEdgeDetectionSketch } from './SimpleEdgeDetection/SimpleEdgeDetectionSketch';
 import { SinSumSketch, SinSumSketchDefaultPropsStore, SinSumSketchDefaultPropsStoreTwo } from './SinSum/SinSumSketch';
 import { SkyscrapersImprovedSketch, SkyscrapersImprovedSketchDefaultPropsStore } from './SkyscrapersImproved/SkyscrapersImprovedSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesDefaultPropsStoreTwo, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
@@ -27,8 +28,12 @@ export const GallerySketches: GallerySketch[] = [
 		propsStore: PurgatoryDefaultPropsStore
 	},
 	{
-		sketch: EdgeDetectionSketch,
-		propsStore: EdgeDetectionAgatePropsStore
+		sketch: CannyEdgeDetectionSketch,
+		propsStore: CannyEdgeDetectionAgatePropsStore
+	},
+	{
+		sketch: SimpleEdgeDetectionSketch,
+		propsStore: SimpleEdgeDetectionAgatePropsStore
 	},
 	{
 		sketch: SkyscrapersImprovedSketch,
@@ -47,8 +52,8 @@ export const GallerySketches: GallerySketch[] = [
 		propsStore: TimesTablesDefaultPropsStore
 	},
 	{
-		sketch: EdgeDetectionSketch,
-		propsStore: EdgeDetectionDefaultPropsStore
+		sketch: SimpleEdgeDetectionSketch,
+		propsStore: SimpleEdgeDetectionDefaultPropsStore
 	},
 	{
 		sketch: ParticleFieldSketch,

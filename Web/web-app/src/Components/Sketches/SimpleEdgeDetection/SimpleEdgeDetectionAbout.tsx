@@ -2,11 +2,11 @@ import React from 'react';
 
 import { BaseOptions } from '../BaseOptions';
 
-interface EdgeDetectionAboutProps {
+interface SimpleEdgeDetectionAboutProps {
 	onClose: () => void;
 }
 
-export const EdgeDetectionAbout: React.FC<EdgeDetectionAboutProps> = ({ onClose }) => {
+export const SimpleEdgeDetectionAbout: React.FC<SimpleEdgeDetectionAboutProps> = ({ onClose }) => {
 	return (
 		<BaseOptions onClose={onClose}>
 			<div>
