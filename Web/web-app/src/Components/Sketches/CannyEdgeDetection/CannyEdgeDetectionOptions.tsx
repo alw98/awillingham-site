@@ -25,6 +25,20 @@ export const CannyEdgeDetectionOptions: React.FC<CannyEdgeDetectionOptionsProps>
 				max={10}
 				initialValue={propsStore.smoothingKernelSize}
 				step={1} />
+			<RangeSlider
+				title='Edge Threshold'
+				onChange={(val) => { propsStore.edgeThreshold = val; }}
+				min={.1}
+				max={10}
+				initialValue={propsStore.edgeThreshold}
+				step={.1} />
+			<RangeSlider
+				title='Edge Lightness Clamp'
+				onChange={(val) => { propsStore.lightnessBound = val; }}
+				min={1}
+				max={100}
+				initialValue={propsStore.lightnessBound}
+				step={1} />
 			<div className={styles.groupContainer}>
 					Use Bilateral Smoothing
 				<Checkbox checked={propsStore.useBilateralSmoothing} onChange={() => {

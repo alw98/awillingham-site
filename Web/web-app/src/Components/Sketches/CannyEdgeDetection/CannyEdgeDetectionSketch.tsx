@@ -51,6 +51,8 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 			output.shader(gradientsShader);
 			gradientsShader.setUniform('uTexImg', input);
 			gradientsShader.setUniform('uTexSize', input.width);
+			gradientsShader.setUniform('uThreshold', propsStore.edgeThreshold);
+			gradientsShader.setUniform('uLightnessBound', propsStore.lightnessBound);
 			gradientsBuffer.rect(0, 0, s.width, s.height);
 		};
 
@@ -128,8 +130,10 @@ export const CannyEdgeDetectionDefaultPropsStore = observable<CannyEdgeDetection
 	mustResize: false,
 	isGallery: false,
 	image: CannyEdgeDetectionTest,
-	smoothingKernelSize: 7,
-	useBilateralSmoothing: true
+	smoothingKernelSize: 9,
+	useBilateralSmoothing: false,
+	edgeThreshold: 5,
+	lightnessBound: 66
 });
 
 export const CannyEdgeDetectionAgatePropsStore = observable<CannyEdgeDetectionPropsStore>({
