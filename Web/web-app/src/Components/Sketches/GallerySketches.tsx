@@ -32,10 +32,6 @@ export const GallerySketches: GallerySketch[] = [
 		propsStore: CannyEdgeDetectionAgatePropsStore
 	},
 	{
-		sketch: SimpleEdgeDetectionSketch,
-		propsStore: SimpleEdgeDetectionAgatePropsStore
-	},
-	{
 		sketch: SkyscrapersImprovedSketch,
 		propsStore: SkyscrapersImprovedSketchDefaultPropsStore
 	},
@@ -50,6 +46,10 @@ export const GallerySketches: GallerySketch[] = [
 	{
 		sketch: TimesTablesSketch,
 		propsStore: TimesTablesDefaultPropsStore
+	},
+	{
+		sketch: SimpleEdgeDetectionSketch,
+		propsStore: SimpleEdgeDetectionAgatePropsStore
 	},
 	{
 		sketch: SimpleEdgeDetectionSketch,
