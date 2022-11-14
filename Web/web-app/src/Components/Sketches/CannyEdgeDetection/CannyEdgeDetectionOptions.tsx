@@ -26,15 +26,31 @@ export const CannyEdgeDetectionOptions: React.FC<CannyEdgeDetectionOptionsProps>
 				initialValue={propsStore.smoothingKernelSize}
 				step={1} />
 			<RangeSlider
-				title='Edge Threshold'
-				onChange={(val) => { propsStore.edgeThreshold = val; }}
+				title='Upper Edge Threshold'
+				onChange={(val) => { 
+					propsStore.mustResize = true;
+					propsStore.upperEdgeThreshold = val; 
+				}}
 				min={.1}
 				max={10}
-				initialValue={propsStore.edgeThreshold}
+				initialValue={propsStore.upperEdgeThreshold}
+				step={.1} />
+			<RangeSlider
+				title='Lower Edge Threshold'
+				onChange={(val) => { 
+					propsStore.mustResize = true;
+					propsStore.lowerEdgeThreshold = val; 
+				}}
+				min={.1}
+				max={10}
+				initialValue={propsStore.lowerEdgeThreshold}
 				step={.1} />
 			<RangeSlider
 				title='Edge Lightness Clamp'
-				onChange={(val) => { propsStore.lightnessBound = val; }}
+				onChange={(val) => { 
+					propsStore.mustResize = true;
+					propsStore.lightnessBound = val; 
+				}}
 				min={1}
 				max={100}
 				initialValue={propsStore.lightnessBound}

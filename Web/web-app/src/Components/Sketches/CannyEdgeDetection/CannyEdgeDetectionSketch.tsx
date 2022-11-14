@@ -7,6 +7,7 @@ import { ThemeStore } from 'Stores/ThemeStore';
 import CannyEdgeDetectionTest from 'wwwroot/images/EdgeDetectionTest.png';
 import CannyEdgeDetectionTest1 from 'wwwroot/images/EdgeDetectionTest1.png';
 import ApplySobelKernelFrag from 'wwwroot/shaders/edgedetection/applySobelKernel.frag';
+import IterativeEdgeBuilding from 'wwwroot/shaders/edgedetection/iterativeEdgeBuilding.frag';
 import BilateralFilterFrag from 'wwwroot/shaders/smoothing/bilateralFilter.frag';
 import BoxFilterFrag from 'wwwroot/shaders/smoothing/boxFilter.frag';
 import TexturedRectVert from 'wwwroot/shaders/texturedRect.vert';
@@ -27,6 +28,8 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 		let smoothedBuffer: p5.Graphics;
 		let gradientsShader: p5.Shader;
 		let gradientsBuffer: p5.Graphics;
+		let edgeBuildingShader: p5.Shader;
+		let edgeBuildingBuffer: p5.Graphics;
 
 		const getSmoothingKernel = () => {
 			const result = [];
@@ -51,9 +54,19 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 			output.shader(gradientsShader);
 			gradientsShader.setUniform('uTexImg', input);
 			gradientsShader.setUniform('uTexSize', input.width);
-			gradientsShader.setUniform('uThreshold', propsStore.edgeThreshold);
+			gradientsShader.setUniform('uThreshold', propsStore.upperEdgeThreshold);
 			gradientsShader.setUniform('uLightnessBound', propsStore.lightnessBound);
-			gradientsBuffer.rect(0, 0, s.width, s.height);
+			output.rect(0, 0, s.width, s.height);
+		};
+
+		const edgeBuild = (input: p5.Graphics, output: p5.Graphics) => {
+			output.shader(edgeBuildingShader);
+			edgeBuildingShader.setUniform('uTexImg', input);
+			edgeBuildingShader.setUniform('uTexSize', input.width);
+			edgeBuildingShader.setUniform('uUpperThreshold', propsStore.upperEdgeThreshold);
+			edgeBuildingShader.setUniform('uLowerThreshold', propsStore.lowerEdgeThreshold);
+			edgeBuildingShader.setUniform('uLightnessBound', propsStore.lightnessBound);
+			output.rect(0, 0, s.width, s.height);
 		};
 
 		const init = () => {
@@ -80,6 +93,13 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 					gradientsBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
 				}
 			});
+
+			s.loadShader(TexturedRectVert, IterativeEdgeBuilding, (args) => {
+				edgeBuildingShader = args;
+				if(!edgeBuildingBuffer) {
+					edgeBuildingBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
+				}
+			});
 		};
 
 		s.setup = () => {
@@ -95,15 +115,19 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 					s.resizeCanvas(propsStore.width, propsStore.height);
 				}					
 				reloadShaders();
+				s.frameCount = 0;
 				propsStore.mustResize = false;
 			}
 			if(smoothedBuffer && gradientsBuffer) {
 				smoothImage(smoothedBuffer);
 				takeImageGradient(smoothedBuffer, gradientsBuffer);
-
+				edgeBuild(s.frameCount < 30 ? gradientsBuffer : edgeBuildingBuffer, edgeBuildingBuffer);
+				
 				s.image(image, 0, 0, s.width / 2, s.height / 2);
 				s.image(smoothedBuffer, s.width / 2, 0, s.width / 2, s.height / 2);
 				s.image(gradientsBuffer, 0, s.height / 2, s.width / 2, s.height / 2);
+				s.image(edgeBuildingBuffer, s.width / 2, s.height / 2, s.width / 2, s.height / 2);
+				
 				// const { x, y, width: scaledWidth, height: scaledHeight } = getImagePosition();
 				// s.image(image, x, y, scaledWidth, scaledHeight);
 				// s.image(edgeDetectedImage, x, y + propsStore.height / 2, scaledWidth, scaledHeight);
@@ -132,7 +156,8 @@ export const CannyEdgeDetectionDefaultPropsStore = observable<CannyEdgeDetection
 	image: CannyEdgeDetectionTest,
 	smoothingKernelSize: 9,
 	useBilateralSmoothing: false,
-	edgeThreshold: 5,
+	upperEdgeThreshold: 2.5,
+	lowerEdgeThreshold: 1,
 	lightnessBound: 66
 });
 

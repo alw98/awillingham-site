@@ -42,7 +42,7 @@ namespace awillingham_site
         {
             app.UseCustomForwardedHeaders();
             app.UseCustomExceptionPage(env);
-            app.UseIpRateLimiting();
+            // app.UseIpRateLimiting();
             app.UseHttpsRedirection();
             app.UseHsts();
             app.UseStaticFiles(new StaticFileOptions
