@@ -32,28 +32,30 @@ void main() {
 	texCoord.y = 1.0 - texCoord.y;
 	float onePixel = 1.0 / uTexSize;
 	vec4 cur = texture2D(uTexImg, texCoord);
-	cur = rgbToHpluv(cur);
-
-	if(cur.z < uLowerThreshold) {
-		gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
-		return;
-	}
+	
 
 	int count = 0;
-	for(int y = -3; y <= 3; ++y) {
-		for(int x = -3; x <= 3; ++x) {
+	int touching = 0;
+
+	for(int y = -4; y <= 4; ++y) {
+		for(int x = -4; x <= 4; ++x) {
 			vec4 compare = texture2D(uTexImg, texCoord + vec2(float(x), float(y)) * onePixel);
-			compare = rgbToHpluv(compare);
-			if(compare.z > uUpperThreshold) {
+			if(compare.r == 1.0) {
 				count++;
-				cur.z = uLightnessBound;
+				if((x < 4 && x > -4) && (y < 4 && y > -4)) {
+					touching++;
+				}
 			}
 		}	
 	}
 	
-	cur = hpluvToRgb(cur);
+	if(touching >= 1 && cur.r != 0.0) {
+		cur = vec4(1.0);
+	} else if(count > 10 && cur.rgb == vec3(0.0, 0.0, 0.0)) {
+		cur = vec4(0.0, 1.0, 0.0, 1.0);
+	}
 
-	gl_FragColor = vec4(cur.rgb, 1.0);
+	gl_FragColor = cur;
 }
 
 

@@ -7,4 +7,5 @@ export interface CannyEdgeDetectionPropsStore extends BaseSketchPropsStore {
 	lowerEdgeThreshold: number;
 	lightnessBound: number;
 	useBilateralSmoothing: boolean;
+	saveNextFrame: boolean;
 }

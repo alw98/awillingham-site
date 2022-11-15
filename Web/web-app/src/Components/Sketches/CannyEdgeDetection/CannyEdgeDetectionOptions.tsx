@@ -1,3 +1,4 @@
+import { PrimaryButton } from 'Components/Buttons/PrimaryButton';
 import { Checkbox } from 'Components/Inputs/Checkbox';
 import { RangeSlider } from 'Components/Inputs/RangeSlider';
 import { observer } from 'mobx-react';
@@ -62,6 +63,11 @@ export const CannyEdgeDetectionOptions: React.FC<CannyEdgeDetectionOptionsProps>
 					propsStore.useBilateralSmoothing = !propsStore.useBilateralSmoothing;
 				}} />
 			</div>
+			<PrimaryButton onClick={() => {
+				propsStore.saveNextFrame = true;
+			}}>
+				Save image
+			</PrimaryButton>
 		</BaseOptions>
 	);
 });

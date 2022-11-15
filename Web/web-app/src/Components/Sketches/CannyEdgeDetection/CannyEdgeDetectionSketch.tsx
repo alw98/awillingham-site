@@ -102,10 +102,13 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 			});
 		};
 
+		s.preload = () => {
+			init();
+		};
+
 		s.setup = () => {
 			s.createCanvas(propsStore.width, propsStore.height);
 			s.pixelDensity(1);
-			init();
 		};
 
 		s.draw = () => {
@@ -128,6 +131,10 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 				s.image(gradientsBuffer, 0, s.height / 2, s.width / 2, s.height / 2);
 				s.image(edgeBuildingBuffer, s.width / 2, s.height / 2, s.width / 2, s.height / 2);
 				
+				if(propsStore.saveNextFrame) {
+					propsStore.saveNextFrame = false;
+					edgeBuildingBuffer.save();
+				}
 				// const { x, y, width: scaledWidth, height: scaledHeight } = getImagePosition();
 				// s.image(image, x, y, scaledWidth, scaledHeight);
 				// s.image(edgeDetectedImage, x, y + propsStore.height / 2, scaledWidth, scaledHeight);
@@ -158,7 +165,8 @@ export const CannyEdgeDetectionDefaultPropsStore = observable<CannyEdgeDetection
 	useBilateralSmoothing: false,
 	upperEdgeThreshold: 2.5,
 	lowerEdgeThreshold: 1,
-	lightnessBound: 66
+	lightnessBound: 66,
+	saveNextFrame: false
 });
 
 export const CannyEdgeDetectionAgatePropsStore = observable<CannyEdgeDetectionPropsStore>({

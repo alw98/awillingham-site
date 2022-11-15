@@ -45,9 +45,9 @@ void main() {
 	result.x = angle * 255.0;
 	result.y = 100.0;
 	result.z = edgeGradient * 200.0;
-	if(result.z > uThreshold) {
-		result.z = uLightnessBound;
-	}
+	// if(result.z > uThreshold) {
+	// 	result.z = uLightnessBound;
+	// }
 	result = hpluvToRgb(result);
 	gl_FragColor = vec4(result.rgb, 1.0);
 }
