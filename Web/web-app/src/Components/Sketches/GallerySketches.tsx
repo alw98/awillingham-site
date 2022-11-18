@@ -6,7 +6,6 @@ import { BouncyDVDSketch, BouncyDVDSketchDefaultPropsStore } from './BouncyDVD/B
 import { CannyEdgeDetectionAgatePropsStore, CannyEdgeDetectionSketch } from './CannyEdgeDetection/CannyEdgeDetectionSketch';
 import { FireworksSketch, FireworksSketchDefaultPropsStore } from './Fireworks/FireworksSketch';
 import { ParticleFieldSketch, ParticleFieldSketchDefaultPropsStore, ParticleFieldSketchDefaultPropsStoreThree, ParticleFieldSketchDefaultPropsStoreTwo } from './ParticleField/ParticleFieldSketch';
-import { PurgatorySketch, PurgatorySketchDefaultPropsStore as PurgatoryDefaultPropsStore } from './Purgatory/PurgatorySketch';
 import { SimpleEdgeDetectionAgatePropsStore, SimpleEdgeDetectionDefaultPropsStore, SimpleEdgeDetectionSketch } from './SimpleEdgeDetection/SimpleEdgeDetectionSketch';
 import { SinSumSketch, SinSumSketchDefaultPropsStore, SinSumSketchDefaultPropsStoreTwo } from './SinSum/SinSumSketch';
 import { SkyscrapersImprovedSketch, SkyscrapersImprovedSketchDefaultPropsStore } from './SkyscrapersImproved/SkyscrapersImprovedSketch';
@@ -23,10 +22,10 @@ interface GallerySketch {
 }
 
 export const GallerySketches: GallerySketch[] = [
-	{
-		sketch: PurgatorySketch,
-		propsStore: PurgatoryDefaultPropsStore
-	},
+	// {
+	// 	sketch: PurgatorySketch,
+	// 	propsStore: PurgatoryDefaultPropsStore
+	// },
 	{
 		sketch: CannyEdgeDetectionSketch,
 		propsStore: CannyEdgeDetectionAgatePropsStore

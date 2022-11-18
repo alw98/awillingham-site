@@ -95,7 +95,7 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 });
 
 export const ParticleFieldSketchDefaultPropsStore = observable<ParticleFieldSketchPropsStore>({
-	name: 'ParticleFields',
+	name: 'ParticleField',
 	backgroundColor: '',
 	width: 320,
 	height: 320,
