@@ -1,3 +1,5 @@
 import { BaseSketchPropsStore } from '../BaseSketchPropsStore';
 
-export type PurgatoryPropsStore = BaseSketchPropsStore;
+export interface PurgatoryPropsStore extends BaseSketchPropsStore {
+	saveNextFrame: boolean;
+}

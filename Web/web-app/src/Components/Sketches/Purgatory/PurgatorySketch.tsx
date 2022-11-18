@@ -4,7 +4,7 @@ import { PurgatoryPropsStore } from 'Models/Sketches/Purgatory/PurgatoryPropsSto
 import p5 from 'p5';
 import React, { useCallback } from 'react';
 import { ThemeStore } from 'Stores/ThemeStore';
-import UpshurEdgeDetected from 'wwwroot/images/UpshurEdgeDetected.png';
+import UpshurEdgeDetected from 'wwwroot/images/UpshurCracked.png';
 import FillEdgesFrag from 'wwwroot/shaders/purgatory/fillEdges.frag';
 import TexturedRectVert from 'wwwroot/shaders/texturedRect.vert';
 
@@ -51,19 +51,24 @@ export const PurgatorySketch: React.FC<PurgatorySketchProps> = observer(({ theme
 					s.resizeCanvas(propsStore.width, propsStore.height);
 				}
 			}
-			if(s.frameCount < 5) {
-				shader.setUniform('uTexImg', image);
-			} else {
-				shader.setUniform('uTexImg', shaderBuffer);
+			if(shaderBuffer) {
+				if(s.frameCount < 5) {
+					shader.setUniform('uTexImg', image);
+				} else {
+					shader.setUniform('uTexImg', shaderBuffer);
+				}
+				shaderBuffer.shader(shader);
+				shader.setUniform('uKernelSize', 3);
+				shader.setUniform('uKernel', getSmoothingKernel());
+				shader.setUniform('uTexSize', image.width);
+				shaderBuffer.rect(0, 0, s.width, s.height);
+
+				s.image(shaderBuffer, 0, 0, s.width, s.height);
 			}
-
-			shaderBuffer.shader(shader);
-			shader.setUniform('uKernelSize', 3);
-			shader.setUniform('uKernel', getSmoothingKernel());
-			shader.setUniform('uTexSize', s.width);
-			shaderBuffer.rect(0, 0, s.width, s.height);
-
-			s.image(shaderBuffer, 0, 0, s.width, s.height);
+			if(propsStore.saveNextFrame) {
+				propsStore.saveNextFrame = false;
+				shaderBuffer.save();
+			}
 		};
 	}, []);
 
@@ -83,5 +88,6 @@ export const PurgatorySketchDefaultPropsStore = observable<PurgatoryPropsStore>(
 	width: 320,
 	height: 320,
 	mustResize: false,
-	isGallery: false
+	isGallery: false,
+	saveNextFrame: false
 });

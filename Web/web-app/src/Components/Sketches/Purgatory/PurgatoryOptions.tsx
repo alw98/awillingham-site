@@ -1,3 +1,4 @@
+import { PrimaryButton } from 'Components/Buttons/PrimaryButton';
 import { observer } from 'mobx-react';
 import { PurgatoryPropsStore } from 'Models/Sketches/Purgatory/PurgatoryPropsStore';
 import React from 'react';
@@ -9,11 +10,16 @@ interface PurgatoryOptionsProps {
 	onClose: () => void;
 }
 
-export const PurgatoryOptions: React.FC<PurgatoryOptionsProps> = observer(({ onClose }) => {
+export const PurgatoryOptions: React.FC<PurgatoryOptionsProps> = observer(({ propsStore, onClose }) => {
 	// const styles = useStyles();
 
 	return (
 		<BaseOptions onClose={onClose}>
+			<PrimaryButton onClick={() => {
+				propsStore.saveNextFrame = true;
+			}}>
+			Save image
+			</PrimaryButton>
 			{/* <RangeSlider
 				title='Grid Width'
 				onChange={(val) => { propsStore.gridWidth = val; propsStore.mustResize = true; }}

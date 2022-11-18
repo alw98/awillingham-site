@@ -32,29 +32,11 @@ void main() {
 	texCoord.y = 1.0 - texCoord.y;
 	float onePixel = 1.0 / uTexSize;
 	vec4 cur = texture2D(uTexImg, texCoord);
+
+	vec2 center = vec2(.5);
+	vec2 towardsCenter = normalize(center - texCoord);
 	
-
-	int count = 0;
-	int touching = 0;
-
-	for(int y = -4; y <= 4; ++y) {
-		for(int x = -4; x <= 4; ++x) {
-			vec4 compare = texture2D(uTexImg, texCoord + vec2(float(x), float(y)) * onePixel);
-			if(compare.r == 1.0) {
-				count++;
-				if((x < 4 && x > -4) && (y < 4 && y > -4)) {
-					touching++;
-				}
-			}
-		}	
-	}
-	
-	if(touching >= 1 && cur.r != 0.0) {
-		cur = vec4(1.0);
-	} else if(count > 10 && cur.rgb == vec3(0.0, 0.0, 0.0)) {
-		cur = vec4(0.0, 1.0, 0.0, 1.0);
-	}
-
+	cur.g = towardsCenter.y;
 	gl_FragColor = cur;
 }
 
