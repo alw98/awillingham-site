@@ -33,6 +33,7 @@ export const PurgatorySketch: React.FC<PurgatorySketchProps> = observer(({ theme
 
 		s.setup = () => {
 			s.createCanvas(propsStore.width, propsStore.height);
+			s.frameRate(1);
 		};
 
 		const getSmoothingKernel = () => {

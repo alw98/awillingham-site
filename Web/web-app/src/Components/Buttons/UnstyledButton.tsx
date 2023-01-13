@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ButtonHTMLAttributes } from 'react';
 import { createUseStyles } from 'react-jss';
 
 
-export const UnstyledButton: React.FC<React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>> = (props) => {
+export const UnstyledButton: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = (props) => {
 	const styles = useStyles();
 
 	const className = styles.unstyledButton + ' ' + props.className;

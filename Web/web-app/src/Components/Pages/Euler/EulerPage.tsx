@@ -1,13 +1,12 @@
 import { EulerProblemList } from 'Models/ProjectEuler/EulerProblemList';
 import React, { useMemo } from 'react';
 import { createUseStyles } from 'react-jss';
-import { PropsWithThemeStore } from 'Stores/ThemeStore';
 
 import { ContentPageContainer } from '../ContentPageContainer';
 import { EulerProblemComponent } from './EulerProblemComponent';
 
 
-export const EulerPage: React.FC<PropsWithThemeStore> = () => {
+export const EulerPage: React.FC = () => {
 	const styles = useStyles();
 
 	const questions = useMemo(() => {

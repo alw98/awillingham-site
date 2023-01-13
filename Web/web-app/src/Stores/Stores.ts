@@ -1,3 +1,4 @@
 export const enum Stores {
-	ThemeStore = 'ThemeStore'
+	ThemeStore = 'ThemeStore',
+	TimerStore = 'TimerStore'
 }

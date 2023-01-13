@@ -6,10 +6,7 @@ import React, { useCallback } from 'react';
 import { ThemeStore } from 'Stores/ThemeStore';
 import CannyEdgeDetectionTest from 'wwwroot/images/EdgeDetectionTest.png';
 import CannyEdgeDetectionTest1 from 'wwwroot/images/EdgeDetectionTest1.png';
-import ApplySobelKernelFrag from 'wwwroot/shaders/edgedetection/applySobelKernel.frag';
-import IterativeEdgeBuilding from 'wwwroot/shaders/edgedetection/iterativeEdgeBuilding.frag';
-import BilateralFilterFrag from 'wwwroot/shaders/smoothing/bilateralFilter.frag';
-import BoxFilterFrag from 'wwwroot/shaders/smoothing/boxFilter.frag';
+import CannyEdgeDetectionFrag from 'wwwroot/shaders/edgedetection/cannyEdgeDetection.frag';
 import TexturedRectVert from 'wwwroot/shaders/texturedRect.vert';
 
 import { BaseSketch } from '../BaseSketch';
@@ -24,91 +21,46 @@ export interface CannyEdgeDetectionSketchProps {
 export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> = observer(({ themeStore, propsStore }) => {
 	const sketch = useCallback((s: p5) => {
 		let image: p5.Image;
-		let smoothingShader: p5.Shader;
-		let smoothedBuffer: p5.Graphics;
-		let gradientsShader: p5.Shader;
-		let gradientsBuffer: p5.Graphics;
-		let edgeBuildingShader: p5.Shader;
-		let edgeBuildingBuffer: p5.Graphics;
-
-		const getSmoothingKernel = () => {
-			const result = [];
-			const size = propsStore.smoothingKernelSize * propsStore.smoothingKernelSize;
-			for(let i = 0; i < size; ++i) {
-				result.push(1.0 / size);
-			}
-			return result;
-		};
-
-		const smoothImage = (buffer: p5.Graphics) => {
-			buffer.shader(smoothingShader);
-			const smoothingKernel = getSmoothingKernel();
-			smoothingShader.setUniform('uTexImg', image);
-			smoothingShader.setUniform('uKernelSize', propsStore.smoothingKernelSize);
-			smoothingShader.setUniform('uKernel', smoothingKernel);
-			smoothingShader.setUniform('uTexSize', s.width);
-			smoothedBuffer.rect(0, 0, s.width, s.height);
-		};
-
-		const takeImageGradient = (input: p5.Graphics, output: p5.Graphics) => {
-			output.shader(gradientsShader);
-			gradientsShader.setUniform('uTexImg', input);
-			gradientsShader.setUniform('uTexSize', input.width);
-			gradientsShader.setUniform('uThreshold', propsStore.upperEdgeThreshold);
-			gradientsShader.setUniform('uLightnessBound', propsStore.lightnessBound);
-			output.rect(0, 0, s.width, s.height);
-		};
-
-		const edgeBuild = (input: p5.Graphics, output: p5.Graphics) => {
-			output.shader(edgeBuildingShader);
-			edgeBuildingShader.setUniform('uTexImg', input);
-			edgeBuildingShader.setUniform('uTexSize', input.width);
-			edgeBuildingShader.setUniform('uUpperThreshold', propsStore.upperEdgeThreshold);
-			edgeBuildingShader.setUniform('uLowerThreshold', propsStore.lowerEdgeThreshold);
-			edgeBuildingShader.setUniform('uLightnessBound', propsStore.lightnessBound);
-			output.rect(0, 0, s.width, s.height);
-		};
-
-		const init = () => {
-			image = undefined;
-			smoothedBuffer = undefined;
-			gradientsBuffer = undefined;
-			image = s.loadImage(propsStore.image, () => {
-				reloadShaders();
-			});
-		};
+		let edgeDetectedImage: p5.Image;
 		
-		const reloadShaders = () => {
-			const smoothingShaderFrag = propsStore.useBilateralSmoothing ? BilateralFilterFrag : BoxFilterFrag;
-			s.loadShader(TexturedRectVert, smoothingShaderFrag, (args) => {
-				smoothingShader = args;
-				if(!smoothedBuffer) {				
-					smoothedBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
-				}
-			});
-
-			s.loadShader(TexturedRectVert, ApplySobelKernelFrag, (args) => {
-				gradientsShader = args;
-				if(!gradientsBuffer) {
-					gradientsBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
-				}
-			});
-
-			s.loadShader(TexturedRectVert, IterativeEdgeBuilding, (args) => {
-				edgeBuildingShader = args;
-				if(!edgeBuildingBuffer) {
-					edgeBuildingBuffer = s.createGraphics(image.width, image.height, s.WEBGL);
-				}
-			});
-		};
-
-		s.preload = () => {
-			init();
+		const makeGaussianKernel = (sigma: number): number[] => {
+			let sum = 0;
+			const kernel = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+			for (let i = 0; i < 3; i++) {
+			  for (let j = 0; j < 3; j++) {
+					kernel[i * 3 + j] = Math.exp(-(Math.pow(i - 1, 2) + Math.pow(j - 1, 2)) / (2 * Math.pow(sigma, 2)));
+					sum += kernel[i * 3 + j];
+			  }
+			}
+			// Normalize the kernel by dividing each element by the sum of the kernel elements
+			for (let i = 0; i < 9; i++) {
+			  kernel[i] /= sum;
+			}
+			return kernel;
 		};
 
 		s.setup = () => {
-			s.createCanvas(propsStore.width, propsStore.height);
-			s.pixelDensity(1);
+			s.createCanvas(propsStore.width, propsStore.height, s.WEBGL);
+			
+			image = s.loadImage(propsStore.image, () => {
+				edgeDetectedImage = s.createImage(image.width, image.height);
+
+				// Create a p5.Shader object for Canny edge detection
+				const edgeDetectionShader = s.createShader(TexturedRectVert, CannyEdgeDetectionFrag);
+
+				// Set the Gaussian kernel as a uniform for the shader
+				const kernel = makeGaussianKernel(propsStore.sigma);
+				const edgeDetectedGraphics = s.createGraphics(image.width, image.height, s.WEBGL);
+
+				edgeDetectionShader.setUniform('gaussian_kernel', kernel);
+
+				// Apply the shader to the image
+				edgeDetectionShader.setUniform('tex0', image);
+				edgeDetectionShader.setUniform('low_threshold', propsStore.lowerEdgeThreshold);
+				edgeDetectionShader.setUniform('high_threshold', propsStore.upperEdgeThreshold);
+				edgeDetectedGraphics.shader(edgeDetectionShader);
+				edgeDetectedGraphics.copy(image, 0, 0, image.width, image.height, 0, 0, image.width, image.height);
+			});
 		};
 
 		s.draw = () => {
@@ -116,29 +68,16 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 			if (propsStore.mustResize) {
 				if (s.width !== propsStore.width || s.height != propsStore.height) {
 					s.resizeCanvas(propsStore.width, propsStore.height);
-				}					
-				reloadShaders();
-				s.frameCount = 0;
-				propsStore.mustResize = false;
-			}
-			if(smoothedBuffer && gradientsBuffer) {
-				smoothImage(smoothedBuffer);
-				takeImageGradient(smoothedBuffer, gradientsBuffer);
-				edgeBuild(s.frameCount < 30 ? gradientsBuffer : edgeBuildingBuffer, edgeBuildingBuffer);
-				
-				s.image(image, 0, 0, s.width / 2, s.height / 2);
-				s.image(smoothedBuffer, s.width / 2, 0, s.width / 2, s.height / 2);
-				s.image(gradientsBuffer, 0, s.height / 2, s.width / 2, s.height / 2);
-				s.image(edgeBuildingBuffer, s.width / 2, s.height / 2, s.width / 2, s.height / 2);
-				
-				if(propsStore.saveNextFrame) {
-					propsStore.saveNextFrame = false;
-					edgeBuildingBuffer.save();
 				}
-				// const { x, y, width: scaledWidth, height: scaledHeight } = getImagePosition();
-				// s.image(image, x, y, scaledWidth, scaledHeight);
-				// s.image(edgeDetectedImage, x, y + propsStore.height / 2, scaledWidth, scaledHeight);
-				// s.line(0, propsStore.height / 2, propsStore.width, propsStore.height / 2);
+			}
+
+			if (image && edgeDetectedImage) {
+				s.translate(-s.width / 2, -s.height / 2);
+				// Draw the original image on the left half of the canvas
+				s.image(image, 0, 0, s.width / 2, s.height);
+
+				// Draw the edge-detected image on the right half of the canvas
+				s.image(edgeDetectedImage, s.width / 2, 0, s.width / 2, s.height);
 			}
 		};
 	}, []);
@@ -166,7 +105,8 @@ export const CannyEdgeDetectionDefaultPropsStore = observable<CannyEdgeDetection
 	upperEdgeThreshold: 2.5,
 	lowerEdgeThreshold: 1,
 	lightnessBound: 66,
-	saveNextFrame: false
+	saveNextFrame: false,
+	sigma: .2
 });
 
 export const CannyEdgeDetectionAgatePropsStore = observable<CannyEdgeDetectionPropsStore>({
