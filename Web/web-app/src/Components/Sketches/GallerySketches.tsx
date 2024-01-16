@@ -10,6 +10,7 @@ import { SimpleEdgeDetectionAgatePropsStore, SimpleEdgeDetectionDefaultPropsStor
 import { SinSumSketch, SinSumSketchDefaultPropsStore, SinSumSketchDefaultPropsStoreTwo } from './SinSum/SinSumSketch';
 import { SkyscrapersImprovedSketch, SkyscrapersImprovedSketchDefaultPropsStore } from './SkyscrapersImproved/SkyscrapersImprovedSketch';
 import { TimesTablesDefaultPropsStore, TimesTablesDefaultPropsStoreTwo, TimesTablesSketch } from './TimesTables/TimesTablesSketch';
+import { SnowGlobeDefaultPropsStore, SnowGlobeSketch } from './SnowGlobe/SnowGlobeSketch';
 
 interface MinimumSketchProps {
 	propsStore: BaseSketchPropsStore;
@@ -26,9 +27,13 @@ export const GallerySketches: GallerySketch[] = [
 	// 	sketch: PurgatorySketch,
 	// 	propsStore: PurgatoryDefaultPropsStore
 	// },
+	// {
+	// 	sketch: CannyEdgeDetectionSketch,
+	// 	propsStore: CannyEdgeDetectionAgatePropsStore
+	// },
 	{
-		sketch: CannyEdgeDetectionSketch,
-		propsStore: CannyEdgeDetectionAgatePropsStore
+		sketch: SnowGlobeSketch,
+		propsStore: SnowGlobeDefaultPropsStore
 	},
 	{
 		sketch: SkyscrapersImprovedSketch,

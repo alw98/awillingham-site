@@ -58,7 +58,7 @@ export const ParticleFieldSketch: React.FC<ParticleFieldSketchProps> = observer(
 					createStartingParticles();
 					s.resizeCanvas(propsStore.width, propsStore.height);
 				}
-				propsStore.mustResize = false;
+				
 				propsStore.field = new Field(propsStore.gridWidth,
 					propsStore.gridHeight,
 					propsStore.fieldDirectionNoiseScale,

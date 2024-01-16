@@ -63,9 +63,24 @@ export class Field {
 		});
 	}
 
+	getFieldValueAtCoordinate(x: number, y: number): p5.Vector {
+		const xIndex = Math.floor(x / this.s.width * this.w);
+		const yIndex = Math.floor(y / this.s.height * this.h);
+	
+		// Ensure indices are within the bounds of this.field
+		if (yIndex >= 0 && yIndex < this.field.length && xIndex >= 0 && xIndex < this.field[yIndex].length) {
+			return this.field[yIndex][xIndex];
+		} else {
+			// Handle the case where the indices are out of bounds
+			// You might want to return null, undefined, or throw an error
+			return new p5.Vector(0, 0); // Or your preferred method of handling out-of-bounds
+		}
+	}
+	
 	drawGrid(w: number, h: number) {
 		const dy = h / this.field.length;
 		const dx = w / this.field[0].length;
+		console.log(this.field.length)
 		this.s.stroke(0);
 		this.s.noFill();
 		for(let x = 0; x < w; x += dx) {

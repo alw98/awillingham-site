@@ -54,12 +54,7 @@ export const FireworksSketch: React.FC<FireworksSketchProps> = observer(({ theme
 			s.background(themeStore.theme.backgroundColor.primary);
 			s.translate(0, s.height);
 			s.scale(1, -1);
-			if (propsStore.mustResize) {
-				if (s.width !== propsStore.width || s.height != propsStore.height) {
-					s.resizeCanvas(propsStore.width, propsStore.height);
-				}
-				propsStore.mustResize = false;
-			}
+			
 			const gravity = new p5.Vector(0, -propsStore.gravity);
 
 			propsStore.fireworks.heapArray.forEach((val) => {

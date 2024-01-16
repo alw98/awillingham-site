@@ -49,12 +49,7 @@ export const SimpleEdgeDetectionSketch: React.FC<SimpleEdgeDetectionSketchProps>
 
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
-			if (propsStore.mustResize) {
-				if (s.width !== propsStore.width || s.height != propsStore.height) {
-					s.resizeCanvas(propsStore.width, propsStore.height);
-				}
-			}
-
+			
 			if(image && edgeDetectedImage) {
 				const { x, y, width: scaledWidth, height: scaledHeight } = getImagePosition();
 				s.image(image, x, y, scaledWidth, scaledHeight);

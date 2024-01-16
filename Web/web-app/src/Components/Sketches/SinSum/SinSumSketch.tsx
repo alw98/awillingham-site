@@ -61,10 +61,6 @@ export const SinSumSketch: React.FC<SinSumSketchProps> = observer(({ themeStore,
 
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
-			if (propsStore.mustResize) {
-				s.resizeCanvas(propsStore.width, propsStore.height);
-				propsStore.mustResize = false;
-			}
 			drawGraph();
 			drawCircles();
 			propsStore.step++;

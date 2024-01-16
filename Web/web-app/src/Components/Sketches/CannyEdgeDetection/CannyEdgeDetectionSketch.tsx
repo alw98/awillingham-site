@@ -65,11 +65,6 @@ export const CannyEdgeDetectionSketch: React.FC<CannyEdgeDetectionSketchProps> =
 
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
-			if (propsStore.mustResize) {
-				if (s.width !== propsStore.width || s.height != propsStore.height) {
-					s.resizeCanvas(propsStore.width, propsStore.height);
-				}
-			}
 
 			if (image && edgeDetectedImage) {
 				s.translate(-s.width / 2, -s.height / 2);

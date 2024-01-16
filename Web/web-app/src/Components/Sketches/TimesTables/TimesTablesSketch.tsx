@@ -23,11 +23,7 @@ export const TimesTablesSketch: React.FC<TimesTablesSketchProps> = observer(({ t
 
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
-			if (propsStore.mustResize) {
-				s.resizeCanvas(propsStore.width, propsStore.height);
-				propsStore.mustResize = false;
-			}
-
+			
 			drawTables(s, propsStore, themeStore);
 		};
 	}, []);

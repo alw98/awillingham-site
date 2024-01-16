@@ -36,10 +36,7 @@ export const BouncyDVDSketch: React.FC<BaseSketchProps> = observer(({ themeStore
 
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
-			if (propsStore.mustResize) {
-				s.resizeCanvas(propsStore.width, propsStore.height);
-				propsStore.mustResize = false;
-			}
+			
 			const imageWidth = propsStore.width / 6;
 			const imageHeight = propsStore.width / 6 * aspectRatio;
 			s.stroke(themeStore.theme.accentColor.primary);

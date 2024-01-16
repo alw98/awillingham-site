@@ -4,7 +4,7 @@ import { observer } from 'mobx-react';
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 import { Theme } from 'Models/Theme';
 import p5 from 'p5';
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { createUseStyles } from 'react-jss';
 import { CSSTransition } from 'react-transition-group';
 import { ThemeStore } from 'Stores/ThemeStore';
@@ -40,10 +40,23 @@ export const BaseSketch: React.FC<BaseSketchProps> = observer((props) => {
 	const [windowWidth, windowHeight] = useWindowSize(250);
 	const gearbox = useValueForTheme(GearboxDark, GearboxLight, props.themeStore.theme);
 
-
 	useLayoutEffect(() => {
 		if (p5ContainerRef.current) {
 			const p5Instance = new p5(props.sketch, p5ContainerRef.current);
+			const baseDraw = p5Instance.draw;
+
+			p5Instance.draw = () => {
+				if (props.propsStore.mustResize) {
+					if (p5Instance.width !== props.propsStore.width || p5Instance.height != props.propsStore.height) {
+						p5Instance.resizeCanvas(props.propsStore.width, props.propsStore.height);
+					}
+				}
+
+				baseDraw();
+
+				props.propsStore.mustResize = false;
+			}
+
 			return () => {
 				p5Instance.remove();
 				setTimeout(() => p5Instance.remove(), 100);

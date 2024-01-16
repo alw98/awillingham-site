@@ -47,11 +47,7 @@ export const PurgatorySketch: React.FC<PurgatorySketchProps> = observer(({ theme
 
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
-			if (propsStore.mustResize) {
-				if (s.width !== propsStore.width || s.height != propsStore.height) {
-					s.resizeCanvas(propsStore.width, propsStore.height);
-				}
-			}
+			
 			if(shaderBuffer) {
 				if(s.frameCount < 5) {
 					shader.setUniform('uTexImg', image);
