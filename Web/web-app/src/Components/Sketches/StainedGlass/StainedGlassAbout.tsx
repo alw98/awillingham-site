@@ -2,15 +2,15 @@ import React from 'react';
 
 import { BaseOptions } from '../BaseOptions';
 
-interface SnowGlobeAboutProps {
+interface StainedGlassAboutProps {
 	onClose: () => void;
 }
 
-export const SnowGlobeAbout: React.FC<SnowGlobeAboutProps> = ({ onClose }) => {
+export const StainedGlassAbout: React.FC<StainedGlassAboutProps> = ({ onClose }) => {
 	return (
 		<BaseOptions onClose={onClose}>
 			<div>
-				A simple snow globe simulation using perlin noise and matter.js
+				A beautiful stained glass mosaic, randomly generated
 			</div>
 		</BaseOptions>
 	);

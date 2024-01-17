@@ -5,7 +5,7 @@ import React, { useCallback } from 'react';
 import { ThemeStore } from 'Stores/ThemeStore';
 
 import { BaseSketch } from '../BaseSketch';
-import { SimpleEdgeDetectionAbout } from './SnowGlobeAbout';
+import { SnowGlobeAbout } from './SnowGlobeAbout';
 import { SnowGlobeOptions } from './SnowGlobeOptions';
 import { BaseSketchPropsStore } from 'Models/Sketches/BaseSketchPropsStore';
 
@@ -19,34 +19,37 @@ export interface SnowGlobeSketchProps {
 
 export const SnowGlobeSketch: React.FC<SnowGlobeSketchProps> = observer(({ themeStore, propsStore }) => {
 	const sketch = useCallback((s: p5) => {
-		const globeRadius = Math.max(propsStore.width, propsStore.height) * .8;
+		let tick = 0;
+		let lastTick = Date.now();
+		let globeRadius = Math.max(propsStore.width, propsStore.height) * .8;
 		const globeResolution = 100;
 		const globeDT = Math.PI * 2 / globeResolution;
 		const circumference = 2 * Math.PI * globeRadius;
 		const globeDC = circumference / globeResolution;
-		const detailedGlobe = true;
-		const field = new Field(100,
-			100,
-			.5,
-			.5,
-			.0003,
-			false,
-			s)
 		const snowCount = 1000;
 		const snowSize = 3;
-		const snow: Matter.Body[] = [];
+		let field: Field;
+		let snow: Matter.Body[];
+		let globePoints: Matter.Vector[];
+		let globe: Matter.Body[];
+		let engine: Matter.Engine;
 		
-		const globePoints: Matter.Vector[] = [];
-		const globe: Matter.Body[] = [];
-		const engine = Matter.Engine.create();
-		engine.gravity.y = .1;
-		let lastTick = Date.now();
-
-		let mouseBox: Matter.Body;
-
-		s.setup = () => {
-			s.createCanvas(propsStore.width, propsStore.height);
+		const createGlobe = () => {
+			globeRadius = Math.min(propsStore.width, propsStore.height) * .4;
 			lastTick = Date.now();
+			snow = [];
+			globePoints = [];
+			globe = [];
+			engine = Matter.Engine.create();
+			engine.gravity.y = .1;
+			field = new Field(100,
+				100,
+				.5,
+				.5,
+				.0003,
+				false,
+				s);
+
 			for(let i = 0; i < snowCount; ++i) {
 				const centerX = propsStore.width / 2;
 				const centerY = propsStore.height / 2;
@@ -69,11 +72,19 @@ export const SnowGlobeSketch: React.FC<SnowGlobeSketchProps> = observer(({ theme
 			// mouseBox = Matter.Bodies.rectangle(450, 500, 50, 50, {isStatic: true, density: 100000});
 			// Matter.World.add(engine.world, mouseBox);
 			// Matter.World.add(engine.world, Matter.Bodies.rectangle(0, 500, propsStore.width, 10, {isStatic:}));
+		}
+
+		s.setup = () => {
+			s.createCanvas(propsStore.width, propsStore.height);
+			createGlobe();
 		};
 
-		let tick = 0;
+			
 		s.draw = () => {
 			s.background(themeStore.theme.backgroundColor.primary);
+			if (propsStore.mustResize) {
+				createGlobe();
+			}
 			const now = Date.now();
 			const dt = now - lastTick;
 			Matter.Engine.update(engine, dt);
@@ -92,7 +103,8 @@ export const SnowGlobeSketch: React.FC<SnowGlobeSketchProps> = observer(({ theme
 				s.push();
 				s.translate(cur.position.x, cur.position.y);
 				s.rotate(i * globeDT);
-				s.rect(0, 0, 10, globeDC);
+				s.rectMode('corner');
+				s.rect(-10, -10, 3, globeDC);
 				s.pop();
 			}
 
@@ -111,7 +123,7 @@ export const SnowGlobeSketch: React.FC<SnowGlobeSketchProps> = observer(({ theme
 
 	return (
 		<BaseSketch
-			about={SimpleEdgeDetectionAbout}
+			about={SnowGlobeAbout}
 			options={SnowGlobeOptions}
 			propsStore={propsStore}
 			themeStore={themeStore}
