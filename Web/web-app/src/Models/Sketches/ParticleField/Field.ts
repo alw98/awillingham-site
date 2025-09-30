@@ -80,7 +80,7 @@ export class Field {
 	drawGrid(w: number, h: number) {
 		const dy = h / this.field.length;
 		const dx = w / this.field[0].length;
-		console.log(this.field.length)
+		console.log(this.field.length);
 		this.s.stroke(0);
 		this.s.noFill();
 		for(let x = 0; x < w; x += dx) {

@@ -1,4 +1,4 @@
-import { BaseSketchPropsStore } from "../BaseSketchPropsStore";
+import { BaseSketchPropsStore } from '../BaseSketchPropsStore';
 
 
 export interface StainedGlassSketchPropsStore extends BaseSketchPropsStore {

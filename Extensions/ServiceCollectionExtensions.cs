@@ -14,6 +14,7 @@ namespace awillingham_site.Extensions
 
             return services;
         }
+
         public static IServiceCollection AddCustomResponseCaching(
             this IServiceCollection services)
         {
@@ -46,6 +47,7 @@ namespace awillingham_site.Extensions
 
             return services;
         }
+
         public static IServiceCollection AddRateLimiting(
             this IServiceCollection services)
         {

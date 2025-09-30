@@ -22,8 +22,15 @@ namespace awillingham_site
         private static WebApplicationBuilder CreateBuilder(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Host.ConfigureCustomAppConfiguration();
-            builder.Host.ConfigureCustomLogging();
+            var env = builder.Environment;
+            builder.Configuration.SetBasePath(env.ContentRootPath);
+            builder.Configuration.AddJsonFile("./_config/config.json", optional: false);
+            builder.Configuration.AddJsonFile($"./_config/{env.EnvironmentName}.config.json", optional: true);
+            builder.Configuration.AddJsonFile("./_config/local.config.json", optional: true);
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+
             builder.Host.UseSystemd();
 
             return builder;
@@ -37,7 +44,7 @@ namespace awillingham_site
             services.AddCustomHttpsRedirection();
             services.AddRateLimiting();
         }
-        
+
         private static void ConfigureApp(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCustomForwardedHeaders();
