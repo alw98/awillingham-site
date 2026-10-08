@@ -37,55 +37,23 @@ describe('safe preference persistence', () => {
     expect(storage.entries.get(PREFERENCE_KEY)).toBe('{broken');
     expect(storage.setItem).not.toHaveBeenCalled();
   });
-  it('reads preferences first, inspects the old theme and never overwrites legacy keys', () => {
-    const storage = memory({ ThemeStore: '{old-theme}', TimerStore: '{old-timer}' });
+  it('reads only current preferences and strips unused fields without losing saved colors', () => {
+    const current = { ...defaultPreferences(), themeMode: 'custom', customTheme: dark, motion: 'reduced' };
+    const raw = JSON.stringify({ ...current, legacyImport: { theme: 'imported', timer: 'pending' } });
+    const storage = memory({ [PREFERENCE_KEY]: raw, unrelated: 'untouched' });
     const store = createPreferenceStore(() => storage);
     expect(storage.getItem).not.toHaveBeenCalled();
     store.getState().load();
-    expect(storage.getItem).toHaveBeenNthCalledWith(1, PREFERENCE_KEY);
-    expect(storage.getItem).toHaveBeenNthCalledWith(2, 'ThemeStore');
+    expect(storage.getItem).toHaveBeenCalledExactlyOnceWith(PREFERENCE_KEY);
+    expect(store.getState().preferences).toEqual(current);
     expect(storage.setItem).not.toHaveBeenCalled();
+    expect(storage.entries.get(PREFERENCE_KEY)).toBe(raw);
     store.getState().setMode('light');
-    expect(parsePreferences(storage.entries.get(PREFERENCE_KEY)!)).toMatchObject({ themeMode: 'light' });
-    expect(storage.entries.get('ThemeStore')).toBe('{old-theme}');
-    expect(storage.entries.get('TimerStore')).toBe('{old-timer}');
+    expect(JSON.parse(storage.entries.get(PREFERENCE_KEY)!)).toEqual({ ...current, themeMode: 'light' });
+    expect(storage.entries.get('unrelated')).toBe('untouched');
   });
 
-  it('imports a validated original theme only on request and preserves both old keys', () => {
-    const theme = structuredClone(dark); theme.backgroundColor.primary = '#123456';
-    const raw = JSON.stringify({ theme, usingDefaultTheme: false, colorPageThemeStore: { theme } });
-    const storage = memory({ ThemeStore: raw, TimerStore: '{old-timer}' });
-    const store = createPreferenceStore(() => storage); store.getState().load();
-    expect(store.getState().preferences.customTheme).toBeNull();
-    expect(storage.setItem).not.toHaveBeenCalled();
-    store.getState().importLegacyTheme();
-    expect(parsePreferences(storage.entries.get(PREFERENCE_KEY)!)).toMatchObject({ themeMode: 'custom', customTheme: theme, legacyImport: { theme: 'imported' } });
-    expect(storage.entries.get('ThemeStore')).toBe(raw); expect(storage.entries.get('TimerStore')).toBe('{old-timer}');
-  });
-
-  it('does not import malformed legacy colors or overwrite an unreadable replacement record', () => {
-    const storage = memory({ ThemeStore: JSON.stringify({ theme: dark }), [PREFERENCE_KEY]: '{broken' });
-    const store = createPreferenceStore(() => storage); store.getState().load(); store.getState().importLegacyTheme();
-    expect(storage.setItem).not.toHaveBeenCalled(); expect(storage.entries.get(PREFERENCE_KEY)).toBe('{broken');
-    storage.entries.set('ThemeStore', '{bad'); store.getState().load();
-    expect(store.getState().legacyTheme).toBeNull(); expect(store.getState().legacyNotice).toContain('preserved');
-  });
-  it('does not overwrite a new custom theme with an original saved theme', () => {
-    const storage = memory({ ThemeStore: JSON.stringify({ theme: dark }) });
-    const store = createPreferenceStore(() => storage); store.getState().load();
-    store.getState().saveCustomTheme(light); const raw = storage.entries.get(PREFERENCE_KEY);
-    store.getState().importLegacyTheme(); expect(storage.entries.get(PREFERENCE_KEY)).toBe(raw);
-    expect(store.getState().preferences.customTheme).toEqual(light);
-  });
-  it('preserves the pending import and original bytes when saving runs out of quota', () => {
-    const original = JSON.stringify({ theme: dark }), storage = memory({ ThemeStore: original });
-    storage.setItem.mockImplementation(() => { throw new Error('Quota exceeded'); });
-    const store = createPreferenceStore(() => storage); store.getState().load(); store.getState().importLegacyTheme();
-    expect(store.getState()).toMatchObject({ status: 'unavailable', preferences: { customTheme: null, legacyImport: { theme: 'pending' } } });
-    expect(storage.entries.get('ThemeStore')).toBe(original); expect(storage.entries.has(PREFERENCE_KEY)).toBe(false);
-  });
-
-  it.each(['{', '{"schemaVersion":99}', JSON.stringify({ ...defaultPreferences(), extra: true }), JSON.stringify({ ...defaultPreferences(), themeMode: 'custom' }), 'x'.repeat(MAX_PREFERENCE_BYTES + 1)])('preserves invalid or unsupported data until an explicit reset (%#)', raw => {
+  it.each(['{', '{"schemaVersion":99}', JSON.stringify({ ...defaultPreferences(), themeMode: 'custom' }), 'x'.repeat(MAX_PREFERENCE_BYTES + 1)])('preserves invalid or unsupported data until an explicit reset (%#)', raw => {
     const storage = memory({ [PREFERENCE_KEY]: raw });
     const store = createPreferenceStore(() => storage);
     store.getState().load();

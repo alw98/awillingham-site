@@ -80,8 +80,6 @@ public sealed class HostTests
     [Theory]
     [InlineData("Site:ClientMode", "Unknown", "ClientMode")]
     [InlineData("Site:ClientAssetsPath", "../outside", "content root")]
-    [InlineData("Features:Accounts:Enabled", "true", "unavailable")]
-    [InlineData("Features:DataSync:Enabled", "true", "unavailable")]
     [InlineData("Proxy:TrustedProxies:0", "not-an-ip", "IP addresses")]
     public void Invalid_configuration_fails_before_accepting_traffic(string key, string value, string diagnostic)
     {
@@ -139,10 +137,10 @@ public sealed class HostTests
 
     [Theory]
     [InlineData("/assets/missing.js")]
-    [InlineData("/images/missing")]
+    [InlineData("/assets/missing")]
     [InlineData("/nested/missing.css")]
     [InlineData("/not.a.route/path")]
-    [InlineData("/shaders/missing.frag")]
+    [InlineData("/assets/nested/missing.frag")]
     [InlineData("/unknown.xyz")]
     public async Task Missing_assets_do_not_receive_html_or_immutable_caching(string path)
     {
@@ -175,17 +173,18 @@ public sealed class HostTests
     }
 
     [Theory]
-    [InlineData("/gallery/Tetris?from=old", "/gallery/tetris?from=old")]
-    [InlineData("/gallery/TimesTables", "/gallery/times-tables-animated")]
-    [InlineData("/gallery/BouncyDVD/", "/gallery/bouncy-dvd")]
-    [InlineData("/gallery/", "/gallery")]
-    public async Task Legacy_and_trailing_slash_redirects_are_permanent_and_preserve_query(string path, string target)
+    [InlineData("/gallery/Tetris?from=old")]
+    [InlineData("/gallery/TimesTables")]
+    [InlineData("/gallery/BouncyDVD/")]
+    [InlineData("/gallery/")]
+    public async Task Client_paths_are_served_without_redirects(string path)
     {
         using var factory = new SiteFactory("Integrated", withAssets: true);
         using var client = factory.CreateClient(new() { AllowAutoRedirect = false });
         using var response = await client.GetAsync(path, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.PermanentRedirect, response.StatusCode);
-        Assert.Equal(target, response.Headers.Location?.OriginalString);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Null(response.Headers.Location);
+        Assert.Equal("fallback", await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -239,7 +238,7 @@ internal sealed class SiteFactory : WebApplicationFactory<Program>
         builder.UseEnvironment(environment).UseContentRoot(Root);
         builder.ConfigureAppConfiguration((_, configuration) =>
         {
-            var values = new Dictionary<string, string?> { ["Features:Accounts:Enabled"] = "false", ["Features:DataSync:Enabled"] = "false" };
+            var values = new Dictionary<string, string?>();
             if (mode is not null) values["Site:ClientMode"] = mode;
             foreach (var pair in settings) values[pair.Key] = pair.Value;
             configuration.AddInMemoryCollection(values);

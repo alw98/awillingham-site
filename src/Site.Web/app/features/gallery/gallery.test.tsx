@@ -3,14 +3,14 @@ import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
 import Gallery from './gallery-page';
 import SketchPage from './sketch-page';
-import { catalog, legacyAliases } from './catalog';
+import { catalog } from './catalog';
 vi.mock('./sketches/canvas-host', () => ({ CanvasHost: () => null }));
 
 describe('the public collection', () => {
-  it('accounts for all active presets and preserves the first Times Tables alias', () => {
+  it('defines all 15 presets with unique routes and distinct Times Tables entries', () => {
     expect(catalog).toHaveLength(15);
     expect(new Set(catalog.map(study => study.slug)).size).toBe(15);
-    expect(legacyAliases.get('TimesTables')).toBe('times-tables-animated');
+    expect(catalog.filter(study => study.slug.startsWith('times-tables')).map(study => study.slug)).toEqual(['times-tables-animated', 'times-tables-static']);
     expect(catalog.some(study => study.slug === 'bouncy-dvd')).toBe(true);
   });
   it('lets a visitor filter and recover an empty search', () => {

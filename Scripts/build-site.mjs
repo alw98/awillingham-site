@@ -6,7 +6,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const client = path.join(root, 'src/Site.Web');
-const pins = JSON.parse(readFileSync(path.join(root, 'docs/contracts/foundation-toolchain.json'), 'utf8'));
+const { engines: pins } = JSON.parse(readFileSync(path.join(client, 'package.json'), 'utf8'));
+const dotnetSdk = JSON.parse(readFileSync(path.join(root, 'global.json'), 'utf8')).sdk.version;
 const args = process.argv.slice(2);
 if (args.length && (args.length !== 2 || args[0] !== '--configuration' || args[1] !== 'Release')) {
   throw new Error('Usage: node Scripts/build-site.mjs [--configuration Release]');
@@ -21,7 +22,7 @@ function run(command, args, cwd = root, capture = false) {
 }
 if (process.versions.node !== pins.node) throw new Error(`Use Node ${pins.node}; found ${process.versions.node}.`);
 if (run('npm', ['--version'], root, true) !== pins.npm) throw new Error(`Use npm ${pins.npm}.`);
-if (run('dotnet', ['--version'], root, true) !== pins.dotnetSdk) throw new Error(`Use .NET SDK ${pins.dotnetSdk}.`);
+if (run('dotnet', ['--version'], root, true) !== dotnetSdk) throw new Error(`Use .NET SDK ${dotnetSdk}.`);
 
 function cleanOwned(relative) {
   if (!['src/Site.Server/wwwroot', '.artifacts/site/publish'].includes(relative)) throw new Error('Unowned cleanup path.');
@@ -45,7 +46,7 @@ function filesIn(relative) {
   walk(relative);
   return files;
 }
-const inputs = [...filesIn('src'), ...filesIn('tests'), 'global.json', '.node-version', '.npmrc', 'Site.slnx', 'Scripts/build-site.mjs', 'docs/contracts/foundation-toolchain.json', 'docs/contracts/legacy-gallery.json'].sort();
+const inputs = [...filesIn('src'), ...filesIn('tests'), 'global.json', '.node-version', '.npmrc', 'Site.slnx', 'Scripts/build-site.mjs'].sort();
 const fingerprint = createHash('sha256');
 for (const file of inputs) fingerprint.update(file.split(path.sep).join('/')).update('\0').update(readFileSync(path.join(root, file)));
 
@@ -66,5 +67,5 @@ run('dotnet', ['build', 'Site.slnx', '--configuration', 'Release', '--no-restore
 run('dotnet', ['test', '--project', 'tests/Site.Server.Tests/Site.Server.Tests.csproj', '--configuration', 'Release', '--no-build']);
 const publish = cleanOwned('.artifacts/site/publish');
 run('dotnet', ['publish', 'src/Site.Server/Site.Server.csproj', '--configuration', 'Release', '--no-build', '--no-restore', '--output', publish]);
-writeFileSync(path.join(publish, 'release.json'), JSON.stringify({ schemaVersion: 1, sourceSha256: fingerprint.digest('hex'), contractVersion: pins.contractVersion, node: pins.node, dotnetSdk: pins.dotnetSdk }, null, 2) + '\n');
+writeFileSync(path.join(publish, 'release.json'), JSON.stringify({ schemaVersion: 1, sourceSha256: fingerprint.digest('hex'), node: pins.node, dotnetSdk: dotnetSdk }, null, 2) + '\n');
 console.log(`Release artifact ready: ${publish}`);

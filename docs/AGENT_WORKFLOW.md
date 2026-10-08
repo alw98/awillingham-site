@@ -2,7 +2,7 @@
 
 Updated 2026-10-08 (America/Chicago). [BACKLOG.md](../BACKLOG.md) owns task states;
 [STATUS.md](../STATUS.md) records evidence; [NEXT_STEPS.md](../NEXT_STEPS.md) expands
-the next gate. [Architecture](architecture.md) defines the target and migration
+the next gate. [Architecture](architecture.md) defines current and future
 boundaries; [AGENTS.md](../AGENTS.md) distinguishes current source from that target.
 
 ## Invocation and read order
@@ -96,7 +96,7 @@ rules alone do not isolate compiler or publish inputs in any future root project
 
 Assign distinct API/frontend/production ports and disposable browser storage.
 Record launch arguments/environment; do not assume launch profiles respect an
-unrecorded override. Do not clear the user's real `ThemeStore` or `TimerStore`.
+unrecorded override. Do not clear the user's real browser storage.
 Future PostgreSQL checks get separate disposable databases; OAuth tests get mock
 providers and unique callbacks. No lane runs shared production migrations.
 

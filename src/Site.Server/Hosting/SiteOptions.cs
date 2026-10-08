@@ -8,12 +8,6 @@ public sealed class SiteOptions
     public string ClientAssetsPath { get; set; } = "wwwroot";
 }
 
-public sealed class FeatureOptions
-{
-    public FeatureFlag Accounts { get; set; } = new();
-    public FeatureFlag DataSync { get; set; } = new();
-}
-public sealed class FeatureFlag { public bool Enabled { get; set; } }
 public sealed class ProxyOptions { public string[] TrustedProxies { get; set; } = []; }
 
 public sealed class SiteOptionsValidator(IHostEnvironment environment) : IValidateOptions<SiteOptions>

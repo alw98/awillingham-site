@@ -22,7 +22,7 @@ jobs:
           package-manager-cache: false
       - name: Check repository guidance
         run: node Scripts/check-repo.mjs
-      - name: Check gallery compatibility and retired entry points
+      - name: Check toolchain and build configuration
         run: node Scripts/check-foundation.mjs
       - name: Exercise repository-check failures
         run: node --test Scripts/check-repo.test.mjs

@@ -11,6 +11,6 @@ retains full-page options across SPA navigation; previews use independent defaul
 Settings are in the gear overlay and About is at the top of each sketch page.
 
 Keep browser globals inside factories/effects so prerendering remains safe. Do
-not import legacy runtime modules or put mutable engines into the gallery catalog
-or preference store. Engine fixtures and browser acceptance live under this
+not put mutable engines into the gallery catalog or preference store. Register
+metadata in `../catalog.ts`; the server has no gallery inventory. Engine fixtures and browser acceptance live under this
 directory and `tests/browser`; STATUS records outcomes and intentional limits.

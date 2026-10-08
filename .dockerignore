@@ -13,10 +13,6 @@
 !tests/Site.Server.Tests/**
 !tests/browser/
 !tests/browser/**
-!docs/
-!docs/contracts/
-!docs/contracts/foundation-toolchain.json
-!docs/contracts/legacy-gallery.json
 !Scripts/
 !Scripts/build-site.mjs
 **/bin/**

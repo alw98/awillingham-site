@@ -2,9 +2,8 @@ using Site.Server.Hosting;
 
 namespace Site.Server.Http;
 
-public sealed partial class ClientRouting(RequestDelegate next, ClientAssets assets, GalleryRoutes routes)
+public sealed partial class ClientRouting(RequestDelegate next, ClientAssets assets)
 {
-    private static readonly string[] StaticPrefixes = ["/assets", "/images", "/shaders", "/css", "/js"];
     public static bool IsHashedAsset(PathString path) => path.StartsWithSegments("/assets") && HashedName().IsMatch(path.Value ?? "");
     [System.Text.RegularExpressions.GeneratedRegex(@"-[a-zA-Z0-9_-]{8,}\.[a-zA-Z0-9]+$")]
     private static partial System.Text.RegularExpressions.Regex HashedName();
@@ -18,22 +17,10 @@ public sealed partial class ClientRouting(RequestDelegate next, ClientAssets ass
             await ApiProblems.Write(context, 404);
             return;
         }
-        if (assets.Integrated && navigationMethod)
-        {
-            var trimmed = (path.Value ?? "/").TrimEnd('/');
-            var canonical = routes.Aliases.GetValueOrDefault(trimmed);
-            if (canonical is null && trimmed.Length > 0 && routes.Canonical.Contains(trimmed) && path.Value != trimmed) canonical = trimmed;
-            if (canonical is not null)
-            {
-                context.Response.Headers.CacheControl = "no-cache";
-                context.Response.Redirect(canonical + context.Request.QueryString, permanent: true, preserveMethod: true);
-                return;
-            }
-        }
         await next(context);
         if (context.Response.StatusCode != 404 || context.Response.HasStarted || context.GetEndpoint() is not null) return;
         if (!assets.Integrated || !navigationMethod || ApiProblems.IsReserved(path) ||
-            StaticPrefixes.Any(prefix => path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase)) ||
+            path.StartsWithSegments("/assets", StringComparison.OrdinalIgnoreCase) ||
             (path.Value ?? "").Split('/').Any(segment => segment.Contains('.')) || !AcceptsHtml(context.Request)) return;
         var file = path.Value switch { "/" => "index.html", "/gallery" => "gallery/index.html", _ => "__spa-fallback.html" };
         context.Response.StatusCode = 200;

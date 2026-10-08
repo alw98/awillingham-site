@@ -23,22 +23,19 @@ sequential integration with combined checks.
 Run `node Scripts/check-repo.mjs` after repository guidance changes. It checks
 local links, task dependencies, required entry points, and copied project residue;
 it does not prove TOML runtime discovery, browser behavior, or live delegation.
-[Foundation revision 2](docs/contracts/FOUNDATION.md) defines the toolchain,
-routes, HTTP/storage and ownership contracts. [Sketch runtime revision 3](docs/contracts/SKETCH_RUNTIME.md)
+[Application contract](docs/contracts/FOUNDATION.md) defines the toolchain,
+routes, HTTP/storage and ownership contracts. [Sketch runtime](docs/contracts/SKETCH_RUNTIME.md)
 defines renderer lifecycle and configuration. Run `node Scripts/check-foundation.mjs`
-to check pins, the compatibility inventory, solution boundaries and retired entry points.
+to check toolchain pins and build boundaries.
 
 ## Current application
 
 The only application lives in `src/Site.Server` and `src/Site.Web`. `Site.slnx`
 contains the server and `tests/Site.Server.Tests`; Chromium checks live in
-`tests/browser`. The legacy root MVC host, React/Webpack client, assets and AWS
-hooks were removed at the user's explicit request on 2026-10-08 after local
-parity acceptance. Historical source remains in Git at `07db3fe`. Do not recreate
-legacy scaffolding or treat historical evidence as current commands.
+`tests/browser`.
 
-Use SDK 10.0.401, Node 24.21.0 and npm 11.19.0 from the root pins and
-[manifest](docs/contracts/foundation-toolchain.json). See README for editor tasks
+Use SDK 10.0.401, Node 24.21.0 and npm 11.19.0 from `global.json` and
+`src/Site.Web/package.json`; `.node-version` selects the same Node version. See README for editor tasks
 and development commands. `node Scripts/build-site.mjs --configuration Release`
 performs clean installation, strict types, TSX lint, frontend tests/build, locked
 .NET restore, backend build/tests and publish to `.artifacts/site/publish`.
@@ -56,13 +53,13 @@ All 15 gallery presets use native Canvas2D, with Matter.js isolated to Snow Glob
 Keep preview/full-page state independent, animate visible previews, pause hidden
 work, and dispose frames/listeners/workers. Settings belong behind the gear;
 About belongs at the top. Options survive navigation within the current session.
-The catalog and server share `docs/contracts/legacy-gallery.json`: preserve all
-14 original URL aliases and both unique Times Tables destinations.
+React owns the catalog in `app/features/gallery/catalog.ts`. Keep current
+slugs stable, including both Times Tables destinations. The server does
+not load gallery metadata or redirect old links; unknown slugs render Not Found.
 
 The 26-color editor has draft-colored bubbles, validated versioned preferences
-and explicit legacy theme import. Preserve the original `ThemeStore`/`TimerStore`
-bytes; new preferences use `aw.gallery.preferences.v1`. Never reset real browser
-data to pass checks. Euler 1–10 executes in cancellable workers. The timer is the
+under `aw.gallery.preferences.v1`. No old-site import or migration is supported.
+Never reset real browser data to pass checks. Euler 1–10 executes in cancellable workers. The timer is the
 original Add Item prototype; a functioning countdown remains M3-06.
 
 ## Product and implementation conventions

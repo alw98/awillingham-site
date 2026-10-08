@@ -1,5 +1,5 @@
 import { test, expect, AxeBuilder } from '../../src/Site.Web/browser-harness';
-import inventory from '../../docs/contracts/legacy-gallery.json';
+import { catalog } from '../../src/Site.Web/app/features/gallery/catalog';
 const fingerprint = (canvas: HTMLCanvasElement) => {
   const data = canvas.toDataURL(); let hash = 2166136261;
   for (let i = 0; i < data.length; i++) hash = Math.imul(hash ^ data.charCodeAt(i), 16777619);
@@ -64,7 +64,7 @@ test('all 15 gallery presets render real seeded canvases with accessible control
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 1280, height: 1000 });
-  for (const preset of inventory.presets) {
+  for (const preset of catalog) {
     await page.goto('/gallery/' + preset.slug);
     const canvas = page.locator('canvas');
     await expect(canvas).toHaveAttribute('data-state', 'paused');

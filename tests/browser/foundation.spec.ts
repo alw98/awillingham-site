@@ -1,5 +1,5 @@
 import { test, expect, AxeBuilder } from '../../src/Site.Web/browser-harness';
-import inventory from '../../docs/contracts/legacy-gallery.json';
+import { catalog } from '../../src/Site.Web/app/features/gallery/catalog';
 
 test('navigation, focus, filtering, themes and reload work without console errors', async ({ page }) => {
   const errors: string[] = [];
@@ -33,34 +33,31 @@ test('navigation, focus, filtering, themes and reload work without console error
   expect(errors).toEqual([]);
 });
 
-test('all canonical pages and legacy aliases open directly', async ({ page, request }) => {
-  for (const path of ['/', '/gallery', '/colors', '/projecteuler', '/timer', ...inventory.presets.map(preset => '/gallery/' + preset.slug)]) {
+test('current pages open directly and obsolete URLs show Not Found without redirects', async ({ page, request }) => {
+  for (const path of ['/', '/gallery', '/colors', '/projecteuler', '/timer', ...catalog.map(preset => '/gallery/' + preset.slug)]) {
     await page.goto(path);
     await expect(page.locator('#page-title')).toBeAttached();
     await expect(page.getByRole('navigation')).toBeVisible();
     const section = path === '/' ? 'Home' : path.startsWith('/gallery') ? 'Gallery' : path === '/colors' ? 'Colors' : path === '/projecteuler' ? 'Euler' : 'Timer';
     await expect(page.getByRole('navigation').locator('a[aria-current="page"]')).toHaveText(section);
   }
-  const seen = new Set<string>();
-  for (const preset of inventory.presets) {
-    if (seen.has(preset.legacyName)) continue;
-    seen.add(preset.legacyName);
-    const response = await request.get('/gallery/' + preset.legacyName + '?source=old', { maxRedirects: 0 });
-    expect(response.status()).toBe(308);
-    expect(response.headers().location).toBe('/gallery/' + preset.slug + '?source=old');
+  for (const path of ['/gallery/Tetris', '/gallery/TimesTables', '/gallery/BouncyDVD']) {
+    const response = await request.get(path, { maxRedirects: 0 });
+    expect(response.status()).toBe(200);
+    expect(response.headers().location).toBeUndefined();
+    await page.goto(path);
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
+    expect(new URL(page.url()).pathname).toBe(path);
   }
-  await page.goto('/gallery/TimesTables');
-  await expect(page).toHaveURL(/times-tables-animated$/);
   await page.goto('/somewhere-unknown');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Page not found');
   await page.goto('/gallery/unknown-study');
   await expect(page.getByRole('main').getByRole('link', { name: 'Gallery', exact: true })).toBeVisible();
 });
 
-test('malformed preferences and legacy storage are preserved until an explicit reset', async ({ page }) => {
+test('malformed preferences are preserved until an explicit reset', async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem('aw.gallery.preferences.v1', '{broken');
-    localStorage.setItem('ThemeStore', 'legacy-theme'); localStorage.setItem('TimerStore', 'legacy-timer');
   });
   await page.goto('/colors');
   await expect(page.getByText('Saved preferences could not be read.', { exact: false })).toBeVisible();
@@ -72,7 +69,6 @@ test('malformed preferences and legacy storage are preserved until an explicit r
   expect((await download).suggestedFilename()).toBe('gallery-preferences.json');
   await page.getByRole('button', { name: 'Reset saved preferences to defaults' }).click();
   expect(await page.evaluate(() => JSON.parse(localStorage.getItem('aw.gallery.preferences.v1')!).themeMode)).toBe('dark');
-  expect(await page.evaluate(() => [localStorage.getItem('ThemeStore'), localStorage.getItem('TimerStore')])).toEqual(['legacy-theme', 'legacy-timer']);
 });
 
 test('system theme changes follow the device and blocked storage remains usable', async ({ page }) => {

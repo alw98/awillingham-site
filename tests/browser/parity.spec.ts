@@ -62,16 +62,14 @@ test('sine circles can exceed eight, extend values, delete any circle and reset'
   await expect(page.locator('canvas')).not.toHaveAttribute('data-state', 'error');
 });
 
-test('original custom theme imports explicitly, reloads and preserves both old keys', async ({ page }) => {
+test('saved custom colors load and remain active after reload', async ({ page }) => {
   const theme = structuredClone(dark); theme.backgroundColor.primary = '#123456';
-  const legacy = JSON.stringify({ theme });
-  await page.addInitScript(({ legacy }) => { if (!localStorage.getItem('ThemeStore')) { localStorage.setItem('ThemeStore', legacy); localStorage.setItem('TimerStore', 'original timer data'); } }, { legacy });
-  await page.goto('/colors'); await expect(page.locator('html')).toHaveCSS('--color-background-primary', dark.backgroundColor.primary);
-  await page.getByRole('button', { name: 'Import saved theme' }).click();
+  await page.addInitScript(({ theme }) => {
+    if (!localStorage.getItem('aw.gallery.preferences.v1')) localStorage.setItem('aw.gallery.preferences.v1', JSON.stringify({ schemaVersion: 1, themeMode: 'custom', customTheme: theme, motion: 'system' }));
+  }, { theme });
+  await page.goto('/colors');
   await expect(page.locator('html')).toHaveCSS('--color-background-primary', '#123456');
   await page.reload(); await expect(page.locator('html')).toHaveCSS('--color-background-primary', '#123456');
-  expect(await page.evaluate(() => [localStorage.getItem('ThemeStore'), localStorage.getItem('TimerStore')])).toEqual([legacy, 'original timer data']);
-  await expect(page.getByRole('button', { name: 'Import saved theme' })).toHaveCount(0);
 });
 
 test('Euler calculates all original answers and terminates completed and cancelled workers', async ({ page }) => {

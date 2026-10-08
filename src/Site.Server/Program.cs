@@ -9,15 +9,11 @@ builder.Services.AddOptions<SiteOptions>()
     .Configure(options => options.ClientMode = builder.Environment.IsDevelopment() || builder.Environment.IsEnvironment("Testing") ? "ApiOnly" : "Integrated")
     .BindConfiguration("Site").ValidateOnStart();
 builder.Services.AddSingleton<IValidateOptions<SiteOptions>, SiteOptionsValidator>();
-builder.Services.AddOptions<FeatureOptions>().BindConfiguration("Features")
-    .Validate(options => !options.Accounts.Enabled && !options.DataSync.Enabled,
-        "Accounts and data sync are unavailable; leave both feature flags disabled.").ValidateOnStart();
 builder.Services.AddOptions<ProxyOptions>().BindConfiguration("Proxy")
     .Validate(options => options.TrustedProxies.All(value => System.Net.IPAddress.TryParse(value, out _)),
         "Proxy:TrustedProxies must contain IP addresses.").ValidateOnStart();
 builder.Services.Configure<Microsoft.AspNetCore.Routing.RouteHandlerOptions>(options => options.ThrowOnBadRequest = true);
 builder.Services.AddSingleton<ClientAssets>();
-builder.Services.AddSingleton<GalleryRoutes>();
 builder.Services.AddSingleton<ISiteEndpoints, HealthEndpoints>();
 
 var app = builder.Build();

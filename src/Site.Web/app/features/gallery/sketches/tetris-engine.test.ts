@@ -1,17 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import { HeldKeys, TetrisEngine } from './tetris-engine';
-import { definitions, parsePreset } from './definitions';
+import { definitions } from './definitions';
 
-describe('versioned sketch definitions', () => {
-  it('validates all 15 immutable defaults and rejects obsolete/unsafe data', () => {
+describe('sketch definitions', () => {
+  it('validates all 15 immutable defaults and rejects unsafe settings', () => {
     expect(definitions).toHaveLength(15);
-    expect(new Set(definitions.map(d => d.presetId)).size).toBe(15);
+    expect(new Set(definitions.map(d => d.slug)).size).toBe(15);
     for (const d of definitions) {
-      expect(parsePreset({ version: 1, presetId: d.presetId, seed: 42, settings: d.defaults }).settings).toEqual(d.defaults);
+      expect(d.schema.parse(d.defaults)).toEqual(d.defaults);
       expect(() => d.schema.parse({ ...d.defaults, unknown: 1 })).toThrow();
     }
     const d = definitions[0];
-    expect(() => parsePreset({ version: 2, presetId: d.presetId, seed: 42, settings: d.defaults })).toThrow();
     expect(() => d.schema.parse({ dropFrames: Infinity })).toThrow();
     expect(() => d.schema.parse({ dropFrames: 0 })).toThrow();
   });

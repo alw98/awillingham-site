@@ -1,20 +1,13 @@
-# Sketch runtime revision 3
+# Sketch runtime
 
-Updated 2026-10-08 for the user-requested original behavior and gear/About layout. Implementation
-owner: the primary agent, working sequentially in the existing dirty workspace.
-No parallel batch, account storage, timer, Euler or inactive experiment is included.
-
-The inventory in [legacy-gallery.json](legacy-gallery.json) owns stable sketch IDs,
-preset IDs, slugs and old URLs. Definitions are immutable metadata plus validated,
-serializable settings and lazy factories. Every factory creates independent state.
-The version-1 preset envelope contains `version`, `presetId`, a uint32 `seed`, and
-`settings`; unknown keys, nonfinite numbers and out-of-range values are rejected.
+The client [catalog](../../src/Site.Web/app/features/gallery/catalog.ts) owns
+unique slugs and display metadata. Definitions contain immutable defaults,
+validated settings and lazy factories. Every factory creates independent state.
 A root provider retains validated full-page settings by slug for the current SPA
 session, matching original navigation behavior. Reload resets sketch settings;
 previews always use fresh independent defaults. No sketch storage key is written.
 
-All registered renderers are 2D. Use native Canvas2D instead of carrying the legacy
-p5 runtime into the replacement. Matter.js is loaded only by Snow Globe. The host
+All renderers use native Canvas2D. Matter.js is loaded only by Snow Globe. The host
 owns the canvas, DPR (maximum 2), ResizeObserver, visibility, focused input, error
 boundary, animation scheduling and cancellation. Engines own simulation state and
 fixed 60Hz updates, independent of React. Renderers receive explicit theme colors.
@@ -26,8 +19,7 @@ defaults and the original seed with a fresh instance. Theme changes repaint.
 An async factory receives the latest settings before its first resize/draw.
 
 One shared scheduler animates every visible enabled preview at 30fps. Full
-pages use 60fps. Revision 2 removes the four-preview cap at the user's request;
-visible cards must not be paused merely because earlier cards are animating.
+pages use 60fps. All visible animated cards run.
 Offscreen/hidden/paused instances receive no simulation time and
 do not catch up on resume. Reduced motion renders a static seeded view; full pages
 offer an explicit Play button. Preview canvases have no keyboard/pointer handlers.
@@ -60,19 +52,11 @@ axis. Expanded numeric values must be finite and <=1e12. Snow uses the original
 seeded simulation by one second to produce a useful static view, then stops.
 Normal motion has no artificial simulation warm-up.
 
-Acceptance sequence: definition/fixture checks, pure Tetris and canvas reference,
-real-browser reference acceptance, then sequential per-family ports: sine/tables/
-fireworks, vector fields, skyline/glass/globe/DVD, and worker-based image edges.
-Tests cover deterministic math and independent instances, Tetris collision/clear/
-spawn/timing, image fixtures, all routes and controls, resize/theme, hidden/offscreen/
-reduced motion, resource bounds, navigation cleanup, accessibility and screenshots.
-Evidence and intentional differences are recorded in STATUS; BACKLOG owns states.
-
 ## Extension example
 
 A lazy renderer module exports a factory with fresh state for each call. Register
 its immutable defaults, controls and strict schema in `definitions.ts`, and add
-its unique preset/slug to the shared inventory before exposing a gallery entry.
+its unique slug to `catalog.ts` before exposing a gallery entry.
 The host passes an instance-owned settings object and updates it before calling
 `configure`; engines should never retain shared defaults or other instances.
 

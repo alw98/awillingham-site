@@ -1,11 +1,9 @@
-# Target architecture and migration boundaries
+# Architecture
 
 Updated 2026-10-08 (America/Chicago). Direction accepted in the project
 conversation; implementation states live only in [BACKLOG.md](../BACKLOG.md).
-The application under `src/` implements the original gallery, theme editor, Euler
-workers, HTTP host, packaging and product CI. The legacy application and AWS hooks
-were retired at the user's request after local parity acceptance. A functioning
-timer, database, accounts and remote hosting remain later work.
+The application implements the gallery, theme editor, Euler workers and HTTP host.
+A functioning timer, database, accounts and remote hosting remain later work.
 
 ## Application shape
 
@@ -18,10 +16,9 @@ Target technologies: released .NET 10/ASP.NET Core, React 19, strict TypeScript,
 Vite, React Router framework mode with runtime SSR disabled, CSS Modules/custom
 properties, Zustand for selected shared UI state, and Zod for runtime data
 validation. Vitest/React Testing Library, Playwright, and xUnit cover the appropriate
-boundaries. [Foundation revision 2](contracts/FOUNDATION.md) and its
-[version manifest](contracts/foundation-toolchain.json) now freeze compatible
-versions, routes, HTTP/storage rules and shared ownership for M1. The projects, runtime pins and lockfiles are now implemented; see STATUS for
-local build and release-image evidence.
+boundaries. [Application contracts](contracts/FOUNDATION.md) define current
+routes, HTTP/storage behavior and build boundaries. Runtime pins live in the
+SDK/package files and committed locks.
 
 React Router can prerender public introduction/gallery pages at build time while
 interactive canvases initialize in the browser. The host must serve the agreed
@@ -47,7 +44,7 @@ and explicitly approved shared data, without sibling clients or agent outputs.
 
 ## Sketch and feature boundaries
 
-- A sketch definition owns stable sketch/preset IDs, a URL slug, label/about
+- A sketch definition owns a stable URL slug, label/about
   metadata, serializable defaults/schema, and a lazy implementation factory.
   A definition is immutable; every preview and full page creates its own instance.
 - The engine owns simulation/input state and elapsed-time updates. Tetris uses a
@@ -59,28 +56,26 @@ and explicitly approved shared data, without sibling clients or agent outputs.
   Canvas2D renders the sketches; Matter.js belongs to the snow globe implementation.
 - Heavy Euler/image operations can use cancellable workers. A navigation or new
   request cannot allow obsolete results to overwrite the current instance.
-- Gallery resource policy bounds simultaneous live previews; hidden/offscreen
-  canvases pause. Seeded fixtures make behavior and selected visual checks repeatable.
+- Every visible animated preview runs; hidden/offscreen canvases pause. Seeded
+  fixtures make behavior and selected visual checks repeatable.
 - Theme values are shared design tokens, expressed as CSS custom properties and
   explicit canvas inputs. UI controls preserve keyboard/focus and reduced-motion
   behavior. A failed canvas should not take down navigation.
 
-The registry uses explicit unique slugs and per-preset identifiers. The existing
-two Times Tables presets share a legacy URL; migration must record that ambiguity,
-preserve the established old destination, and assign distinct new destinations.
-Inactive experiments are not automatically included in the parity milestone.
+The client catalog owns unique slugs, including
+separate animated and still Times Tables entries. Gallery metadata stays in React.
+The server serves the built client without a registry or old-link redirects.
 
-## Local state and compatibility
+## Local state
 
 Component state stays local. Small cross-page preference/timer stores use explicit
 actions and selected persistence. Saved data is a versioned JSON shape validated
-at the storage boundary; loading supports migration and recoverable malformed data.
-Keep transient engine instances, p5 colors, listeners, and runtime resources out
+at the storage boundary, with recoverable malformed data.
+Keep transient engines, listeners and runtime resources out
 of persisted JSON.
 
-Migrate existing `ThemeStore` and `TimerStore` keys deliberately. Capture disposable
-fixtures, define supported import behavior, and retain the old values until import
-is confirmed. The running timer derives remaining time from a deadline and handles
+No old-site data import or URL compatibility is supported. A future running timer
+derives remaining time from a deadline and handles
 background suspension; tests separate a time source from timer transitions.
 
 ## Server and API
@@ -153,14 +148,12 @@ operational tools, not proof of database consistency or volume recovery. Migrati
 compatibility constrains image rollback; restarting an old image does not undo a
 database migration. Provisioning and release are later actions, outside this setup.
 
-## Migration and ownership
+## Ownership
 
-Local foundation, reference runtime and feature parity have acceptance evidence
-in STATUS. Legacy source retirement was explicitly authorized under OPS-03. Keep
-old routes and browser data compatible; recover historical source from Git as
-documented in README. M3-08 owns remaining release acceptance, and HOST-02 owns
-the separately authorized hosted cutover. Registry, HTTP contracts, persistence versions, migrations, root builds,
-lockfiles, CI, and tracking each need a named shared owner during parallel work.
+During an explicitly invoked parallel batch, assign shared owners for registry,
+HTTP contracts, persisted schemas, migrations, builds/lockfiles, CI and tracking.
+See [the workflow](AGENT_WORKFLOW.md). Future hosting/deployment is separate from
+local acceptance.
 
 ## Primary technical references
 

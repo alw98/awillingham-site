@@ -16,7 +16,7 @@ export default function Gallery() {
     <details className={styles.galleryTools}><summary>Filter gallery</summary><div className={styles.galleryToolsBody}><div className={styles.filters} role="group" aria-label="Filter studies">{categories.map(label => <button key={label} aria-pressed={label === category} onClick={() => setCategory(label)}>{label}</button>)}</div>
       <label className={styles.search}><span>Search sketches</span><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search…" /></label></div>
     <p className={styles.resultCount} role="status">{studies.length} {studies.length === 1 ? 'sketch' : 'sketches'}</p></details>
-    <div className={styles.galleryGrid}>{studies.map(study => <Link key={study.presetId} className={styles.card} to={'/gallery/' + study.slug} aria-label={`${study.title} preview`} title={study.title}>
+    <div className={styles.galleryGrid}>{studies.map(study => <Link key={study.slug} className={styles.card} to={'/gallery/' + study.slug} aria-label={`${study.title} preview`} title={study.title}>
       <div className={styles.cardArt}><CanvasHost definition={study} settings={study.defaults} seed={seedFor(study.slug)} preview /></div>
       <div className={styles.cardBody}><span className={styles.eyebrow}>{study.category}</span><h2>{study.title}<span aria-hidden="true">↗</span></h2><p>{study.description}</p></div>
     </Link>)}</div>

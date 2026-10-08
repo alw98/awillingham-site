@@ -63,10 +63,4 @@ export const definitions = Object.freeze(catalog.map(entry => {
     }
   });
 }));
-export function parsePreset(value: unknown) {
-  const envelope = z.object({ version: z.literal(1), presetId: z.string(), seed: z.number().int().min(0).max(4294967295), settings: z.record(z.string(), z.union([z.number(), z.boolean(), z.string()])) }).strict().parse(value);
-  const definition = definitions.find(entry => entry.presetId === envelope.presetId);
-  if (!definition) throw new Error('Unknown preset.');
-  return { ...envelope, settings: definition.schema.parse(envelope.settings) };
-}
 export type Definition = typeof definitions[number];
