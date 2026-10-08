@@ -1,7 +1,6 @@
-import p5 from 'p5';
 import { BaseSketchPropsStore } from '../BaseSketchPropsStore';
-import { Tetrimino } from './Tetrimino';
 import { GridCell } from './GridCell';
+import { Tetrimino } from './Tetrimino';
 
 export interface TetrisPropsStore extends BaseSketchPropsStore {
 	rows: number;
