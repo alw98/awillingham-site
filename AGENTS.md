@@ -1,6 +1,37 @@
 # Project guide for coding agents
 
-## Scope and snapshot
+## Start here
+
+Read [README.md](README.md), [STATUS.md](STATUS.md), [NEXT_STEPS.md](NEXT_STEPS.md),
+and [BACKLOG.md](BACKLOG.md) before implementation. BACKLOG alone owns task states;
+STATUS records evidence and limits. [Target architecture](docs/architecture.md)
+defines the accepted C#/React rebuild direction, including later PostgreSQL/EF
+Core, external OAuth/OIDC login, and Hetzner hosting. Those features are planned,
+not current runtime dependencies. Freeze shared contracts before parallel work.
+
+Use [the agent workflow](docs/AGENT_WORKFLOW.md) and
+[task template](docs/templates/AGENT_TASK.md) when a parallel batch is invoked.
+Preparation and ordinary questions do not automatically launch a batch. Preserve
+the existing role/model policy and the user's dirty work. At most three children
+and two independent implementation lanes; the coordinator owns shared tracking,
+contracts, migrations, pins/lockfiles, and integration unless explicitly delegated.
+Assign absolute worktrees, owned paths/symbols, isolated outputs/ports/browser
+storage, and disposable databases when relevant. Workers are not alone and must
+preserve others' edits. Product candidates receive independent review/QA and
+sequential integration with combined checks.
+
+Run `node Scripts/check-repo.mjs` after repository guidance changes. It checks
+local links, task dependencies, required entry points, and copied project residue;
+it does not prove TOML runtime discovery, browser behavior, or live delegation.
+The root .NET project excludes `.worktrees/` and `.agent-artifacts/` from default
+items; Git ignore rules alone do not isolate build/publish globs. M1-01 must define
+exclusions before adding new nested C# source projects.
+
+The conventions below describe the existing application. New implementation
+follows its accepted milestone contract and target architecture; do not invent
+new-app commands or claim migration completion from planning documents.
+
+## Current application snapshot
 
 This file applies to the entire repository. It records the project as inspected on
 2026-10-07, based on branch `main` at commit `5c9f75a` (`Tetris`). Recheck source and
@@ -174,10 +205,11 @@ The following checks ran against the existing installed/restored dependencies on
 - **Lint omits `.tsx`.** Both lint scripts specify `--ext .js,.ts`; most React
   components are therefore outside the directory traversal's lint scope. The
   lint result does not cover all frontend source.
-- **Coverage is narrow.** The only tracked automated test file is
+- **Coverage is narrow.** The only existing product test file is
   `test/DataStructures/Heap.spec.ts`. There is no backend test project, component
-  test suite, browser test suite, or checked-in CI workflow. Browser behavior and
-  the production bundle were not exercised during this inspection.
+  test suite, or browser test suite. Repository-only CI is included in preparation;
+  full application CI belongs to M1. Browser behavior and the production bundle
+  were not exercised during the earlier application inspection.
 - **Deployment still targets .NET 6.** `README` describes ASP.NET Core 6,
   `Scripts/install_dependencies.sh` installs `dotnet-sdk-6.0`, and
   `Scripts/start_server.sh` launches `bin/Release/net6.0/awillingham-site.dll`.
@@ -217,7 +249,7 @@ and includes additional subdomain proxies. The scripts modify system packages,
 nginx configuration, and systemd services; they are deployment hooks, not local
 development setup commands. Their live deployment state was not verified.
 
-## Conventions for future changes
+## Conventions for the existing application
 
 - Follow existing separation: UI in `Components`, sketch data and algorithms in
   `Models`, shared state in `Stores`, and common helpers in `Utils`/`Hooks`.
@@ -243,3 +275,9 @@ development setup commands. Their live deployment state was not verified.
   sketch cleanup when those behaviors change.
 - Keep this file current when the target framework, scripts, routes, deployment
   assumptions, or verified baseline change.
+
+- When the user invokes the agent workflow, follow
+  [docs/AGENT_WORKFLOW.md](docs/AGENT_WORKFLOW.md) and
+  [.codex/agents/coordinator.toml](.codex/agents/coordinator.toml). Delegate bounded
+  tasks through the defined roles; apply the ownership/review/integration rules
+  above. Ordinary questions do not start a feature batch.

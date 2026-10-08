@@ -1,0 +1,39 @@
+name: Repository guidance
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  repository:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Check repository guidance
+        run: node Scripts/check-repo.mjs
+      - name: Exercise repository-check failures
+        run: node --test Scripts/check-repo.test.mjs
+      - name: Parse project agent TOML
+        run: |
+          python3 - <<'PY'
+          import pathlib, tomllib
+          files = list(pathlib.Path('.codex').rglob('*.toml'))
+          for path in files:
+              data = tomllib.loads(path.read_text(encoding='utf-8'))
+              if path.parent.name == 'agents':
+                  assert data['name'] == path.stem, path
+                  assert data['description'].strip(), path
+                  assert data['developer_instructions'].strip(), path
+          print(f'{len(files)} TOML files parsed')
+          PY

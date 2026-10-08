@@ -5,6 +5,8 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>awillingham_site</RootNamespace>
+    <!-- Nested agent checkouts/evidence must not enter this root project's globs. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);.worktrees/**;.agent-artifacts/**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

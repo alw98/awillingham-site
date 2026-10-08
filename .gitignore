@@ -5,3 +5,17 @@ obj
 Web/web-app/node_modules
 Web/web-app/dist
 wwwroot/js/bundles
+
+# Isolated agent checkouts and disposable evidence.
+.worktrees/
+.agent-artifacts/
+
+# Local credentials and test output. Existing tracked files stay tracked.
+.env
+.env.*
+!.env.example
+*.csproj.user
+**/TestResults/
+**/test-results/
+**/playwright-report/
+**/coverage/

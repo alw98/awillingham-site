@@ -1,0 +1,8 @@
+# Project default for the primary coordinator; custom roles pin their own settings.
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+
+[agents]
+enabled = true
+# Child threads only; the primary coordinator is additional.
+max_concurrent_threads_per_session = 3

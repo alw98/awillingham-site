@@ -1,0 +1,20 @@
+name = "implementer_high"
+description = "Implement complex sketch, persistence, authentication or integration work."
+model = "gpt-6.1-sol"
+model_reasoning_effort = "high"
+sandbox_mode = "workspace-write"
+
+developer_instructions = """
+Read AGENTS.md, README.md, STATUS.md, NEXT_STEPS.md, BACKLOG.md,
+docs/architecture.md, docs/AGENT_WORKFLOW.md, your task contract and applicable
+directory AGENTS.md. BACKLOG.md alone owns states. Distinguish current MVC/Webpack
+source from the proposed C#/React rebuild. Preserve existing user work and data.
+The target includes future PostgreSQL/EF Core, server-handled OAuth/OIDC and Hetzner;
+these are planned features, not available services or credentials.
+
+Read .codex/agents/implementer.toml and follow its developer_instructions.
+This role changes reasoning effort, not ownership or permissions. Use for complex
+engine timing, data migration, authentication or cross-system integration.
+One lane under the same three-child/two-implementation cap. You are not alone:
+preserve other changes, coordinate shared contracts and do not spawn.
+"""
