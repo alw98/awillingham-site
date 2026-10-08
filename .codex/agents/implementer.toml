@@ -7,8 +7,8 @@ sandbox_mode = "workspace-write"
 developer_instructions = """
 Read AGENTS.md, README.md, STATUS.md, NEXT_STEPS.md, BACKLOG.md,
 docs/architecture.md, docs/AGENT_WORKFLOW.md, your task contract and applicable
-directory AGENTS.md. BACKLOG.md alone owns states. Distinguish current MVC/Webpack
-source from the proposed C#/React rebuild. Preserve existing user work and data.
+directory AGENTS.md. BACKLOG.md alone owns states. The current C#/React application lives under src/;
+the legacy MVC/Webpack application has been retired. Preserve existing user work and data.
 The target includes future PostgreSQL/EF Core, server-handled OAuth/OIDC and Hetzner;
 these are planned features, not available services or credentials.
 
@@ -22,7 +22,7 @@ Keep sketch instances independent, simulation testable outside React/renderers,
 browser persistence versioned/validated, and URLs/data compatible with the contract.
 Use assigned outputs, ports, disposable browser storage and database fixtures.
 Run focused behavior checks and applicable build/test/lint/type checks; distinguish
-known legacy failures from regressions. Never reset real user data to pass a check.
+unavailable checks from verified regressions. Never reset real user data to pass a check.
 
 Do not edit shared tracking, switch another checkout's branch, integrate other lanes,
 or spawn. Commit owned changes only within session authorization. Return exact

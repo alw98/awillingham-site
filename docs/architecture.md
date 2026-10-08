@@ -1,9 +1,11 @@
 # Target architecture and migration boundaries
 
-Updated 2026-10-07 (America/Chicago). Direction accepted in the project
+Updated 2026-10-08 (America/Chicago). Direction accepted in the project
 conversation; implementation states live only in [BACKLOG.md](../BACKLOG.md).
-The existing MVC/Webpack app remains current. Proposed paths below do not imply
-that projects, packages, APIs, accounts, containers, or infrastructure exist.
+The application under `src/` implements the original gallery, theme editor, Euler
+workers, HTTP host, packaging and product CI. The legacy application and AWS hooks
+were retired at the user's request after local parity acceptance. A functioning
+timer, database, accounts and remote hosting remain later work.
 
 ## Application shape
 
@@ -16,14 +18,17 @@ Target technologies: released .NET 10/ASP.NET Core, React 19, strict TypeScript,
 Vite, React Router framework mode with runtime SSR disabled, CSS Modules/custom
 properties, Zustand for selected shared UI state, and Zod for runtime data
 validation. Vitest/React Testing Library, Playwright, and xUnit cover the appropriate
-boundaries. Exact compatible patch versions belong to M1-01.
+boundaries. [Foundation revision 2](contracts/FOUNDATION.md) and its
+[version manifest](contracts/foundation-toolchain.json) now freeze compatible
+versions, routes, HTTP/storage rules and shared ownership for M1. The projects, runtime pins and lockfiles are now implemented; see STATUS for
+local build and release-image evidence.
 
 React Router can prerender public introduction/gallery pages at build time while
 interactive canvases initialize in the browser. The host must serve the agreed
 prerender files and fallback artifact; it must reserve `/api`, health, assets,
 and future auth callbacks from catch-all HTML handling.
 
-## Proposed layout
+## Application layout
 
 ```text
 src/Site.Server/             ASP.NET Core composition, feature APIs, infrastructure
@@ -36,8 +41,9 @@ docs/tasks/                 Coordinator-owned active task records
 
 Keep frontend feature code/tests together. Keep C# endpoint/request/feature
 services together; extract additional assemblies only when a real dependency
-boundary warrants it. The root legacy .NET project's recursive item globs need
-an explicit migration plan before introducing nested new projects.
+boundary warrants it. `Site.slnx` contains only the server and backend tests; no
+root .NET project remains. Server publish inputs must stay within its own project
+and explicitly approved shared data, without sibling clients or agent outputs.
 
 ## Sketch and feature boundaries
 
@@ -49,8 +55,8 @@ an explicit migration plan before introducing nested new projects.
   navigation, accessibility, and lifecycle orchestration. Frame-level state does
   not flow through a global React store.
 - A canvas host owns size/DPR, visibility/pause, focused keyboard/pointer input,
-  configuration/theme updates, error reporting, and complete disposal. p5 is one
-  renderer adapter; Matter.js belongs to the snow globe implementation.
+  configuration/theme updates, error reporting, and complete disposal. Native
+  Canvas2D renders the sketches; Matter.js belongs to the snow globe implementation.
 - Heavy Euler/image operations can use cancellable workers. A navigation or new
   request cannot allow obsolete results to overwrite the current instance.
 - Gallery resource policy bounds simultaneous live previews; hidden/offscreen
@@ -149,11 +155,11 @@ database migration. Provisioning and release are later actions, outside this set
 
 ## Migration and ownership
 
-Keep the current application available while the replacement is implemented.
-Accept the foundation, then the canvas/Tetris reference, then bounded feature ports.
-Track old routes, data keys, assets, and inactive experiments before retiring files.
-The M3-08 parity/cutover gate owns legacy cleanup; HOST-02 owns the authorized hosted
-cutover. Registry, HTTP contracts, persistence versions, migrations, root builds,
+Local foundation, reference runtime and feature parity have acceptance evidence
+in STATUS. Legacy source retirement was explicitly authorized under OPS-03. Keep
+old routes and browser data compatible; recover historical source from Git as
+documented in README. M3-08 owns remaining release acceptance, and HOST-02 owns
+the separately authorized hosted cutover. Registry, HTTP contracts, persistence versions, migrations, root builds,
 lockfiles, CI, and tracking each need a named shared owner during parallel work.
 
 ## Primary technical references

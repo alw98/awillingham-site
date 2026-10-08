@@ -1,0 +1,126 @@
+{
+  "contractVersion": 2,
+  "sourceRevision": "07db3fe363465e3c9c842ca8b9857cbd9c517f63",
+  "presets": [
+    {
+      "sketchId": "tetris",
+      "presetId": "tetris.classic",
+      "slug": "tetris",
+      "legacyName": "Tetris",
+      "description": "Classic default",
+      "portTicket": "M2-04"
+    },
+    {
+      "sketchId": "stained-glass",
+      "presetId": "stained-glass.default",
+      "slug": "stained-glass",
+      "legacyName": "StainedGlass",
+      "description": "Default strips",
+      "portTicket": "M3-03"
+    },
+    {
+      "sketchId": "snow-globe",
+      "presetId": "snow-globe.default",
+      "slug": "snow-globe",
+      "legacyName": "SnowGlobe",
+      "description": "Matter.js snow globe",
+      "portTicket": "M3-03"
+    },
+    {
+      "sketchId": "skyscrapers",
+      "presetId": "skyscrapers.improved",
+      "slug": "skyscrapers",
+      "legacyName": "SkyscrapersImproved",
+      "description": "Improved implementation",
+      "portTicket": "M3-03"
+    },
+    {
+      "sketchId": "particle-field",
+      "presetId": "particle-field.particles",
+      "slug": "particle-field",
+      "legacyName": "ParticleField",
+      "description": "20 particles, fading trails",
+      "portTicket": "M3-02"
+    },
+    {
+      "sketchId": "fireworks",
+      "presetId": "fireworks.default",
+      "slug": "fireworks",
+      "legacyName": "Fireworks",
+      "description": "Default fireworks",
+      "portTicket": "M3-01"
+    },
+    {
+      "sketchId": "times-tables",
+      "presetId": "times-tables.animated",
+      "slug": "times-tables-animated",
+      "legacyName": "TimesTables",
+      "description": "100 points, multiplier rate 0.01",
+      "portTicket": "M3-01"
+    },
+    {
+      "sketchId": "edge-detection",
+      "presetId": "edge-detection.agate",
+      "slug": "edge-detection-agate",
+      "legacyName": "AgateSimpleEdgeDetection",
+      "description": "EdgeDetectionTest1.png",
+      "portTicket": "M3-04"
+    },
+    {
+      "sketchId": "edge-detection",
+      "presetId": "edge-detection.default",
+      "slug": "edge-detection",
+      "legacyName": "SimpleSimpleEdgeDetection",
+      "description": "EdgeDetectionTest.png",
+      "portTicket": "M3-04"
+    },
+    {
+      "sketchId": "particle-field",
+      "presetId": "particle-field.flow",
+      "slug": "flow-field",
+      "legacyName": "FlowField",
+      "description": "Field lines, no initial particles, direction rate 0.001",
+      "portTicket": "M3-02"
+    },
+    {
+      "sketchId": "particle-field",
+      "presetId": "particle-field.drawn",
+      "slug": "drawn-field",
+      "legacyName": "DrawnField",
+      "description": "3 particles, accumulated background, alpha 20",
+      "portTicket": "M3-02"
+    },
+    {
+      "sketchId": "times-tables",
+      "presetId": "times-tables.static",
+      "slug": "times-tables-static",
+      "legacyName": "TimesTables",
+      "description": "10 points, multiplier rate 0; legacy link resolves to animated preset",
+      "portTicket": "M3-01"
+    },
+    {
+      "sketchId": "sine-sums",
+      "presetId": "sine-sums.harmonic",
+      "slug": "sine-sums",
+      "legacyName": "SinSums",
+      "description": "Frequencies 1, 2, 5; amplitudes 0.6, 0.3, 0.1",
+      "portTicket": "M3-01"
+    },
+    {
+      "sketchId": "sine-sums",
+      "presetId": "sine-sums.mixed",
+      "slug": "sine-sums-mixed",
+      "legacyName": "SinSums2",
+      "description": "Frequencies 1, 0.1, 10; amplitudes 0.3, 0.3, 0.05",
+      "portTicket": "M3-01"
+    },
+    {
+      "sketchId": "bouncy-dvd",
+      "presetId": "bouncy-dvd.default",
+      "slug": "bouncy-dvd",
+      "legacyName": "BouncyDVD",
+      "description": "Bouncing DVDLogo.png; active registration",
+      "portTicket": "M3-03"
+    }
+  ]
+}

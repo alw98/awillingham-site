@@ -1,0 +1,6 @@
+.panel { position: fixed; inset: 3rem 0 auto; margin: 0; width: 100%; max-width: 100%; max-height: calc(100dvh - 3rem); overflow: auto; border: 0; padding: 1rem 2rem 2rem; background: var(--color-background-secondary); color: var(--color-text-primary); animation: reveal var(--motion-duration) ease-out; }
+.panel::backdrop { background: #0006; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.header h2 { margin: 0; font-size: 1.5rem; }
+.header button { font-size: 1.5rem; min-width: 2.75rem; }
+@keyframes reveal { from { transform: translateY(-100%); } to { transform: translateY(0); } }

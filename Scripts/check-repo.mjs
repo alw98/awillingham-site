@@ -10,7 +10,10 @@ const required = [
   'AGENTS.md', 'README.md', 'BACKLOG.md', 'STATUS.md', 'NEXT_STEPS.md',
   'docs/architecture.md', 'docs/AGENT_WORKFLOW.md', 'docs/templates/AGENT_TASK.md',
   '.codex/config.toml', '.agents/skills/add-sketch/SKILL.md',
-  'Scripts/check-repo.mjs', '.github/workflows/repository.yml',
+  'Scripts/check-repo.mjs', 'Scripts/check-foundation.mjs', '.github/workflows/repository.yml',
+  'docs/contracts/FOUNDATION.md', 'docs/contracts/foundation-toolchain.json',
+  'docs/contracts/legacy-gallery.json', 'docs/tasks/M1-01.md',
+  'docs/tasks/M1-02.md', 'docs/tasks/M1-03.md',
   ...roles.map((role) => `.codex/agents/${role}.toml`),
 ];
 const states = new Set(['Ready', 'In progress', 'Planned', 'Blocked', 'Done', 'Deferred']);

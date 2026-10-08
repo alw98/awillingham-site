@@ -1,6 +1,6 @@
 # Interactive gallery agent workflow
 
-Updated 2026-10-07 (America/Chicago). [BACKLOG.md](../BACKLOG.md) owns task states;
+Updated 2026-10-08 (America/Chicago). [BACKLOG.md](../BACKLOG.md) owns task states;
 [STATUS.md](../STATUS.md) records evidence; [NEXT_STEPS.md](../NEXT_STEPS.md) expands
 the next gate. [Architecture](architecture.md) defines the target and migration
 boundaries; [AGENTS.md](../AGENTS.md) distinguishes current source from that target.
@@ -88,21 +88,15 @@ git status --short
 git worktree add -b agent/M1-02 .worktrees/M1-02 <accepted-local-sha>
 ```
 
-Use the resulting absolute checkout path for every agent command. `.worktrees/`
-and `.agent-artifacts/` are ignored and excluded from the root .NET project's
-default items. New nested source projects require their own explicit exclusion
-plan under M1-01. A Git ignore alone does not isolate compiler or publish globs.
+Use the resulting absolute checkout path for every agent command. Each checkout
+owns its client `node_modules`, build outputs, server/test `bin` and `obj`, and
+`.artifacts/site/publish`. Share download caches only. `Site.slnx` contains only
+the server and backend tests; no root project globs nested worktrees. Git ignore
+rules alone do not isolate compiler or publish inputs in any future root project.
 
-For a lane using the current legacy client, run `npm ci --legacy-peer-deps` inside
-its own `Web/web-app` directory. Each worktree owns `node_modules`, `dist`,
-`wwwroot/js/bundles`, `bin`, and `obj`; share a package download cache only.
-Run backend restore/build in that worktree. Future app commands are defined by
-M1-01/M1-04, not assumed to exist today.
-
-Assign distinct HTTP/HTTPS ports and disposable browser profiles/storage. The
-current backend's HTTP redirect targets 443, so test its assigned HTTPS endpoint.
+Assign distinct API/frontend/production ports and disposable browser storage.
 Record launch arguments/environment; do not assume launch profiles respect an
-unrecorded port override. Do not clear the user's real `ThemeStore` or `TimerStore`.
+unrecorded override. Do not clear the user's real `ThemeStore` or `TimerStore`.
 Future PostgreSQL checks get separate disposable databases; OAuth tests get mock
 providers and unique callbacks. No lane runs shared production migrations.
 
@@ -116,23 +110,16 @@ From the assigned root:
 
 ```sh
 node Scripts/check-repo.mjs
+node Scripts/check-foundation.mjs
 node --test Scripts/check-repo.test.mjs
-dotnet build awillingham-site.csproj --configuration Release --no-restore
+node Scripts/build-site.mjs --configuration Release
 ```
 
-From its `Web/web-app` directory:
-
-```sh
-npm test -- --runInBand
-npm run lint
-npm run bundle
-node node_modules/typescript/bin/tsc --noEmit
-```
-
-Record the known standalone type failures and TSX lint gap from STATUS; do not
-report the legacy command set as a clean full-product gate. Restore is required
-before `--no-restore` in a fresh checkout. Repository-only CI is available; full
-application CI, browser tests, and containers are M1 deliverables.
+Start the published application from `.artifacts/site/publish` on the lane's
+assigned port, then run `npm --prefix src/Site.Web run test:browser` with
+`SITE_BASE_URL` set to that URL. See README for development and container commands.
+Strict typechecking includes library declarations, lint includes TSX, and clean
+builds use committed npm/NuGet locks. Repository CI complements full product CI.
 
 Optional TOML diagnostic with Python 3.11+:
 
@@ -149,8 +136,9 @@ permissions, or live role/model execution; OPS-02 owns live batch evidence.
 Act as primary coordinator for the interactive gallery. Follow AGENTS.md,
 docs/AGENT_WORKFLOW.md and .codex/agents/coordinator.toml. Read BACKLOG.md,
 STATUS.md, NEXT_STEPS.md and docs/architecture.md; recheck dirty work and dependencies.
-Pull M1-01 first. Once its shared contract and accepted committed base exist,
-assign M1-02 and M1-03 to isolated worktrees/resources with explicit ownership.
+Use the accepted foundation/runtime contracts and verify their recorded acceptance.
+Establish an accepted committed base, then assign up to two independent Ready
+tickets to isolated worktrees/resources with explicit ownership.
 Use independent exact-candidate review and QA, integrate sequentially, run combined
 checks, and update tracking. Cap three children and two implementation lanes.
 Keep existing routes/browser data recoverable and database/login optional until

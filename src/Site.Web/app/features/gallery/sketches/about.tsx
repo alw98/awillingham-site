@@ -1,0 +1,7 @@
+export function SketchAbout({ slug }: { slug: string }) {
+  if (slug.startsWith('times-tables')) return <p>Multiplication patterns on a circle, inspired by <a href="https://www.youtube.com/watch?v=qhbuKbxJsk8">Mathologer</a>. Settings control the multiplier, its rate of change, radius, color and resolution.</p>;
+  if (slug.startsWith('sine-sums')) return <p>A simulation of cycloid motion. Each circle represents a sine function with a frequency, amplitude and phase, all controlled in Settings.</p>;
+  if (slug.endsWith('field')) return <p>Drag on the canvas to create particles. Perlin noise controls the flow field. Mapping the plane onto a torus makes the field continuous at the screen edges. Settings control the particles and field.</p>;
+  if (slug.startsWith('edge-detection')) return <p>A simple edge detection algorithm using grayscale differences between each pixel and its left and upper neighbors.</p>;
+  return <p>{({ tetris: 'Tetris, made in preparation for the hardware project Less Is More. A/D move, S descends, Q/E rotate, and W drops the piece.', 'stained-glass': 'A randomly generated, mirrored stained glass pattern.', 'snow-globe': 'A snow globe simulation using Perlin noise and Matter.js.', skyscrapers: 'Draws the skyline for the generated skyscrapers.', fireworks: 'Fireworks with gravity and configurable lifespans. Click the canvas to launch a firework.', 'bouncy-dvd': 'A DVD logo that changes color when it bounces.' } as Record<string, string>)[slug]}</p>;
+}

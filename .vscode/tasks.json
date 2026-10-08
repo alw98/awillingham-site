@@ -1,0 +1,99 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "site: dev",
+      "detail": "Install frontend dependencies and start the API and frontend. Open http://127.0.0.1:5300.",
+      "dependsOrder": "sequence",
+      "dependsOn": ["site: install frontend", "site: dev servers"],
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "site: install frontend",
+      "type": "shell",
+      "command": "npm",
+      "windows": { "command": "npm.cmd" },
+      "args": ["--prefix", "src/Site.Web", "ci", "--include=dev", "--strict-peer-deps"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "hide": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "site: dev servers",
+      "dependsOrder": "parallel",
+      "dependsOn": ["site: dev API", "site: dev frontend"],
+      "hide": true,
+      "problemMatcher": []
+    },
+    {
+      "label": "site: dev API",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["run", "--project", "src/Site.Server", "--no-launch-profile", "--", "--environment", "Development", "--urls", "http://127.0.0.1:5200"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated", "group": "site-dev" },
+      "hide": true,
+      "problemMatcher": {
+        "base": "$msCompile",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Starting",
+          "endsPattern": "Now listening on: http://127\\.0\\.0\\.1:5200"
+        }
+      }
+    },
+    {
+      "label": "site: dev frontend",
+      "type": "shell",
+      "command": "npm",
+      "windows": { "command": "npm.cmd" },
+      "args": ["--prefix", "src/Site.Web", "run", "dev"],
+      "options": { "cwd": "${workspaceFolder}", "env": { "NO_COLOR": "1" } },
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated", "group": "site-dev" },
+      "hide": true,
+      "problemMatcher": {
+        "owner": "site-vite",
+        "pattern": { "regexp": "^(.+):(\\d+):(\\d+): (.*)$", "file": 1, "line": 2, "column": 3, "message": 4 },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Starting",
+          "endsPattern": "Local:.*http://127\\.0\\.0\\.1:5300"
+        }
+      }
+    },
+    {
+      "label": "site: production",
+      "detail": "Build, test and publish, then run the production app at http://127.0.0.1:5400.",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["Site.Server.dll", "--urls", "http://127.0.0.1:5400"],
+      "options": {
+        "cwd": "${workspaceFolder}/.artifacts/site/publish",
+        "env": { "ASPNETCORE_ENVIRONMENT": "Production", "DOTNET_ENVIRONMENT": "Production" }
+      },
+      "dependsOn": "site: build production",
+      "isBackground": true,
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": {
+        "base": "$msCompile",
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Starting",
+          "endsPattern": "Now listening on: http://127\\.0\\.0\\.1:5400"
+        }
+      }
+    },
+    {
+      "label": "site: build production",
+      "type": "process",
+      "command": "node",
+      "args": ["Scripts/build-site.mjs", "--configuration", "Release"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "hide": true,
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

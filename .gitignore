@@ -1,16 +1,21 @@
-.vs
-.vscode
-bin
-obj
-Web/web-app/node_modules
-Web/web-app/dist
-wwwroot/js/bundles
+.vs/
+.vscode/*
+!.vscode/tasks.json
+**/bin/
+**/obj/
+**/node_modules/
+
+# Application build outputs; source and lockfiles remain tracked.
+.artifacts/
+src/Site.Web/build/
+src/Site.Web/.react-router/
+src/Site.Server/wwwroot/
 
 # Isolated agent checkouts and disposable evidence.
 .worktrees/
 .agent-artifacts/
 
-# Local credentials and test output. Existing tracked files stay tracked.
+# Local credentials and test output.
 .env
 .env.*
 !.env.example

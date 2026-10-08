@@ -18,10 +18,12 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v6
         with:
-          node-version: '24'
+          node-version-file: .node-version
           package-manager-cache: false
       - name: Check repository guidance
         run: node Scripts/check-repo.mjs
+      - name: Check gallery compatibility and retired entry points
+        run: node Scripts/check-foundation.mjs
       - name: Exercise repository-check failures
         run: node --test Scripts/check-repo.test.mjs
       - name: Parse project agent TOML

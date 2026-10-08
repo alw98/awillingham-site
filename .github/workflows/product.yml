@@ -1,0 +1,55 @@
+name: Site product
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .node-version
+          package-manager-cache: false
+      - name: Check repository and frozen contracts
+        run: |
+          node Scripts/check-repo.mjs
+          node Scripts/check-foundation.mjs
+          node --test Scripts/check-repo.test.mjs
+      - name: Build and test the release image
+        run: docker build --platform linux/amd64 -t gallery:ci .
+      - name: Install browser test dependencies
+        run: |
+          npm --prefix src/Site.Web ci --include=dev --strict-peer-deps
+          node src/Site.Web/node_modules/@playwright/test/cli.js install --with-deps chromium
+      - name: Start the release artifact
+        run: |
+          docker run -d --name gallery-ci -p 127.0.0.1:5400:8080 gallery:ci
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:5400/health/ready; then exit 0; fi
+            sleep 1
+          done
+          docker logs gallery-ci
+          exit 1
+      - name: Test production routing, UI and accessibility
+        run: npm --prefix src/Site.Web run test:browser
+      - name: Record container logs and stop owned container
+        if: always()
+        run: |
+          docker logs gallery-ci || true
+          docker rm -f gallery-ci || true
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: foundation-browser-failure
+          path: .agent-artifacts/M1/browser/
+          if-no-files-found: ignore

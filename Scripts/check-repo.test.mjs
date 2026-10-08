@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { cpSync, mkdtempSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
@@ -18,9 +18,30 @@ function fixture(t) {
     rmSync(resolved, { recursive: true });
   });
   for (const file of ['AGENTS.md', 'README.md', 'BACKLOG.md', 'STATUS.md', 'NEXT_STEPS.md',
-    'docs', '.codex', '.agents', '.github', 'Scripts/check-repo.mjs']) {
+    'docs', '.codex', '.agents', '.github', 'Scripts/check-repo.mjs', 'Scripts/check-foundation.mjs']) {
     cpSync(path.join(source, file), path.join(root, file), { recursive: true });
   }
+  // Guidance now links directly to implementation and editor task files. Copy
+  // those targets too, without copying generated outputs or dependency trees.
+  const visit = directory => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) { visit(file); continue; }
+      if (!entry.name.endsWith('.md')) continue;
+      for (const match of readFileSync(file, 'utf8').matchAll(/\[[^\]\n]*\]\(([^)\n]+)\)/g)) {
+        const link = match[1].split(/[?#]/)[0];
+        if (!link || /^[a-z][a-z\d+.-]*:/i.test(link)) continue;
+        const target = path.resolve(path.dirname(file), decodeURIComponent(link));
+        const relative = path.relative(root, target);
+        if (relative.startsWith('..') || path.isAbsolute(relative)) continue;
+        const original = path.join(source, relative);
+        if (existsSync(original) && !existsSync(target)) {
+          mkdirSync(path.dirname(target), { recursive: true }); cpSync(original, target, { recursive: true });
+        }
+      }
+    }
+  };
+  visit(root);
   return root;
 }
 function replace(root, file, before, after) {
@@ -28,6 +49,16 @@ function replace(root, file, before, after) {
   const text = readFileSync(target, 'utf8');
   assert.ok(text.includes(before), `Fixture input exists: ${file}`);
   writeFileSync(target, text.replace(before, after));
+}
+
+function replaceDependency(root, id, dependency) {
+  const file = path.join(root, 'BACKLOG.md');
+  const text = readFileSync(file, 'utf8');
+  const row = text.split(/\r?\n/).find((line) => line.startsWith(`| ${id} |`));
+  assert.ok(row, `Fixture task exists: ${id}`);
+  const cells = row.split('|');
+  cells[4] = ` ${dependency} `;
+  writeFileSync(file, text.replace(row, cells.join('|')));
 }
 
 test('current guidance is a valid baseline', (t) => {
@@ -41,16 +72,16 @@ test('a broken local documentation link fails', (t) => {
 });
 test('a dependency on a nonexistent ticket fails', (t) => {
   const root = fixture(t);
-  replace(root, 'BACKLOG.md', '| M1-02 | P0 | Planned | M1-01 |', '| M1-02 | P0 | Planned | UNKNOWN-99 |');
+  replaceDependency(root, 'M1-02', 'UNKNOWN-99');
   assert.ok(checkRepository(root).errors.some((error) => error.includes('Unknown dependency')));
 });
 test('a cycle in the milestone graph fails', (t) => {
   const root = fixture(t);
-  replace(root, 'BACKLOG.md', '| M1-02 | P0 | Planned | M1-01 |', '| M1-02 | P0 | Planned | M1-04 |');
+  replaceDependency(root, 'M1-02', 'M1-04');
   assert.ok(checkRepository(root).errors.some((error) => error.includes('Dependency cycle')));
 });
 test('a task cannot become ready ahead of its prerequisites', (t) => {
   const root = fixture(t);
-  replace(root, 'BACKLOG.md', '| M1-04 | P0 | Planned |', '| M1-04 | P0 | Ready |');
+  replace(root, 'BACKLOG.md', '| M3-08 | P1 | Planned |', '| M3-08 | P1 | Ready |');
   assert.ok(checkRepository(root).errors.some((error) => error.includes('Unfinished prerequisite')));
 });
