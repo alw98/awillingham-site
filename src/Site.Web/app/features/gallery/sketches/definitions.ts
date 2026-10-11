@@ -9,6 +9,7 @@ const field = [range('count', 'Initial particles', 20, 0, 100), range('size', 'P
 const waves = (mixed: boolean): Control[] => [range('speed', 'Speed', 1, 0, 5, .5), range('waves', 'Circles', 3, 0, 1024), ...Array.from({ length: 3 }, (_, i) => [range(`frequency${i}`, `Frequency ${i + 1}`, (mixed ? [1, .1, 10] : [1, 2, 5])[i], 0, 1e12, .1), range(`amplitude${i}`, `Amplitude ${i + 1}`, (mixed ? [.3, .3, .05] : [.6, .3, .1])[i], 0, 1e12, .01), range(`phase${i}`, `Phase ${i + 1}`, 0, 0, Math.PI * 2, .1)]).flat()];
 const tables = (still: boolean): Control[] => [range('multiplier', 'Multiplier', 2, 1, 1000, .01), range('rate', 'Multiplier change rate', still ? 0 : .01, 0, .1, .001), range('points', 'Resolution', still ? 10 : 100, 2, 1000), range('radius', 'Radius', 160, 50, 1000), { key: 'color', label: 'Line color', value: '' }];
 const controls: Record<string, Control[]> = {
+  'rock-paper-scissors': [range('speed', 'Generations per second', 60, 1, 120), range('boardSize', 'Board size (cells per side)', 200, 200, 10000, 200), range('brushSize', 'Brush radius (cells)', 1, 1, 1000), range('paintColor', 'Paint color', 1, 1, 3)],
   tetris: [range('dropFrames', 'Frames per drop', 25, 5, 120)],
   'stained-glass': [range('count', 'Strip count', 20, 1, 200), range('minDistance', 'Minimum step', 10, 1, 100), range('maxDistance', 'Maximum step', 75, 1, 200), range('average', 'Average step position', .25, 0, 1, .01), toggle('grid', 'Show grid', false), range('gridWidth', 'Grid width', 32, 4, 200), range('gridHeight', 'Grid height', 32, 4, 200)],
   'snow-globe': [range('count', 'Snow particles', 1000, 50, 1000, 50), range('gravity', 'Gravity', .1, 0, 1, .01), range('wind', 'Wind strength', .00003, 0, .001, .00001)],
@@ -22,16 +23,16 @@ const controls: Record<string, Control[]> = {
   'edge-detection': [], 'edge-detection-agate': [],
   'bouncy-dvd': [range('speed', 'Speed', 1, 0, 4, .1), range('size', 'Logo width (%)', 100 / 6, 5, 50, .1)]
 };
-const factories = import.meta.glob<{ create: SketchFactory }>(['./tetris.ts', './geometry.ts', './field.ts', './fireworks.ts', './glass.ts', './skyline.ts', './snow.ts', './dvd.ts', './edges.ts']);
+const factories = import.meta.glob<{ create: SketchFactory }>(['./tetris.ts', './geometry.ts', './field.ts', './fireworks.ts', './glass.ts', './skyline.ts', './snow.ts', './dvd.ts', './edges.ts', './rps.ts']);
 function family(slug: string) {
   if (slug.startsWith('times-tables') || slug.startsWith('sine-sums')) return 'geometry';
   if (slug.endsWith('field')) return 'field';
   if (slug.startsWith('edge-detection')) return 'edges';
-  return ({ 'stained-glass': 'glass', skyscrapers: 'skyline', 'snow-globe': 'snow', 'bouncy-dvd': 'dvd' } as Record<string, string>)[slug] ?? slug;
+  return ({ 'stained-glass': 'glass', skyscrapers: 'skyline', 'snow-globe': 'snow', 'bouncy-dvd': 'dvd', 'rock-paper-scissors': 'rps' } as Record<string, string>)[slug] ?? slug;
 }
 export const definitions = Object.freeze(catalog.map(entry => {
   const fields = controls[entry.slug].map(control => Object.freeze({ ...control }));
-  const shape = Object.fromEntries(fields.map(control => [control.key, typeof control.value === 'boolean' ? z.boolean() : typeof control.value === 'string' ? z.union([z.literal(''), colorSchema]) : (control.step === 1 ? z.number().int() : z.number()).min(control.min!).max(control.key === 'strength' ? 1e12 : control.max!)]));
+  const shape = Object.fromEntries(fields.map(control => [control.key, typeof control.value === 'boolean' ? z.boolean() : typeof control.value === 'string' ? z.union([z.literal(''), colorSchema]) : (control.key === 'boardSize' ? z.number().int().multipleOf(200) : control.step === 1 ? z.number().int() : z.number()).min(control.min!).max(control.key === 'strength' ? 1e12 : control.max!)]));
   const schema = entry.slug.startsWith('sine-sums') ? z.record(z.string(), z.union([z.number(), z.boolean(), z.string()])).superRefine((settings, context) => {
     const count = settings.waves;
     if (typeof count !== 'number' || !Number.isInteger(count) || count < 0 || count > 1024 || typeof settings.speed !== 'number' || settings.speed < 0 || settings.speed > 5) { context.addIssue({ code: 'custom', message: 'Invalid sine settings.' }); return; }

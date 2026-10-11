@@ -3,14 +3,14 @@ import { HeldKeys, TetrisEngine } from './tetris-engine';
 import { definitions } from './definitions';
 
 describe('sketch definitions', () => {
-  it('validates all 15 immutable defaults and rejects unsafe settings', () => {
-    expect(definitions).toHaveLength(15);
-    expect(new Set(definitions.map(d => d.slug)).size).toBe(15);
+  it('validates all 16 immutable defaults and rejects unsafe settings', () => {
+    expect(definitions).toHaveLength(16);
+    expect(new Set(definitions.map(d => d.slug)).size).toBe(16);
     for (const d of definitions) {
       expect(d.schema.parse(d.defaults)).toEqual(d.defaults);
       expect(() => d.schema.parse({ ...d.defaults, unknown: 1 })).toThrow();
     }
-    const d = definitions[0];
+    const d = definitions.find(d => d.slug === 'tetris')!;
     expect(() => d.schema.parse({ dropFrames: Infinity })).toThrow();
     expect(() => d.schema.parse({ dropFrames: 0 })).toThrow();
   });

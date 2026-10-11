@@ -4,8 +4,15 @@ An ASP.NET Core host for a React/TypeScript website with interactive sketches,
 theme editing, Project Euler solutions, and a timer prototype.
 
 The application uses .NET 10, React 19, strict TypeScript and Vite. It preserves
-the original styling, 15 gallery presets, gear settings, top About panels and
+the original styling, 16 gallery presets, gear settings, top About panels and
 bubble color editor. Euler 1–10 runs in workers. The timer is an Add Item prototype.
+Rock Paper Scissors runs its level-based simulation and rendering on the GPU,
+with RGB paint buttons and mouse/touch
+zoom and pan. Open `/gallery/rock-paper-scissors`; it requires WebGL 2 support.
+Settings offers boards from 200 × 200 to 10,000 × 10,000 cells. Choose **Use
+10,000 × 10,000 board**, then **Fill board** to populate it. Changing board size
+clears the board. Large boards require hardware acceleration and texture support
+for that size; the two simulation textures use about 191 MiB at the maximum size.
 
 [STATUS](STATUS.md) records checks and limits; [BACKLOG](BACKLOG.md) and
 [NEXT_STEPS](NEXT_STEPS.md) track future work. Agent instructions are in
@@ -63,6 +70,13 @@ using disposable browser storage (`SITE_BASE_URL` overrides the URL):
 node src/Site.Web/node_modules/@playwright/test/cli.js install chromium
 npm --prefix src/Site.Web run test:browser
 ```
+
+On Windows, opt into the 100-million-cell hardware benchmark with
+`$env:SITE_HARDWARE_GPU='1'`, then run
+`npm --prefix src/Site.Web run test:browser -- rps-scale.spec.ts --workers=1`.
+It selects Chromium's D3D11 graphics backend and measures simulation and rendering
+separately at two zoom levels. The regular suite uses its default graphics backend
+and skips this hardware-specific benchmark.
 
 The product workflow builds and tests that image, then checks UI, accessibility,
 routes, storage and HTTP behavior. Hosted CI has not yet run on this candidate.

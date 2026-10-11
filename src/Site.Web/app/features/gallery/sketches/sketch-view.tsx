@@ -45,6 +45,7 @@ export function SketchView({ definition }: { definition: Definition }) {
   const isLight = channels && channels[0] * .299 + channels[1] * .587 + channels[2] * .114 > 128;
   const staticImage = definition.slug.startsWith('edge-detection');
   const sine = definition.slug.startsWith('sine-sums');
+  const automaton = definition.slug === 'rock-paper-scissors';
   const host = useRef<CanvasHandle>(null);
   useEffect(() => { session.set(definition.slug, { ...settings }); }, [session, settings, definition.slug]);
   const apply = (candidate: Settings) => { if (definition.schema.safeParse(candidate).success) setSettings(candidate); };
@@ -64,17 +65,27 @@ export function SketchView({ definition }: { definition: Definition }) {
     apply(candidate);
   }
   const control = (c: Control, extend = false) => <SettingControl key={c.key} control={c} value={settings[c.key]} themeColor={colors.textColor.primary} change={value => change(c.key, value)} extend={extend} />;
-  return <section className={styles.page}>
+  return <section className={`${styles.page} ${automaton ? styles.automaton : ''}`}>
     <h1 id="page-title" className={styles.title} tabIndex={-1}>{definition.title}</h1>
-    <CanvasHost key={resetVersion} ref={host} definition={definition} settings={settings} seed={seed} paused={paused} play={play} onSummary={setSummary} />
+    <CanvasHost key={`${resetVersion}:${automaton ? settings.boardSize : ''}`} ref={host} definition={definition} settings={settings} seed={seed} paused={paused} play={play} onSummary={setSummary} />
+    {automaton && <>
+      <div className={styles.paintTools} role="group" aria-label="Paint color">
+        {['Red', 'Green', 'Blue'].map((color, index) => <button key={color} className={styles.paintColor} style={{ backgroundColor: ['#ff0000', '#00ff00', '#0000ff'][index] }} aria-label={`Paint ${color.toLowerCase()}`} aria-pressed={settings.paintColor === index + 1} onClick={() => change('paintColor', index + 1)} />)}
+      </div>
+      <div className={styles.zoomTools} role="group" aria-label="View controls">
+        <button aria-label="Zoom out" onClick={() => host.current?.input('zoom-out')}>−</button>
+        <button aria-label="Reset view" onClick={() => host.current?.input('reset-view')}>⌂</button>
+        <button aria-label="Zoom in" onClick={() => host.current?.input('zoom-in')}>+</button>
+      </div>
+    </>}
     <button className={styles.about} onClick={() => setPanel('About')} aria-haspopup="dialog">About</button>
     <button className={styles.gear} onClick={() => setPanel('Settings')} aria-haspopup="dialog" aria-label="Settings">
-      <img src={isLight ? darkGear : lightGear} alt="" /><span className={styles.gearStatic} aria-hidden="true">⚙</span><span>settings</span>
+      <img src={isLight && !automaton ? darkGear : lightGear} alt="" /><span className={styles.gearStatic} aria-hidden="true">⚙</span><span>settings</span>
     </button>
     {panel && <OverlayPanel title={panel} onClose={() => setPanel(null)}>
       {panel === 'About' ? <SketchAbout slug={definition.slug} /> : <>
         <div className={styles.controls}>
-          {definition.controls.filter(c => !sine || !/^(waves|frequency|amplitude|phase)/.test(c.key)).map(c => control(c, c.key === 'strength'))}
+          {definition.controls.filter(c => (!sine || !/^(waves|frequency|amplitude|phase)/.test(c.key)) && c.key !== 'paintColor').map(c => control(c, c.key === 'strength'))}
           {sine && <>
             <button disabled={Number(settings.waves) >= 1024} onClick={addCircle}>Add circle</button>
             {Array.from({ length: Number(settings.waves) }, (_, i) => <fieldset className={styles.function} key={i}><legend>Function {i + 1}</legend>
@@ -89,9 +100,15 @@ export function SketchView({ definition }: { definition: Definition }) {
           {!staticImage && <button onClick={() => { if (paused || (reduced && !play)) { setPaused(false); setPlay(true); } else setPaused(true); }}>{paused ? 'Resume' : reduced && !play ? 'Play' : 'Pause'}</button>}
           <button onClick={() => { setSeed(s => (s + 1) >>> 0); setSummary(''); }}>Restart</button>
           {actions.map(([action, label]) => <button key={action} onClick={() => host.current?.input(action)}>{label}</button>)}
+          {automaton && <>
+            <button onClick={() => change('boardSize', 10000)}>Use 10,000 × 10,000 board</button>
+            <button onClick={() => host.current?.input('fill')}>Fill board</button>
+            <button onClick={() => host.current?.input('clear')}>Clear board</button>
+          </>}
           <button onClick={() => { setSettings({ ...definition.defaults }); setSeed(seedFor(definition.slug)); setResetVersion(value => value + 1); }}>Reset options</button>
         </div>
         {definition.slug === 'tetris' && <p className={styles.instructions}>Focus the canvas: A/D move, S down, Q/E rotate, W drop. Arrow keys and Space also work.</p>}
+        {automaton && <p className={styles.instructions}>Changing board size clears the board. Fill board adds random colors at level 4. Large boards require a capable graphics device; speed is limited by its performance.</p>}
         <div className={styles.readout} role="status" aria-label={`${definition.title} status`}>{summary}</div>
       </>}
     </OverlayPanel>}

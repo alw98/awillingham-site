@@ -49,7 +49,13 @@ never receive SPA fallback. Development defaults to ApiOnly; Production requires
 generated client assets. Forwarded headers require explicit trusted proxy IPs.
 The server project must not glob sibling client sources, worktrees or evidence.
 
-All 15 gallery presets use native Canvas2D, with Matter.js isolated to Snow Globe.
+The gallery has 15 Canvas2D presets plus a WebGL 2 rock-paper-scissors automaton.
+Matter.js is isolated to Snow Globe. The automaton simulates and renders on the
+GPU using two R8UI textures; board sizes are 200–10,000 per side in steps of 200.
+Randomized disjoint neighbor pairs preserve strength/attack/reproduction rules,
+with parallel scheduling explicitly accepted instead of original global ordering.
+The automaton owns its shader resources;
+the shared host still owns scheduling, inputs and disposal.
 Keep preview/full-page state independent, animate visible previews, pause hidden
 work, and dispose frames/listeners/workers. Settings belong behind the gear;
 About belongs at the top. Options survive navigation within the current session.

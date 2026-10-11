@@ -1,4 +1,5 @@
 export const catalog = Object.freeze([
+  { slug: 'rock-paper-scissors', title: 'Rock Paper Scissors', category: 'Play', description: 'Paint red, green and blue cells in a cyclic cellular automaton.' },
   { slug: 'tetris', title: 'Tetris', category: 'Play', description: 'Falling-block puzzle.' },
   { slug: 'stained-glass', title: 'Stained Glass', category: 'Geometry', description: 'Generated stained-glass patterns.' },
   { slug: 'snow-globe', title: 'Snow Globe', category: 'Motion', description: 'Snow globe simulation.' },

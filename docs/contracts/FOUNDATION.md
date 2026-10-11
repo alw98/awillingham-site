@@ -19,7 +19,7 @@ Shared ownership for an invoked parallel batch follows [the workflow](../AGENT_W
 
 Public pages: `/`, `/gallery`, `/colors`, `/projecteuler`, `/timer` and
 `/gallery/:slug`. The client [catalog](../../src/Site.Web/app/features/gallery/catalog.ts)
-owns 15 unique slugs and display metadata. The server has no gallery registry.
+owns 16 unique slugs and display metadata. The server has no gallery registry.
 Unknown paths show Not Found; there are no old-link aliases or redirects.
 Imported images/fonts and their licenses live in `app/assets`; Vite hashes assets.
 Sketch behavior follows [the runtime contract](SKETCH_RUNTIME.md).

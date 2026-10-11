@@ -21,6 +21,8 @@ batch; ordinary work does not require agents or a batch.
 | M1-04 | P0 | Done | M1-02, M1-03 | One deployable artifact, dev proxy, static/SPA routing, container and product CI. |
 | UI-01 | P1 | Done | M1-04 | Original Rubik navigation, palettes, buttons and 26-color bubble editor with Save/Discard. |
 | UI-02 | P1 | Done | UI-01 | Plain titles, factual descriptions and necessary control/status text. |
+| RPS-01 | P1 | Done | M2-05 | WebGL 2 RGB cellular automaton with three paint buttons, zoom/pan, animated preview and gear/About layout. Original level/attack/reproduction mechanics, mouse/touch, light/dark controls, resize, context recovery and disposal pass; clean release and all 29 browser checks pass. |
+| RPS-02 | P1 | Done | RPS-01 | GPU simulation/painting in packed integer textures, level/attack/reproduction rules with accepted parallel ordering, validated sizes through 10,000². Fully populated RTX 5080 benchmark runs at ~59.6 simulation/render FPS at 1× and 25.63×; shader/reference parity, lifecycle, clean release, all 32 regular Chromium checks and the hardware benchmark pass. |
 | M2-01 | P1 | Done | M1-04 | Immutable definitions, unique slugs, validated settings, independent factories and deterministic seeds. |
 | M2-02 | P1 | Done | M2-01 | Canvas lifecycle, resize/DPR, visibility, input, pause, errors and disposal. |
 | M2-03 | P1 | Done | M2-01 | Deterministic Tetris movement, rotation, collision, clearing, spawn reset and elapsed-time behavior. |

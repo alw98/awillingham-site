@@ -23,6 +23,16 @@
 .value { display: flex; justify-content: space-between; gap: .5rem; }
 .function { border: 1px solid var(--color-accent-primary); padding: 1rem; }
 .readout { text-align: center; min-height: 1.5rem; }
+.paintTools, .zoomTools { position: absolute; right: 1rem; display: flex; gap: .5rem; }
+.paintTools { top: 8rem; }
+.automaton .about, .automaton .gear { color: #eff0fe; }
+.automaton .about:hover, .automaton .gear:hover { color: #1dccd8; background: #122835; }
+.paintColor { width: 44px; height: 44px; padding: 0; border: 2px solid #fff; border-radius: 50%; position: relative; }
+.paintColor:hover, .paintColor:active { border-color: #fff; }
+.paintColor[aria-pressed='true']::after { content: ''; position: absolute; inset: 10px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px #000; }
+.paintColor:focus-visible { outline-color: #fff; }
+.zoomTools { bottom: 1rem; }
+.zoomTools button { min-width: 44px; min-height: 44px; padding: .3rem; font-size: 1.4rem; }
 .extended { display: flex; gap: .5rem; align-items: center; }
 .extended input { width: 7rem; background: var(--color-background-primary); color: var(--color-text-primary); border: 1px solid var(--color-accent-primary); padding: .25rem; }
 @media (prefers-reduced-motion: reduce) { .gear img { display: none; } .gearStatic { display: block; } }

@@ -52,13 +52,13 @@ test('reduced motion renders a static reference until explicitly played', async 
   await page.getByRole('button', { name: 'Close settings' }).click();
   await expect(canvas).toHaveAttribute('data-state', 'running');
   await page.goto('/gallery');
-  await expect(page.locator('canvas[data-state="paused"]')).toHaveCount(15);
+  await expect(page.locator('canvas[data-state="paused"]')).toHaveCount(16);
   const initialFrames = await page.locator('canvas').evaluateAll(canvases => canvases.map(element => element.getAttribute('data-frames')));
   await page.waitForTimeout(150);
   expect(await page.locator('canvas').evaluateAll(canvases => canvases.map(element => element.getAttribute('data-frames')))).toEqual(initialFrames);
 });
 
-test('all 15 gallery presets render real seeded canvases with accessible controls', async ({ page }, testInfo) => {
+test('all 16 gallery presets render real seeded canvases with accessible controls', async ({ page }, testInfo) => {
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
@@ -68,14 +68,20 @@ test('all 15 gallery presets render real seeded canvases with accessible control
     await page.goto('/gallery/' + preset.slug);
     const canvas = page.locator('canvas');
     await expect(canvas).toHaveAttribute('data-state', 'paused');
-    // Every implementation draws more than its flat background, including static images.
+    // The original automaton starts empty; paint RGB before checking its renderer.
+    if (preset.slug === 'rock-paper-scissors') {
+      for (const color of ['red', 'green', 'blue']) {
+        await page.getByRole('button', { name: `Paint ${color}` }).click();
+        await canvas.click({ position: { x: 500 + ['red', 'green', 'blue'].indexOf(color) * 50, y: 400 } });
+      }
+    }
     const colors = await canvas.evaluate((element: HTMLCanvasElement) => {
       const pixels = element.getContext('2d')!.getImageData(0, 0, element.width, element.height).data;
       const colors = new Set<number>();
       for (let i = 0; i < pixels.length; i += 16) colors.add(pixels[i] * 65536 + pixels[i + 1] * 256 + pixels[i + 2]);
       return colors.size;
     });
-    expect(colors, preset.slug).toBeGreaterThan(5);
+    expect(colors, preset.slug).toBeGreaterThan(preset.slug === 'rock-paper-scissors' ? 3 : 5);
     await expect(page.getByText('Not yet available', { exact: false })).toHaveCount(0);
     expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations, preset.slug).toEqual([]);
     await page.screenshot({ path: testInfo.outputPath(`gallery-${preset.slug}.png`), fullPage: true });
@@ -89,7 +95,9 @@ test('all 15 gallery presets render real seeded canvases with accessible control
       await sliders.first().focus(); await page.keyboard.press(Number(value) >= Number(max) ? 'ArrowLeft' : 'ArrowRight');
       await expect(sliders.first()).not.toHaveValue(value);
       await page.getByRole('button', { name: 'Reset options' }).click();
-      await expect.poll(() => canvas.evaluate(fingerprint)).toBe(initial);
+      if (preset.slug === 'rock-paper-scissors') {
+        await expect.poll(() => canvas.evaluate(fingerprint)).not.toBe(initial); // Reset restores the empty board.
+      } else await expect.poll(() => canvas.evaluate(fingerprint)).toBe(initial);
     }
   }
   expect(errors).toEqual([]);
@@ -103,8 +111,8 @@ test('all visible animated previews run and offscreen, hidden and unmounted prev
   }).length);
   await page.setViewportSize({ width: 1280, height: 1300 });
   await page.goto('/gallery');
-  await expect(page.locator('canvas')).toHaveCount(15);
-  await expect(page.locator('canvas[data-state="running"], canvas[data-state="paused"]')).toHaveCount(15);
+  await expect(page.locator('canvas')).toHaveCount(16);
+  await expect(page.locator('canvas[data-state="running"], canvas[data-state="paused"]')).toHaveCount(16);
   const visible = await visibleAnimatedCount();
   expect(visible).toBeGreaterThan(4);
   await expect(page.locator('canvas[data-state="running"]')).toHaveCount(visible);

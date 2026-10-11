@@ -3,6 +3,7 @@ import { usePreferences, useThemeColors } from '../../themes/preferences-context
 import type { Definition } from './definitions';
 import type { Point, Settings, SketchInstance } from './types';
 import { schedule } from './scheduler';
+import { attachRpsInput } from './rps-input';
 import styles from './sketch.module.css';
 
 const subscribeMotion = (callback: () => void) => { const query = matchMedia('(prefers-reduced-motion: reduce)'); query.addEventListener('change', callback); return () => query.removeEventListener('change', callback); };
@@ -30,6 +31,8 @@ export const CanvasHost = forwardRef<CanvasHandle, { definition: Definition; set
   const visibleRef = useRef(false);
   const lastPointer = useRef(0);
   const [status, setStatus] = useState('loading');
+  const [graphicsError, setGraphicsError] = useState('');
+  const automaton = definition.slug === 'rock-paper-scissors';
   useImperativeHandle(ref, () => ({ input(action: string) { instanceRef.current?.input?.(action); repaint.current(); } }), []);
   useEffect(() => { colorsRef.current = colors; summaryRef.current = onSummary; repaint.current(); }, [colors, onSummary]);
   useEffect(() => {
@@ -44,8 +47,9 @@ export const CanvasHost = forwardRef<CanvasHandle, { definition: Definition; set
     const context = canvas.getContext('2d');
     const abort = new AbortController();
     let instance: SketchInstance | null = null, frames = 0, lastSummary = '', failed = false;
+    let detachInput = () => {};
     let size = { width: 320, height: 320 };
-    const fail = () => { if (abort.signal.aborted) return; failed = true; canvas.dataset.state = 'error'; setStatus('error'); scheduling.current?.set(false, false); };
+    const fail = (error?: unknown) => { if (abort.signal.aborted) return; failed = true; canvas.dataset.state = 'error'; setGraphicsError(error instanceof Error && error.name === 'RpsBoardSizeError' ? error.message : ''); setStatus('error'); scheduling.current?.set(false, false); };
     const draw = () => {
       if (!instance || !context || failed) return;
       context.save();
@@ -86,6 +90,9 @@ export const CanvasHost = forwardRef<CanvasHandle, { definition: Definition; set
       if (!created) return;
       if (abort.signal.aborted) { created.dispose(); return; }
       instance = created; instanceRef.current = created;
+      if (!preview && automaton) detachInput = attachRpsInput(canvas, (command, point) => {
+        try { created.input?.(command, point); draw(); } catch { fail(); }
+      });
       created.configure?.(settingsRef.current);
       created.resize(size); draw();
       if (reduced) { created.update(1000); draw(); }
@@ -94,24 +101,24 @@ export const CanvasHost = forwardRef<CanvasHandle, { definition: Definition; set
     }).catch(fail);
     if (!context) fail();
     return () => {
-      abort.abort(); scheduler.dispose(); scheduling.current = null;
+      detachInput(); abort.abort(); scheduler.dispose(); scheduling.current = null;
       observer.disconnect(); visibility.disconnect(); window.removeEventListener('resize', resize);
       window.removeEventListener('blur', release); document.removeEventListener('visibilitychange', release);
       instance?.dispose(); instanceRef.current = null; repaint.current = () => {};
     };
-  }, [definition, seed, preview, reduced]);
+  }, [definition, seed, preview, reduced, automaton]);
   const action = (command: string, point?: Point) => { if (status !== 'ready') return; instanceRef.current?.input?.(command, point); repaint.current(); };
   return <div className={`${styles.surface} ${preview ? '' : styles.full}`}>
-    <canvas ref={canvasRef} aria-label={`${definition.title} ${preview ? 'preview' : 'canvas'}`} role="img" tabIndex={preview ? undefined : 0}
+    <canvas ref={canvasRef} aria-label={`${definition.title} ${preview ? 'preview' : 'canvas'}`} role="img" tabIndex={preview ? undefined : 0} style={automaton && !preview ? { touchAction: 'none' } : undefined}
       onKeyDown={preview ? undefined : event => { const key = keys[event.key] ?? keys[event.key.toLowerCase()]; if (definition.slug === 'tetris' && key && !event.altKey && !event.ctrlKey && !event.metaKey) { event.preventDefault(); if (!event.repeat) action('press:' + key); } }}
       onKeyUp={preview ? undefined : event => { const key = keys[event.key] ?? keys[event.key.toLowerCase()]; if (definition.slug === 'tetris' && key) { event.preventDefault(); action('release:' + key); } }}
       onBlur={preview ? undefined : () => action('release')}
-      onPointerDown={preview ? undefined : event => { event.currentTarget.focus(); const bounds = event.currentTarget.getBoundingClientRect(); action('pointer', { x: event.clientX - bounds.left, y: event.clientY - bounds.top }); }}
+      onPointerDown={preview || automaton ? undefined : event => { event.currentTarget.focus(); const bounds = event.currentTarget.getBoundingClientRect(); action('pointer', { x: event.clientX - bounds.left, y: event.clientY - bounds.top }); }}
       onPointerMove={preview || !definition.slug.endsWith('field') ? undefined : event => {
         if (event.buttons !== 1 || event.timeStamp - lastPointer.current < 60) return;
         lastPointer.current = event.timeStamp;
         const bounds = event.currentTarget.getBoundingClientRect(); action('pointer', { x: event.clientX - bounds.left, y: event.clientY - bounds.top });
       }} />
-    {status !== 'ready' && <div className={styles.message} role={status === 'error' ? 'alert' : undefined}>{status === 'error' ? 'Unable to load sketch.' : 'Loading...'}</div>}
+    {status !== 'ready' && <div className={styles.message} role={status === 'error' ? 'alert' : undefined}>{status === 'error' ? automaton ? graphicsError || 'Graphics unavailable. Restart the sketch or try a browser with WebGL 2.' : 'Unable to load sketch.' : 'Loading...'}</div>}
   </div>;
 });

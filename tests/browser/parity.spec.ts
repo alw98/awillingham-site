@@ -125,7 +125,9 @@ test('Tetris repeats a held key without OS repeat and releases it when canvas fo
   await expect.poll(center).toBeLessThan(initial - cell * 1.5);
   await page.getByRole('button', { name: 'About', exact: true }).focus();
   const released = await center(); await page.waitForTimeout(250);
-  expect(await center()).toBeCloseTo(released); await page.keyboard.up('a');
+  // Gravity can change edge antialiasing and shift this raster centroid by a fraction of a pixel.
+  // A held-key repeat moves a whole cell; require horizontal stability within half a pixel.
+  expect(Math.abs(await center() - released)).toBeLessThan(.5); await page.keyboard.up('a');
 });
 
 test('Drawn Field keeps old translucent strokes while new strokes accumulate', async ({ page }) => {

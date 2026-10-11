@@ -1,8 +1,10 @@
 # Sketch implementation boundary
 
-This directory implements all 15 registered gallery presets with lazy native
-Canvas2D factories and Matter.js for Snow Globe. Follow
-[runtime revision 3](../../../../../../docs/contracts/SKETCH_RUNTIME.md).
+This directory implements 15 Canvas2D presets and a WebGL 2 cellular automaton,
+with lazy factories and Matter.js isolated to Snow Globe. Follow
+[the runtime contract](../../../../../../docs/contracts/SKETCH_RUNTIME.md).
+The automaton's `rps-gpu.ts` owns GPU simulation/painting/display resources;
+`rps-rules.ts` supplies a scalar test reference, not a runtime CPU grid.
 
 Definitions own immutable metadata and validated serializable defaults. Factories
 create independent mutable simulation state; the host owns canvas scheduling,

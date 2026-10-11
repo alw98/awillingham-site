@@ -1,7 +1,7 @@
 import type { ThemeColors } from '../../themes/preferences';
 
 export type Settings = Record<string, number | boolean | string>;
-export type Point = { x: number; y: number };
+export type Point = { x: number; y: number; scale?: number };
 export type Size = { width: number; height: number };
 export interface SketchInstance {
   resize(size: Size): void;

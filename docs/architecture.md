@@ -53,7 +53,10 @@ and explicitly approved shared data, without sibling clients or agent outputs.
   not flow through a global React store.
 - A canvas host owns size/DPR, visibility/pause, focused keyboard/pointer input,
   configuration/theme updates, error reporting, and complete disposal. Native
-  Canvas2D renders the sketches; Matter.js belongs to the snow globe implementation.
+  Canvas2D renders the original sketches; the rock-paper-scissors automaton uses
+  WebGL 2 simulation/display shaders with a Canvas2D presentation surface. Its
+  packed integer state stays on the GPU; randomized disjoint neighbor pairs
+  replace global sequential ordering. Matter.js belongs to Snow Globe.
 - Heavy Euler/image operations can use cancellable workers. A navigation or new
   request cannot allow obsolete results to overwrite the current instance.
 - Every visible animated preview runs; hidden/offscreen canvases pause. Seeded
